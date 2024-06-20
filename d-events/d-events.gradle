@@ -1,0 +1,5 @@
+apply plugin: 'publish-conventions'
+dependencies {
+    api project(':d-fn')
+    api group: 'org.apache.commons', name: 'commons-collections4', version: "${ApacheCollection4Version}"
+}

@@ -1,0 +1,5 @@
+apply plugin: 'publish-conventions'
+
+dependencies {
+    api group: 'cn.hutool', name: 'hutool-core', version: "${HutoolVersion}"
+}

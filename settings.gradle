@@ -1,0 +1,19 @@
+apply from: "properties.gradle"
+rootProject.name = "${rootAppName}"
+
+subProjects = "${subProjects}".split(',')
+
+subProjects.each { subProject ->
+    include "$subProject"
+}
+
+void changeProjectBuildFileName(project) {
+    if (project.getParent() != null) {
+        project.buildFileName = "${project.name}.gradle"
+    }
+    if (project.children.size() > 0) {
+        project.children.each { it -> changeProjectBuildFileName(it) }
+    }
+}
+
+changeProjectBuildFileName(rootProject)

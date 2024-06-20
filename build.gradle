@@ -1,0 +1,9 @@
+apply from: 'properties.gradle'
+subprojects {
+    def subAppProjects = subApps.split(',')
+    if (subAppProjects.contains(project.name)) {
+        apply plugin: 'application-conventions'
+    } else {
+        apply plugin: 'library-conventions'
+    }
+}

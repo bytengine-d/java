@@ -1,0 +1,5 @@
+apply plugin: 'publish-conventions'
+dependencies {
+    api group: 'cn.hutool', name: 'hutool-core', version: "${HutoolVersion}"
+    api group: 'io.netty', name: 'netty-buffer', version: "${NettyVersion}"
+}

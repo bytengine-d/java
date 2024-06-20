@@ -1,0 +1,111 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+def localProperties = new Properties()
+if (Files.exists(Paths.get("$project.rootDir/maven_cert.properties"))) {
+    localProperties.load(new FileInputStream("$rootProject.rootDir/maven_cert.properties"))
+    localProperties.each { prop -> project.ext.set(prop.key, prop.value) }
+} else {
+    localProperties.setProperty("center_maven_repository_username", "nothing")
+    localProperties.setProperty("center_maven_repository_password", "nothing")
+    localProperties.setProperty("signing.keyId", "nothing")
+    localProperties.setProperty("signing.password", "nothing")
+    localProperties.setProperty("signing.secretKeyRingFile", "nothing")
+}
+
+ext {
+    project_name = "${project.name}"
+    center_maven_repository_username = localProperties.getProperty("center_maven_repository_username")
+    center_maven_repository_password = localProperties.getProperty("center_maven_repository_password")
+    signingKeyId = localProperties.getProperty("signing.keyId")
+    signingPassword = localProperties.getProperty("signing.password")
+    signingGpgKeyFile = localProperties.getProperty("signing.secretKeyRingFile")
+    signingGpgKeyFile = "$rootProject.rootDir/$signingGpgKeyFile"
+    signingGpgKey = ''
+    if (Files.exists(Paths.get(signingGpgKeyFile))) {
+        signingGpgKey = new File(signingGpgKeyFile).text
+    }
+}
+
+group = "${projectGroup}"
+version = "${projectVersion}"
+description = "$project_description"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
+}
+
+javadoc {
+    options {
+        encoding('UTF-8')
+        version
+        author
+    }
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+jar {
+    archiveBaseName = "${project_name}"
+}
+
+publishing {
+    repositories {
+        maven {
+            url = version.endsWith('SNAPSHOT') ? "$centerMavenSnapshotsUrl" : "$centerMavenReleasesUrl"
+            credentials {
+                username "${center_maven_repository_username}"
+                password "${center_maven_repository_password}"
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = "${project_name}"
+            from components.java
+            groupId = "${projectGroup}"
+            pom {
+                name = "${project_name}"
+                description = "$project.description"
+                url = "${projectUrl}"
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'bantenio'
+                        name = 'Sun Kaihan'
+                        email = 'bantenio@gmail.com'
+                    }
+                }
+                scm {
+                    connection = "scm:git:${projectScm}"
+                    developerConnection = "scm:git:${projectScm}"
+                    url = "${projectUrl}"
+                }
+            }
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(signingKeyId, signingGpgKey, signingPassword)
+    sign publishing.publications.mavenJava
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

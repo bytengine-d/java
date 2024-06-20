@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':d-events')
+//    implementation group: 'com.lmax', name: 'disruptor', version: '4.0.0'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'cn.bytengne.d.example.App'
+}
