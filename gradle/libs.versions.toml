@@ -7,13 +7,14 @@ commons-collection4 = "4.4"
 
 [libraries]
 slf4j-jul = { module = "org.slf4j:jul-to-slf4j", version.ref = "slf4j" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-jcl = { module = "org.slf4j:jcl-over-slf4j", version.ref = "slf4j" }
 hutool-core = { module = "cn.hutool:hutool-core", version.ref = "hutool" }
 hutool-crypto = { module = "cn.hutool:hutool-crypto", version.ref = "hutool" }
 commons-collection4 = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collection4" }
 
 [bundles]
-base = ["slf4j-jul", "slf4j-jcl", "hutool-core", "hutool-crypto"]
+base = ["slf4j-api", "hutool-core"]
 
 
 [plugins]
