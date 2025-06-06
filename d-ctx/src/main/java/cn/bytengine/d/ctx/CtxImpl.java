@@ -15,11 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * 并且它实现了父子关系
  * </p>
  *
- * @author sunkaihan
+ * @author Ban Tenio
  * @version 1.0
  */
-public class CtxImpl implements Ctx,
-        CtxSource<Map<String, Object>, CtxImpl> {
+public class CtxImpl implements Ctx {
     private Ctx parentCtx;
     private Map<String, Object> source;
 
@@ -91,18 +90,15 @@ public class CtxImpl implements Ctx,
         return parentCtx;
     }
 
-    @Override
     public CtxImpl clear() {
         this.source.clear();
         return this;
     }
 
-    @Override
     public Map<String, Object> getSource() {
         return this.source;
     }
 
-    @Override
     public CtxImpl setSource(Map<String, Object> source) {
         this.source = source;
         return this;

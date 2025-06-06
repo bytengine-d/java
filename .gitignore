@@ -2,6 +2,7 @@ HELP.md
 .gradle
 .DS_Store
 build/
+!gradle/libs.versions.toml
 gradle/
 gradlew
 gradlew.bat

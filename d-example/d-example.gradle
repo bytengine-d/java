@@ -1,3 +1,8 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
 dependencies {
     implementation project(':d-events')
 //    implementation group: 'com.lmax', name: 'disruptor', version: '4.0.0'

@@ -17,7 +17,7 @@ ext {
     rootAppName = "d"
 
     // sub projects
-    subProjects = "d-ctx,d-fn,d-events,d-sdso,d-example,d-lang"
+    subProjects = "d-ctx,d-fn,d-events,d-example,d-lang"
     baseModules = "d-ctx"
     subApps = "d-example"
 
@@ -26,22 +26,7 @@ ext {
     HutoolVersion = "5.8.23"
 
     Slf4jVersion = "2.0.9"
-    LogbackVersion = "1.4.11"
     JaninoVersion = "3.1.10"
-
-    SpringBoot3Version = "3.2.0"
-    SpringBoot2Version = "2.7.18"
-    Spring6Version = "6.1.1"
-    Spring5Version = "5.3.31"
-    ReactorVersion = "3.6.0"
-    ReactorNettyVersion = "1.1.13"
-
-    FreeMarkerVersion = "2.3.32"
-
-    NettyVersion = "4.1.101.Final"
-
-    MessagePackVersion = "0.9.8"
-    CommonsIOVersion = "2.11.0"
     ApacheCollection4Version = "4.4"
 
     // test dependencies version

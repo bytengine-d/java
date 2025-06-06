@@ -8,9 +8,20 @@ import java.util.Map;
  * @author Ban Tenio
  * @version 1.0
  */
-public abstract class Contexts {
+public abstract class Ctxs {
 
-    private Contexts() {
+    private static final Ctx globalCtx = root();
+
+    private Ctxs() {
+    }
+
+    /**
+     * 创建一个新的根上下文视图
+     *
+     * @return 上下文视图扩展实现类
+     */
+    public static Ctx global() {
+        return globalCtx;
     }
 
     /**
@@ -47,7 +58,7 @@ public abstract class Contexts {
      * 指定父级上下文和数据，创建新一级的上下文视图
      *
      * @param parent 父级上下文
-     * @param data 数据内容
+     * @param data   数据内容
      * @return 上下文视图扩展实现类
      */
     public static Ctx space(Ctx parent, Map<String, Object> data) {

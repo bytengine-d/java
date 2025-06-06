@@ -1,5 +1,8 @@
-apply plugin: 'publish-conventions'
+plugins {
+    id 'java'
+    id 'java-library'
+}
 
 dependencies {
-    api group: 'cn.hutool', name: 'hutool-core', version: "${HutoolVersion}"
+    api libs.bundles.base
 }

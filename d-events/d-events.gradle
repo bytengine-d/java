@@ -1,5 +1,9 @@
-apply plugin: 'publish-conventions'
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
 dependencies {
     api project(':d-fn')
-    api group: 'org.apache.commons', name: 'commons-collections4', version: "${ApacheCollection4Version}"
+    api libs.commons.collection4
 }

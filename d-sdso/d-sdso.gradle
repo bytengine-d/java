@@ -1,9 +1,0 @@
-dependencies {
-    api project(':d-events')
-
-    api group: 'org.slf4j', name: 'slf4j-api'
-    api group: 'io.netty', name: 'netty-buffer', version: "${NettyVersion}"
-    api group: 'io.netty', name: 'netty-transport', version: "${NettyVersion}"
-    api group: 'io.netty', name: 'netty-codec', version: "${NettyVersion}"
-    api group: 'org.msgpack', name: 'msgpack-core', version: "${MessagePackVersion}"
-}

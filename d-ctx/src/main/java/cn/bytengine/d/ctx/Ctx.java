@@ -10,7 +10,7 @@ import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 /**
  * 逻辑执行上下文
  *
- * @author sunkaihan
+ * @author Ban Tenio
  * @version 1.0
  */
 public interface Ctx {
@@ -597,7 +597,7 @@ public interface Ctx {
         if (val instanceof Ctx) {
             return (Ctx) val;
         } else if (val instanceof Map) {
-            Contexts.space(this, (Map<String, Object>) val);
+            Ctxs.space(this, (Map<String, Object>) val);
         }
         return null;
     }

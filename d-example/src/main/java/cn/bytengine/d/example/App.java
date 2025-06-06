@@ -9,7 +9,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 
 public class App {
     public static void main(String[] args) throws Throwable {
-
+        testInvokerEventBus();
     }
 
     /*private static void testDisruptor() {
