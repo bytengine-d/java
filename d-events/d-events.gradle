@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-    api project(':d-fn')
+    api project(':d-lang')
     api libs.commons.collection4
 }

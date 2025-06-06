@@ -17,7 +17,7 @@ ext {
     rootAppName = "d"
 
     // sub projects
-    subProjects = "d-ctx,d-fn,d-events,d-example,d-lang"
+    subProjects = "d-ctx,d-events,d-example,d-lang"
     baseModules = "d-ctx"
     subApps = "d-example"
 
