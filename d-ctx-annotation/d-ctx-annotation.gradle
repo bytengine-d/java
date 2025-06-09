@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'publish-conventions'
+}
+
+dependencies {
+    api project(":d-ctx")
+    api project(":d-apt-util")
+}

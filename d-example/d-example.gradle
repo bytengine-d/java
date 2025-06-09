@@ -5,6 +5,9 @@ plugins {
 
 dependencies {
     implementation project(':d-events')
+    implementation project(':d-ctx')
+
+    annotationProcessor project(':d-ctx')
 //    implementation group: 'com.lmax', name: 'disruptor', version: '4.0.0'
 }
 
