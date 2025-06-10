@@ -14,4 +14,17 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface ClassAssist {
+    /**
+     * include field names, default is all.
+     *
+     * @return include field names;
+     */
+    String[] value() default {"*"};
+
+    /**
+     * exclude field names, default is empty.
+     *
+     * @return exclude field names;
+     */
+    String[] excludes() default {};
 }
