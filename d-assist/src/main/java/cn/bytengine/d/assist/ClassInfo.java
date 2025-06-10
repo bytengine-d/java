@@ -71,6 +71,10 @@ public class ClassInfo {
         propertyInfoMap.forEach(action);
     }
 
+    public boolean addMethod(Method method) {
+        return addMethodInfo(MethodInfo.of(type, method));
+    }
+
     public boolean addMethodInfo(MethodInfo methodInfo) {
         return methodInfos.add(methodInfo);
     }
@@ -116,18 +120,18 @@ public class ClassInfo {
     }
 
     public <T> T getPropertyValue(Object instance, String propertyName) {
-        checkPropertyName(propertyName);
+//        checkPropertyName(propertyName);
         PropertyInfo propertyInfo = getProperty(propertyName);
         return propertyInfo.getPropertyValue(instance);
     }
 
     public void setPropertyValue(Object instance, String propertyName, Object value) {
+//        checkPropertyName(propertyName);
         PropertyInfo propertyInfo = getProperty(propertyName);
         propertyInfo.setPropertyValue(instance, value);
     }
 
     public Object invokeMethod(Object instance, String methodName, Object... args) {
-        ClassAssists.checkInstance(getType(), instance);
         return findFirstMethod(methodName).invoke(instance, args);
     }
     // endregion

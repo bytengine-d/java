@@ -1,6 +1,7 @@
 package cn.bytengine.d.assist;
 
 import cn.bytengine.d.fn.invoker.MethodHandles;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ArrayUtil;
 
@@ -52,14 +53,16 @@ public class MethodInfo {
         return handle;
     }
 
+    // region instance methods
     public Object invoke(Object me, Object... args) {
-        ClassAssists.checkInstance(getClazz(), me);
+//        ClassAssists.checkInstance(getClazz(), me);
         try {
-            return handle.invoke(ArrayUtil.insert(args, 0, me));
+            return handle.invokeWithArguments(ArrayUtil.insert(args, 0, me));
         } catch (Throwable e) {
             return new RuntimeException(e);
         }
     }
+    // endregion
 
     @Override
     public boolean equals(Object o) {
@@ -82,7 +85,7 @@ public class MethodInfo {
         info.parameters = method.getParameterTypes();
         info.parameterLength = info.parameters.length;
         info.handle = MethodHandles.getMethodHandler(clazz, info.name, info.parameters);
-        info.sign = CharSequenceUtil.format("{} {}.{}({})", info.hasReturn ? info.returnType.getCanonicalName() : "void", clazz.getCanonicalName(), info.name, info.parameterLength == 0 ? CharSequenceUtil.EMPTY : ArrayUtil.join(ArrayUtil.map(info.parameters, Class::getCanonicalName), ","));
+        info.sign = CharSequenceUtil.format("{} {}.{}({})", info.hasReturn ? info.returnType.getCanonicalName() : "void", clazz.getCanonicalName(), info.name, info.parameterLength == 0 ? CharSequenceUtil.EMPTY : CollUtil.join(ArrayUtil.map(info.parameters, Class::getCanonicalName), ","));
         return info;
     }
 }

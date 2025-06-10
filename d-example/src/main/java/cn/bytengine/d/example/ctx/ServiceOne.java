@@ -18,7 +18,29 @@ import cn.bytengine.d.ctx.annotations.CtxWrapper;
  */
 @CtxWrapper
 public class ServiceOne {
+    private String username;
+    private int age;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public ServiceOne setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public ServiceOne setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
     public void handleEvent(String name, int age) {
-        System.out.println(name + ":" + age);
+        StringBuilder buf = new StringBuilder(name + ":" + age);
+        buf.delete(0, buf.length());
     }
 }
