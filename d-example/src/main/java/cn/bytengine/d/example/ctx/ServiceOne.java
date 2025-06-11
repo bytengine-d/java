@@ -43,4 +43,10 @@ public class ServiceOne {
         StringBuilder buf = new StringBuilder(name + ":" + age);
         buf.delete(0, buf.length());
     }
+
+    public Object handle(String name, int age) {
+        StringBuilder buf = new StringBuilder(name + ":" + age);
+        buf.delete(0, buf.length());
+        return null;
+    }
 }

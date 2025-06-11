@@ -3,7 +3,6 @@ package cn.bytengine.d.events.internal;
 import cn.bytengine.d.events.EventExceptionHandler;
 import cn.bytengine.d.events.RegisterOption;
 import cn.bytengine.d.fn.invoker.Invoker;
-import cn.bytengine.d.fn.invoker.InvokerFactory;
 import cn.hutool.core.lang.Assert;
 import org.apache.commons.collections4.map.MultiKeyMap;
 
@@ -23,7 +22,6 @@ import java.util.List;
  * @version 1.0
  */
 public class DefaultInvokerEventBus implements AbstractInvokerEventBus {
-    private final InvokerFactory invokerFactory;
     private final EventRouter eventRouter;
     private final EventInvokerDispatcher dispatcher;
     private final MultiKeyMap<Object, InvokerRegistration> eventInvokerRegistrationMap = new MultiKeyMap<>();
@@ -32,17 +30,13 @@ public class DefaultInvokerEventBus implements AbstractInvokerEventBus {
     /**
      * 指定调用器工厂，以及路由策略的调用器事件总线
      *
-     * @param invokerFactory 调用器工厂
      * @param eventRouter    事件路由策略
      * @param dispatcher     事件分发器
      */
-    public DefaultInvokerEventBus(InvokerFactory invokerFactory,
-                                  EventRouter eventRouter,
+    public DefaultInvokerEventBus(EventRouter eventRouter,
                                   EventInvokerDispatcher dispatcher) {
-        Assert.notNull(invokerFactory, "InvokerFactory must not be null");
         Assert.notNull(eventRouter, "EventRouter must not be null");
         Assert.notNull(dispatcher, "EventInvokerDispatcher must not be null");
-        this.invokerFactory = invokerFactory;
         this.eventRouter = eventRouter;
         this.dispatcher = dispatcher;
     }
@@ -60,11 +54,6 @@ public class DefaultInvokerEventBus implements AbstractInvokerEventBus {
             eventRouter.remove(eventName, invokerRegistration);
             eventInvokerRegistrationMap.remove(eventName, invoker);
         }
-    }
-
-    @Override
-    public InvokerFactory getInvokerFactory() {
-        return invokerFactory;
     }
 
     @Override

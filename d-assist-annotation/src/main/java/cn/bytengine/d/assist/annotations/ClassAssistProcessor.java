@@ -21,17 +21,17 @@ import java.util.Set;
 public class ClassAssistProcessor extends AbstractAnnotationProcessor {
 
     public ClassAssistProcessor() {
-        super(ClassAssist.class);
+        super(ClassAccess.class);
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         boolean isClaimed = false;
-        Set<? extends Element> annotatedClasses = roundEnv.getElementsAnnotatedWith(ClassAssist.class);
+        Set<? extends Element> annotatedClasses = roundEnv.getElementsAnnotatedWith(ClassAccess.class);
         if (!annotatedClasses.isEmpty()) {
             note("processing ClassAssist count: {}", annotatedClasses.size());
             for (Element annotatedClass : annotatedClasses) {
-                ClassAssist ctxWrapper = annotatedClass.getAnnotation(ClassAssist.class);
+                ClassAccess ctxWrapper = annotatedClass.getAnnotation(ClassAccess.class);
             }
         } else {
             try {

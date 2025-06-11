@@ -13,5 +13,5 @@ public interface Invoker {
      * @param args 调用参数列表
      * @throws Throwable 调用产生的异常
      */
-    void invoke(Object[] args) throws Throwable;
+    Object invoke(Object[] args) throws Throwable;
 }

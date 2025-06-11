@@ -1,4 +1,4 @@
-package cn.bytengine.d.assist;
+package cn.bytengine.d.lang.reflect;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -47,22 +47,6 @@ public class PropertyInfo {
         return canWrite;
     }
 
-    // region instance method
-    public <T> T getPropertyValue(Object instance) {
-        if (!isCanRead()) {
-            throw new UnsupportedOperationException("the property can not read");
-        }
-        return (T) getGetter().invoke(instance);
-    }
-
-    public void setPropertyValue(Object instance, Object value) {
-        if (!isCanWrite()) {
-            throw new UnsupportedOperationException("the property can not write");
-        }
-        getSetter().invoke(instance, value);
-    }
-    // endregion
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -80,17 +64,29 @@ public class PropertyInfo {
     }
 
     public static PropertyInfo of(Class<?> clazz, String name, Class<?> type, Method getter, Method setter) {
+        MethodInfo reader = null;
+        if (getter != null) {
+            reader = MethodInfo.of(clazz, getter);
+        }
+        MethodInfo writer = null;
+        if (setter != null) {
+            writer = MethodInfo.of(clazz, setter);
+        }
+        return of(clazz, name, type, reader, writer);
+    }
+
+    public static PropertyInfo of(Class<?> clazz, String name, Class<?> type, MethodInfo getter, MethodInfo setter) {
         PropertyInfo info = new PropertyInfo();
         info.name = name;
         info.clazz = clazz;
         info.type = type;
         if (getter != null) {
             info.canRead = true;
-            info.getter = MethodInfo.of(clazz, getter);
+            info.getter = getter;
         }
         if (setter != null) {
             info.canWrite = true;
-            info.setter = MethodInfo.of(clazz, setter);
+            info.setter = setter;
         }
         return info;
     }

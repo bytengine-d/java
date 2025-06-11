@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface ClassAssist {
+public @interface ClassAccess {
     /**
      * include field names, default is all.
      *

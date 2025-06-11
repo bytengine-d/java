@@ -1,33 +1,47 @@
 package cn.bytengine.d.example;
 
-import cn.bytengine.d.assist.ClassAssists;
-import cn.bytengine.d.assist.ClassInfo;
+import cn.bytengine.d.assist.ClassAccessor;
+import cn.bytengine.d.assist.ClassAccessors;
 import cn.bytengine.d.events.Events;
 import cn.bytengine.d.events.InvokerEventBus;
 import cn.bytengine.d.example.ctx.ServiceOne;
 import cn.bytengine.d.fn.invoker.Invoker;
+import cn.bytengine.d.fn.invoker.MetaInfoInvokerFactory;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.text.CharSequenceUtil;
 
-import java.lang.reflect.Method;
-
 public class App {
     public static void main(String[] args) throws Throwable {
-        testInvokerEventBus();
+//        testInvokerEventBus();
+        testDisruptor();
     }
 
-    /*private static void testDisruptor() {
-        int ringBufferSize = 1024 * 1024;
-        Disruptor<Object> disruptor =
-                new Disruptor<>(factory, ringBufferSize, Executors.defaultThreadFactory(), ProducerType.SINGLE, new YieldingWaitStrategy());
-    }*/
+    private static void testDisruptor() throws Throwable {
+        int times = 100000;
+        final TimeInterval timer = new TimeInterval();
+
+        ClassAccessor classAccessor = ClassAccessors.register(ServiceOne.class);
+        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::handle));
+        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::handleEvent));
+        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::getUsername));
+        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::getAge));
+        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::setUsername));
+        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::setAge));
+        classAccessor.addPropertyAccessor("username");
+        classAccessor.addPropertyAccessor("age");
+
+        ServiceOne one = new ServiceOne();
+        timer.start("invoker");
+        Object[] args = new Object[]{"Kaihan Sun", 38};
+        for (int i = 0; i < times; i++) {
+//            classAccessor.invoke(one, "handle", args);
+            classAccessor.set(one, "username", "sunkaihan");
+        }
+        long invokerTime = timer.intervalMs("invoker");
+        System.out.println(CharSequenceUtil.format("invoker execute {} times took {} ms", times, invokerTime));
+    }
 
     private static void testInvokerEventBus() throws Throwable {
-        ClassAssists classAssists = ClassAssists.of(ServiceOne.class);
-        ClassInfo classInfo = classAssists.get(ServiceOne.class);
-        Method method = ServiceOne.class.getDeclaredMethod("handleEvent", String.class, int.class);
-        classInfo.addMethod(method);
-
         ServiceOne one = new ServiceOne();
         InvokerEventBus eventBus = Events.general().build();
         Invoker invoker = eventBus.register("TestEvent", ServiceOne::handleEvent);
@@ -55,17 +69,9 @@ public class App {
         long callTime = timer.intervalMs("call");
         System.out.println("-------------------------call----------------------------");
 
-        timer.start("classInfo");
-        for (int i = 0; i < times; i++) {
-            classInfo.invokeMethod(one, "handleEvent", "Kaihan Sun", 38);
-        }
-        long classInfoTime = timer.intervalMs("classInfo");
-        System.out.println("-------------------------classInfo----------------------------");
-
         System.out.println(CharSequenceUtil.format("eventbus execute {} times took {} ms", times, eventBusTime));
         System.out.println(CharSequenceUtil.format("invoker execute {} times took {} ms", times, invokerTime));
         System.out.println(CharSequenceUtil.format("call execute {} times took {} ms", times, callTime));
-        System.out.println(CharSequenceUtil.format("classInfo execute {} times took {} ms", times, classInfoTime));
 
         timer.clear();
     }

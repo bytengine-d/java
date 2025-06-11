@@ -1,15 +1,14 @@
-package cn.bytengine.d.assist;
+package cn.bytengine.d.lang.reflect;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 
 import java.beans.FeatureDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -20,22 +19,36 @@ import java.util.stream.Collectors;
  */
 public class ClassInfo {
     private Class<?> type;
-    private String name;
-    private String className;
 
     private final Map<String, PropertyInfo> propertyInfoMap = new HashMap<>(16);
-    private final List<MethodInfo> methodInfos = new LinkedList<>();
+    private final Map<Method, MethodInfo> methodInfos = new HashMap<>(16);
 
     public Class<?> getType() {
         return type;
     }
 
-    public String getName() {
-        return name;
+    public String getClassName() {
+        return this.type.getName();
     }
 
-    public String getClassName() {
-        return className;
+    public String getDescriptorString() {
+        return this.type.descriptorString();
+    }
+
+    public boolean isInterface() {
+        return this.type.isInterface();
+    }
+
+    public boolean isAnnotation() {
+        return this.type.isAnnotation();
+    }
+
+    public boolean isAbstract() {
+        return Modifier.isAbstract(this.type.getModifiers());
+    }
+
+    public boolean isFinal() {
+        return Modifier.isFinal(this.type.getModifiers());
     }
 
     public PropertyInfo addProperty(String key, PropertyInfo value) {
@@ -71,33 +84,46 @@ public class ClassInfo {
         propertyInfoMap.forEach(action);
     }
 
-    public boolean addMethod(Method method) {
+    public MethodInfo addMethod(Method method) {
         return addMethodInfo(MethodInfo.of(type, method));
     }
 
-    public boolean addMethodInfo(MethodInfo methodInfo) {
-        return methodInfos.add(methodInfo);
+    public MethodInfo addMethodInfo(MethodInfo methodInfo) {
+        methodInfos.put(methodInfo.getMethod(), methodInfo);
+        return methodInfo;
     }
 
-    public boolean removeMethodInfo(MethodInfo o) {
+    public MethodInfo removeMethodInfo(Method o) {
         return methodInfos.remove(o);
     }
 
-    public boolean containsMethod(MethodInfo o) {
-        return methodInfos.contains(o);
+    public MethodInfo removeMethodInfo(MethodInfo o) {
+        return removeMethodInfo(o.getMethod());
     }
 
-    public void eachMethod(Consumer<? super MethodInfo> action) {
-        methodInfos.forEach(action);
+    public boolean containsMethod(Method o) {
+        return methodInfos.containsKey(o);
+    }
+
+    public boolean containsMethod(MethodInfo o) {
+        return methodInfos.containsValue(o);
+    }
+
+    public MethodInfo getMethodInfo(Method o) {
+        return methodInfos.get(o);
     }
 
     public MethodInfo findFirstMethod(String methodName) {
         return findFirstMethod(methodName, true);
     }
 
+    public void eachMethod(BiConsumer<? super Method, ? super MethodInfo> action) {
+        methodInfos.forEach(action);
+    }
+
     public MethodInfo findFirstMethod(String methodName, boolean throwWhenNotFound) {
-        Optional<MethodInfo> result = methodInfos.stream()
-                .filter(mi -> CharSequenceUtil.equals(mi.getName(), methodName))
+        Optional<MethodInfo> result = methodInfos.values().stream()
+                .filter(mi -> CharSequenceUtil.equals(mi.getMethodName(), methodName))
                 .findFirst();
         if (throwWhenNotFound) {
             return result.orElseThrow(() -> new NoSuchElementException("the method name not existed in type"));
@@ -106,35 +132,10 @@ public class ClassInfo {
     }
 
     public List<MethodInfo> findAllMethods(String methodName) {
-        return methodInfos.stream()
-                .filter(mi -> CharSequenceUtil.equals(mi.getName(), methodName))
+        return methodInfos.values().stream()
+                .filter(mi -> CharSequenceUtil.equals(mi.getMethodName(), methodName))
                 .collect(Collectors.toList());
     }
-
-    // region instance methods
-
-    protected void checkPropertyName(String propertyName) {
-        if (!containsProperty(propertyName)) {
-            throw new NoSuchElementException("the property is not existed in type");
-        }
-    }
-
-    public <T> T getPropertyValue(Object instance, String propertyName) {
-//        checkPropertyName(propertyName);
-        PropertyInfo propertyInfo = getProperty(propertyName);
-        return propertyInfo.getPropertyValue(instance);
-    }
-
-    public void setPropertyValue(Object instance, String propertyName, Object value) {
-//        checkPropertyName(propertyName);
-        PropertyInfo propertyInfo = getProperty(propertyName);
-        propertyInfo.setPropertyValue(instance, value);
-    }
-
-    public Object invokeMethod(Object instance, String methodName, Object... args) {
-        return findFirstMethod(methodName).invoke(instance, args);
-    }
-    // endregion
 
     @Override
     public boolean equals(Object o) {
@@ -148,21 +149,55 @@ public class ClassInfo {
         return Objects.hashCode(type);
     }
 
-    public static ClassInfo of(Class<?> clazz, String... propertyNames) {
+    public static ClassInfo of(Class<?> clazz) {
         ClassInfo info = new ClassInfo();
         info.type = clazz;
-        info.name = clazz.getSimpleName();
-        info.className = clazz.getCanonicalName();
+        buildMethodInfos(info, clazz);
+        buildPropertyInfos(info, clazz);
+        return info;
+    }
+
+    private static void buildMethodInfos(ClassInfo info, Class<?> clazz) {
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method declaredMethod : declaredMethods) {
+            info.addMethodInfo(MethodInfo.of(clazz, declaredMethod));
+        }
+        List<Method> defaultMethods = findDefaultMethodsOnInterfaces(clazz);
+        if (defaultMethods != null) {
+            for (Method defaultMethod : defaultMethods) {
+                info.addMethodInfo(MethodInfo.of(clazz, defaultMethod));
+            }
+        }
+    }
+
+    private static List<Method> findDefaultMethodsOnInterfaces(Class<?> clazz) {
+        List<Method> result = null;
+        for (Class<?> ifc : clazz.getInterfaces()) {
+            for (Method method : ifc.getMethods()) {
+                if (method.isDefault()) {
+                    if (result == null) {
+                        result = new ArrayList<>();
+                    }
+                    result.add(method);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static void buildPropertyInfos(ClassInfo info, Class<?> clazz) {
         Collection<? extends PropertyDescriptor> properties = determineBasicProperties(clazz);
         if (!properties.isEmpty()) {
-            boolean isAll = propertyNames.length == 0 || propertyNames.length == 1 && "*".equals(propertyNames[0]);
-            Set<String> names = CollUtil.set(false, propertyNames);
             properties.stream()
-                    .filter(p -> isAll || names.contains(p.getName()))
-                    .collect(Collectors.toMap(FeatureDescriptor::getName, p -> PropertyInfo.of(clazz, p)))
+                    .collect(Collectors.toMap(FeatureDescriptor::getName, p -> buildPropertyInfo(info, clazz, p)))
                     .forEach(info::addProperty);
         }
-        return info;
+    }
+
+    private static PropertyInfo buildPropertyInfo(ClassInfo classInfo, Class<?> clazz, PropertyDescriptor p) {
+        MethodInfo reader = p.getReadMethod() == null ? null : classInfo.getMethodInfo(p.getReadMethod());
+        MethodInfo writer = p.getWriteMethod() == null ? null : classInfo.getMethodInfo(p.getWriteMethod());
+        return PropertyInfo.of(clazz, p.getName(), p.getPropertyType(), reader, writer);
     }
 
     public static Collection<? extends PropertyDescriptor> determineBasicProperties(Class<?> beanClass) {
