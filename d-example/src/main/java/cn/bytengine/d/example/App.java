@@ -12,14 +12,10 @@ import cn.hutool.core.text.CharSequenceUtil;
 
 public class App {
     public static void main(String[] args) throws Throwable {
-//        testInvokerEventBus();
-        testDisruptor();
+        testInvokerEventBus();
     }
 
-    private static void testDisruptor() throws Throwable {
-        int times = 100000;
-        final TimeInterval timer = new TimeInterval();
-
+    private static void testInvokerEventBus() throws Throwable {
         ClassAccessor classAccessor = ClassAccessors.register(ServiceOne.class);
         classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::handle));
         classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::handleEvent));
@@ -31,21 +27,9 @@ public class App {
         classAccessor.addPropertyAccessor("age");
 
         ServiceOne one = new ServiceOne();
-        timer.start("invoker");
-        Object[] args = new Object[]{"Kaihan Sun", 38};
-        for (int i = 0; i < times; i++) {
-//            classAccessor.invoke(one, "handle", args);
-            classAccessor.set(one, "username", "sunkaihan");
-        }
-        long invokerTime = timer.intervalMs("invoker");
-        System.out.println(CharSequenceUtil.format("invoker execute {} times took {} ms", times, invokerTime));
-    }
-
-    private static void testInvokerEventBus() throws Throwable {
-        ServiceOne one = new ServiceOne();
         InvokerEventBus eventBus = Events.general().build();
         Invoker invoker = eventBus.register("TestEvent", ServiceOne::handleEvent);
-        int times = 100000;
+        int times = 1000000;
         final TimeInterval timer = new TimeInterval();
 
         timer.start("eventbus");
@@ -62,15 +46,25 @@ public class App {
         long invokerTime = timer.intervalMs("invoker");
         System.out.println("-------------------------invoker----------------------------");
 
+        timer.start("accessor");
+        Object[] args = new Object[]{"Kaihan Sun", 38};
+        for (int i = 0; i < times; i++) {
+//            classAccessor.invoke(one, "handle", args);
+            classAccessor.set(one, "username", "sunkaihan");
+        }
+        long accessorTime = timer.intervalMs("accessor");
+
         timer.start("call");
         for (int i = 0; i < times; i++) {
-            one.handleEvent("Kaihan Sun", 38);
+//            one.handleEvent("Kaihan Sun", 38);
+            one.setUsername("sunkaihan");
         }
         long callTime = timer.intervalMs("call");
         System.out.println("-------------------------call----------------------------");
 
         System.out.println(CharSequenceUtil.format("eventbus execute {} times took {} ms", times, eventBusTime));
         System.out.println(CharSequenceUtil.format("invoker execute {} times took {} ms", times, invokerTime));
+        System.out.println(CharSequenceUtil.format("accessor execute {} times took {} ms", times, accessorTime));
         System.out.println(CharSequenceUtil.format("call execute {} times took {} ms", times, callTime));
 
         timer.clear();

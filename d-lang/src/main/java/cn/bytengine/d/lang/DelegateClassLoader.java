@@ -10,14 +10,6 @@ import java.util.NoSuchElementException;
 
 /**
  * 委托ClassLoader
- * <p>
- * <ul>
- * <li>ProjectName:    d
- * <li>Package:        cn.bytengine.d.lang
- * <li>ClassName:      DelegateClassLoader
- * <li>Date:    2024/5/21 11:35
- * </ul>
- * </p>
  *
  * @author Ban Tenio
  * @version 1.0
