@@ -7,8 +7,8 @@ import cn.bytengine.d.events.InvokerEventBus;
 import cn.bytengine.d.example.ctx.ServiceOne;
 import cn.bytengine.d.fn.invoker.Invoker;
 import cn.bytengine.d.fn.invoker.MetaInfoInvokerFactory;
-import cn.hutool.core.date.TimeInterval;
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.bytengine.d.lang.CharSequenceTools;
+import cn.bytengine.d.lang.TimeInterval;
 
 public class App {
     public static void main(String[] args) throws Throwable {
@@ -62,10 +62,10 @@ public class App {
         long callTime = timer.intervalMs("call");
         System.out.println("-------------------------call----------------------------");
 
-        System.out.println(CharSequenceUtil.format("eventbus execute {} times took {} ms", times, eventBusTime));
-        System.out.println(CharSequenceUtil.format("invoker execute {} times took {} ms", times, invokerTime));
-        System.out.println(CharSequenceUtil.format("accessor execute {} times took {} ms", times, accessorTime));
-        System.out.println(CharSequenceUtil.format("call execute {} times took {} ms", times, callTime));
+        System.out.println(CharSequenceTools.format("eventbus execute {} times took {} ms", times, eventBusTime));
+        System.out.println(CharSequenceTools.format("invoker execute {} times took {} ms", times, invokerTime));
+        System.out.println(CharSequenceTools.format("accessor execute {} times took {} ms", times, accessorTime));
+        System.out.println(CharSequenceTools.format("call execute {} times took {} ms", times, callTime));
 
         timer.clear();
     }

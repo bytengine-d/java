@@ -1,6 +1,6 @@
 package cn.bytengine.d.lang.reflect;
 
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.bytengine.d.lang.CharSequenceTools;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -108,7 +108,7 @@ public class MethodInfo {
         info.parameters = method.getParameterTypes();
         info.parameterLength = info.parameters.length;
         info.methodTypeSign = methodSignatureString(method);
-        info.methodSign = CharSequenceUtil.format("{}.{}{}}", ownClass.getCanonicalName(), info.getMethodName(), info.methodTypeSign);
+        info.methodSign = CharSequenceTools.format("{}.{}{}}", ownClass.getCanonicalName(), info.getMethodName(), info.methodTypeSign);
         return info;
     }
 

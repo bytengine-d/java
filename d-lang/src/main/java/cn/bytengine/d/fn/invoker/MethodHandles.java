@@ -1,6 +1,6 @@
 package cn.bytengine.d.fn.invoker;
 
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.bytengine.d.lang.CharSequenceTools;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandle;
@@ -74,7 +74,7 @@ public abstract class MethodHandles {
     public static MethodType getMethodType(Class<?> type,
                                            String methodName,
                                            Class<?>[] parameterClasses) {
-        String methodSign = CharSequenceUtil.format("{}.{}({})", type.getName(), methodName, Arrays.toString(parameterClasses));
+        String methodSign = CharSequenceTools.format("{}.{}({})", type.getName(), methodName, Arrays.toString(parameterClasses));
         return METHOD_SIGN_METHOD_TYPE_MAPPING.computeIfAbsent(methodSign, key -> {
             MethodHandle mh = getMethodHandler(type, methodName, parameterClasses);
             return mh == null ? null : mh.type();
@@ -92,7 +92,7 @@ public abstract class MethodHandles {
     public static MethodHandle getMethodHandler(Class<?> type,
                                                 String methodName,
                                                 Class<?>[] parameterClasses) {
-        String methodSign = CharSequenceUtil.format("{}.{}({})", type.getName(), methodName, Arrays.toString(parameterClasses));
+        String methodSign = CharSequenceTools.format("{}.{}({})", type.getName(), methodName, Arrays.toString(parameterClasses));
         return METHOD_SIGN_METHOD_HANDLE_MAPPING.computeIfAbsent(methodSign, key -> {
             try {
                 Method method = type.getDeclaredMethod(methodName, parameterClasses);

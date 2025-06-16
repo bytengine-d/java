@@ -1,6 +1,6 @@
 package cn.bytengine.d.events.internal;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.bytengine.d.lang.CollectionTools;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +31,7 @@ public class DefaultEventRouter implements EventRouter {
     @Override
     public void remove(String eventName, InvokerRegistration invoker) {
         List<InvokerRegistration> invokerList = invokerMap.get(eventName);
-        if (CollUtil.isNotEmpty(invokerMap)) {
+        if (CollectionTools.isNotEmpty(invokerMap)) {
             invokerList.remove(invoker);
         }
     }
@@ -44,7 +44,7 @@ public class DefaultEventRouter implements EventRouter {
     @Override
     public boolean has(String eventName, InvokerRegistration invoker) {
         List<InvokerRegistration> invokerList = invokerMap.get(eventName);
-        if (CollUtil.isNotEmpty(invokerList)) {
+        if (CollectionTools.isNotEmpty(invokerList)) {
             return invokerList.contains(invoker);
         }
         return false;
@@ -52,12 +52,12 @@ public class DefaultEventRouter implements EventRouter {
 
     @Override
     public boolean has(String eventName) {
-        return CollUtil.isNotEmpty(invokerMap.get(eventName));
+        return CollectionTools.isNotEmpty(invokerMap.get(eventName));
     }
 
     @Override
     public List<InvokerRegistration> matching(String eventName) {
         List<InvokerRegistration> invokerList = invokerMap.get(eventName);
-        return CollUtil.isNotEmpty(invokerList) ? Collections.unmodifiableList(invokerList) : Collections.emptyList();
+        return CollectionTools.isNotEmpty(invokerList) ? Collections.unmodifiableList(invokerList) : Collections.emptyList();
     }
 }

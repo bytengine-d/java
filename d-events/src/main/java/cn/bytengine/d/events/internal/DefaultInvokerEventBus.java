@@ -3,7 +3,7 @@ package cn.bytengine.d.events.internal;
 import cn.bytengine.d.events.EventExceptionHandler;
 import cn.bytengine.d.events.RegisterOption;
 import cn.bytengine.d.fn.invoker.Invoker;
-import cn.hutool.core.lang.Assert;
+import cn.bytengine.d.lang.AssertTools;
 import org.apache.commons.collections4.map.MultiKeyMap;
 
 import java.util.List;
@@ -35,8 +35,8 @@ public class DefaultInvokerEventBus implements AbstractInvokerEventBus {
      */
     public DefaultInvokerEventBus(EventRouter eventRouter,
                                   EventInvokerDispatcher dispatcher) {
-        Assert.notNull(eventRouter, "EventRouter must not be null");
-        Assert.notNull(dispatcher, "EventInvokerDispatcher must not be null");
+        AssertTools.notNull(eventRouter, "EventRouter must not be null");
+        AssertTools.notNull(dispatcher, "EventInvokerDispatcher must not be null");
         this.eventRouter = eventRouter;
         this.dispatcher = dispatcher;
     }

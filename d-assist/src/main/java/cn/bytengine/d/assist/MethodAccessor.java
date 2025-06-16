@@ -2,8 +2,8 @@ package cn.bytengine.d.assist;
 
 import cn.bytengine.d.fn.invoker.InvocationException;
 import cn.bytengine.d.fn.invoker.MetaInfoInvoker;
+import cn.bytengine.d.lang.ArrayTools;
 import cn.bytengine.d.lang.reflect.MethodInfo;
-import cn.hutool.core.util.ArrayUtil;
 
 /**
  * TODO
@@ -30,7 +30,7 @@ public class MethodAccessor {
 
     public Object invoke(Object me, Object... args) {
         try {
-            return metaInfoInvoker.invoke(ArrayUtil.insert(args, 0, me));
+            return metaInfoInvoker.invoke(ArrayTools.insert(args, 0, me));
         } catch (Throwable e) {
             throw new InvocationException(e);
         }

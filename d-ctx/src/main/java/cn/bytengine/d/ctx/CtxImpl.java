@@ -1,6 +1,6 @@
 package cn.bytengine.d.ctx;
 
-import cn.hutool.core.lang.Assert;
+import cn.bytengine.d.lang.AssertTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class CtxImpl implements Ctx {
 
     @Override
     public Object get(String key) {
-        Assert.notNull(key, "The key is null.");
+        AssertTools.notNull(key, "The key is null.");
         Object obj = this.source.get(key);
         if (obj == null && this.parentCtx != null) {
             obj = this.parentCtx.get(key);
@@ -60,7 +60,7 @@ public class CtxImpl implements Ctx {
 
     @Override
     public Ctx set(String key, Object value) {
-        Assert.notNull(key, "The key is null.");
+        AssertTools.notNull(key, "The key is null.");
         if (value != null) {
             this.source.put(key, value);
         } else {
@@ -71,7 +71,7 @@ public class CtxImpl implements Ctx {
 
     @Override
     public boolean has(String key) {
-        Assert.notNull(key, "The key is null.");
+        AssertTools.notNull(key, "The key is null.");
         if (this.source.containsKey(key)) {
             return true;
         } else {
@@ -81,7 +81,7 @@ public class CtxImpl implements Ctx {
 
     @Override
     public CtxImpl remove(String key) {
-        Assert.notNull(key, "The key is null.");
+        AssertTools.notNull(key, "The key is null.");
         return this;
     }
 

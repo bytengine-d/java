@@ -3,7 +3,7 @@ package cn.bytengine.d.events.internal;
 import cn.bytengine.d.events.EventExceptionHandler;
 import cn.bytengine.d.events.RegisterOption;
 import cn.bytengine.d.fn.invoker.Invoker;
-import cn.hutool.core.collection.CollUtil;
+import cn.bytengine.d.lang.CollectionTools;
 
 import java.util.Collection;
 import java.util.List;
@@ -41,7 +41,7 @@ public class DefaultEventInvokerDispatcher implements EventInvokerDispatcher {
         Invoker invoker = invokerRegistration.getInvoker();
         Invoker tempInvoker = invoker;
         try {
-            if (CollUtil.isNotEmpty(options)) {
+            if (CollectionTools.isNotEmpty(options)) {
                 for (RegisterOption option : options) {
                     tempInvoker = option.option(eventName, tempInvoker);
                 }

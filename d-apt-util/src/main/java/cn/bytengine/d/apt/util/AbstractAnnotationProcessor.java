@@ -1,6 +1,6 @@
 package cn.bytengine.d.apt.util;
 
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.bytengine.d.lang.CharSequenceTools;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -72,47 +72,47 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
     }
 
     /**
-     * 输出消息，支持格式化消息，消息格式参考HuTool的CharSequenceUtil.format方法
+     * 输出消息，支持格式化消息，消息格式参考CharSequenceTools.format方法
      *
      * @param message 格式化消息
      * @param args    消息占位符参数
-     * @see CharSequenceUtil#format(CharSequence, Object...)
+     * @see CharSequenceTools#format(CharSequence, Object...)
      */
     protected void note(String message, Object... args) {
-        mMessager.printMessage(Diagnostic.Kind.NOTE, CharSequenceUtil.format(message, args));
+        mMessager.printMessage(Diagnostic.Kind.NOTE, CharSequenceTools.format(message, args));
     }
 
     /**
-     * 输出警告，支持格式化消息，消息格式参考HuTool的CharSequenceUtil.format方法
+     * 输出警告，支持格式化消息，消息格式参考CharSequenceTools.format方法
      *
      * @param message 格式化消息
      * @param args    消息占位符参数
-     * @see CharSequenceUtil#format(CharSequence, Object...)
+     * @see CharSequenceTools#format(CharSequence, Object...)
      */
     protected void warn(String message, Object... args) {
-        mMessager.printMessage(Diagnostic.Kind.WARNING, CharSequenceUtil.format(message, args));
+        mMessager.printMessage(Diagnostic.Kind.WARNING, CharSequenceTools.format(message, args));
     }
 
     /**
-     * 输出强制性警告，支持格式化消息，消息格式参考HuTool的CharSequenceUtil.format方法
+     * 输出强制性警告，支持格式化消息，消息格式参考CharSequenceTools.format方法
      *
      * @param message 格式化消息
      * @param args    消息占位符参数
-     * @see CharSequenceUtil#format(CharSequence, Object...)
+     * @see CharSequenceTools#format(CharSequence, Object...)
      */
     protected void mandatory(String message, Object... args) {
-        mMessager.printMessage(Diagnostic.Kind.MANDATORY_WARNING, CharSequenceUtil.format(message, args));
+        mMessager.printMessage(Diagnostic.Kind.MANDATORY_WARNING, CharSequenceTools.format(message, args));
     }
 
     /**
-     * 输出错误，支持格式化消息，消息格式参考HuTool的CharSequenceUtil.format方法
+     * 输出错误，支持格式化消息，消息格式参考CharSequenceTools.format方法
      *
      * @param message 格式化消息
      * @param args    消息占位符参数
-     * @see CharSequenceUtil#format(CharSequence, Object...)
+     * @see CharSequenceTools#format(CharSequence, Object...)
      */
     protected void error(String message, Object... args) {
-        mMessager.printMessage(Diagnostic.Kind.ERROR, CharSequenceUtil.format(message, args));
+        mMessager.printMessage(Diagnostic.Kind.ERROR, CharSequenceTools.format(message, args));
     }
 
     @Override

@@ -1,9 +1,10 @@
 package cn.bytengine.d.lang;
 
-import cn.hutool.core.text.finder.Finder;
-import cn.hutool.core.text.finder.StrFinder;
-
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -24,6 +25,10 @@ public abstract class CharSequenceTools {
     private CharSequenceTools() {
     }
 
+    public static boolean isNotBlank(CharSequence str) {
+        return !isBlank(str);
+    }
+
     public static boolean isBlank(CharSequence str) {
         final int length;
         if ((str == null) || ((length = str.length()) == 0)) {
@@ -41,6 +46,18 @@ public abstract class CharSequenceTools {
 
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
+    }
+
+    public static boolean isNotEmpty(CharSequence str) {
+        return !isEmpty(str);
+    }
+
+    public static String nullToDefault(CharSequence str, String defaultStr) {
+        return (str == null) ? defaultStr : str.toString();
+    }
+
+    public static String nullToEmpty(CharSequence str) {
+        return nullToDefault(str, EMPTY);
     }
 
     /**
@@ -93,7 +110,7 @@ public abstract class CharSequenceTools {
                 if (delimIndex > 1 && strPattern.charAt(delimIndex - 2) == C_BACKSLASH) {// 双转义符
                     // 转义符之前还有一个转义符，占位符依旧有效
                     buf.append(strPattern, handledPosition, delimIndex - 1);
-                    buf.append(StringTools.utf8Str(argArray[argIndex]));
+                    buf.append(utf8Str(argArray[argIndex]));
                     handledPosition = delimIndex + placeHolderLength;
                 } else {
                     // 占位符被转义
@@ -104,7 +121,7 @@ public abstract class CharSequenceTools {
                 }
             } else {// 正常占位符
                 buf.append(strPattern, handledPosition, delimIndex);
-                buf.append(StringTools.utf8Str(argArray[argIndex]));
+                buf.append(utf8Str(argArray[argIndex]));
                 handledPosition = delimIndex + placeHolderLength;
             }
         }
@@ -113,6 +130,16 @@ public abstract class CharSequenceTools {
         buf.append(strPattern, handledPosition, strPatternLength);
 
         return buf.toString();
+    }
+
+    public static String format(CharSequence template, Object... params) {
+        if (null == template) {
+            return NULL;
+        }
+        if (ArrayTools.isEmpty(params) || isBlank(template)) {
+            return template.toString();
+        }
+        return format(template.toString(), params);
     }
 
     public static String format(String strPattern, Object... argArray) {
@@ -130,7 +157,7 @@ public abstract class CharSequenceTools {
         String template2 = template.toString();
         String value;
         for (Map.Entry<?, ?> entry : map.entrySet()) {
-            value = StringTools.utf8Str(entry.getValue());
+            value = utf8Str(entry.getValue());
             if (null == value && ignoreNull) {
                 continue;
             }
@@ -149,7 +176,7 @@ public abstract class CharSequenceTools {
 
     public static String replace(CharSequence str, int fromIndex, CharSequence searchStr, CharSequence replacement, boolean ignoreCase) {
         if (isEmpty(str) || isEmpty(searchStr)) {
-            return StringTools.str(str);
+            return str(str);
         }
         if (null == replacement) {
             replacement = EMPTY;
@@ -159,11 +186,11 @@ public abstract class CharSequenceTools {
         final int searchStrLength = searchStr.length();
         if (strLength < searchStrLength) {
             // issue#I4M16G@Gitee
-            return StringTools.str(str);
+            return str(str);
         }
 
         if (fromIndex > strLength) {
-            return StringTools.str(str);
+            return str(str);
         } else if (fromIndex < 0) {
             fromIndex = 0;
         }
@@ -196,7 +223,7 @@ public abstract class CharSequenceTools {
                 return INDEX_NOT_FOUND;
             }
         }
-        return new StrFinder(searchStr, ignoreCase).setText(text).start(from);
+        return new StringFinder(searchStr, ignoreCase).setText(text).start(from);
     }
 
     public static boolean equals(CharSequence str1, CharSequence str2) {
@@ -243,5 +270,309 @@ public abstract class CharSequenceTools {
             }
         }
         return false;
+    }
+
+    public static boolean isSubEquals(CharSequence str1, int start1, CharSequence str2, int start2, int length, boolean ignoreCase) {
+        if (null == str1 || null == str2) {
+            return false;
+        }
+
+        return str1.toString().regionMatches(ignoreCase, start1, str2.toString(), start2, length);
+    }
+
+    public static String trim(CharSequence str, int mode, Predicate<Character> predicate) {
+        String result;
+        if (str == null) {
+            result = null;
+        } else {
+            int length = str.length();
+            int start = 0;
+            int end = length;// 扫描字符串头部
+            if (mode <= 0) {
+                while ((start < end) && (predicate.test(str.charAt(start)))) {
+                    start++;
+                }
+            }// 扫描字符串尾部
+            if (mode >= 0) {
+                while ((start < end) && (predicate.test(str.charAt(end - 1)))) {
+                    end--;
+                }
+            }
+            if ((start > 0) || (end < length)) {
+                result = str.toString().substring(start, end);
+            } else {
+                result = str.toString();
+            }
+        }
+
+        return result;
+    }
+
+    public static String trim(CharSequence str) {
+        return (null == str) ? null : trim(str, 0);
+    }
+
+    public static String trim(CharSequence str, int mode) {
+        return trim(str, mode, CharTools::isBlankChar);
+    }
+
+    public static String trimStart(CharSequence str) {
+        return trim(str, -1);
+    }
+
+    public static String trimEnd(CharSequence str) {
+        return trim(str, 1);
+    }
+
+    public static String subByCodePoint(CharSequence str, int fromIndex, int toIndex) {
+        if (isEmpty(str)) {
+            return str(str);
+        }
+
+        if (fromIndex < 0 || fromIndex > toIndex) {
+            throw new IllegalArgumentException();
+        }
+
+        if (fromIndex == toIndex) {
+            return EMPTY;
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        final int subLen = toIndex - fromIndex;
+        str.toString().codePoints().skip(fromIndex).limit(subLen).forEach(v -> sb.append(Character.toChars(v)));
+        return sb.toString();
+    }
+
+    public static String sub(CharSequence str, int fromIndexInclude, int toIndexExclude) {
+        if (isEmpty(str)) {
+            return str(str);
+        }
+        int len = str.length();
+
+        if (fromIndexInclude < 0) {
+            fromIndexInclude = len + fromIndexInclude;
+            if (fromIndexInclude < 0) {
+                fromIndexInclude = 0;
+            }
+        } else if (fromIndexInclude > len) {
+            fromIndexInclude = len;
+        }
+
+        if (toIndexExclude < 0) {
+            toIndexExclude = len + toIndexExclude;
+            if (toIndexExclude < 0) {
+                toIndexExclude = len;
+            }
+        } else if (toIndexExclude > len) {
+            toIndexExclude = len;
+        }
+
+        if (toIndexExclude < fromIndexInclude) {
+            int tmp = fromIndexInclude;
+            fromIndexInclude = toIndexExclude;
+            toIndexExclude = tmp;
+        }
+
+        if (fromIndexInclude == toIndexExclude) {
+            return EMPTY;
+        }
+
+        return str.toString().substring(fromIndexInclude, toIndexExclude);
+    }
+
+    public static String subPre(CharSequence string, int toIndexExclude) {
+        return sub(string, 0, toIndexExclude);
+    }
+
+    public static String subSuf(CharSequence string, int fromIndex) {
+        if (isEmpty(string)) {
+            return null;
+        }
+        return sub(string, fromIndex, string.length());
+    }
+
+    public static String subSufByLength(CharSequence string, int length) {
+        if (isEmpty(string)) {
+            return null;
+        }
+        if (length <= 0) {
+            return EMPTY;
+        }
+        return sub(string, -length, string.length());
+    }
+
+    public static String subWithLength(String input, int fromIndex, int length) {
+        final int toIndex;
+        if (fromIndex < 0) {
+            toIndex = fromIndex - length;
+        } else {
+            toIndex = fromIndex + length;
+        }
+        return sub(input, fromIndex, toIndex);
+    }
+
+    public static boolean startWith(CharSequence str, CharSequence prefix, boolean ignoreCase, boolean ignoreEquals) {
+        if (null == str || null == prefix) {
+            if (ignoreEquals) {
+                return false;
+            }
+            return null == str && null == prefix;
+        }
+
+        boolean isStartWith = str.toString()
+                .regionMatches(ignoreCase, 0, prefix.toString(), 0, prefix.length());
+
+        if (isStartWith) {
+            return (false == ignoreEquals) || (false == equals(str, prefix, ignoreCase));
+        }
+        return false;
+    }
+
+    public static boolean startWith(CharSequence str, CharSequence prefix, boolean ignoreCase) {
+        return startWith(str, prefix, ignoreCase, false);
+    }
+
+    public static boolean startWith(CharSequence str, CharSequence prefix) {
+        return startWith(str, prefix, false);
+    }
+
+    public static boolean startWith(CharSequence str, char c) {
+        if (isEmpty(str)) {
+            return false;
+        }
+        return c == str.charAt(0);
+    }
+
+    public static boolean startWithIgnoreEquals(CharSequence str, CharSequence prefix) {
+        return startWith(str, prefix, false, true);
+    }
+
+    public static boolean startWithIgnoreCase(CharSequence str, CharSequence prefix) {
+        return startWith(str, prefix, true);
+    }
+
+    public static boolean startWithAnyIgnoreCase(final CharSequence str, final CharSequence... prefixes) {
+        if (isEmpty(str) || ArrayTools.isEmpty(prefixes)) {
+            return false;
+        }
+
+        for (final CharSequence prefix : prefixes) {
+            if (startWith(str, prefix, true)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean startWithAny(CharSequence str, CharSequence... prefixes) {
+        if (isEmpty(str) || ArrayTools.isEmpty(prefixes)) {
+            return false;
+        }
+
+        for (CharSequence prefix : prefixes) {
+            if (startWith(str, prefix, false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String removePrefix(CharSequence str, CharSequence prefix) {
+        if (isEmpty(str) || isEmpty(prefix)) {
+            return str(str);
+        }
+
+        final String str2 = str.toString();
+        if (str2.startsWith(prefix.toString())) {
+            return subSuf(str2, prefix.length());// 截取后半段
+        }
+        return str2;
+    }
+
+    public static String repeat(char c, int count) {
+        if (count <= 0) {
+            return EMPTY;
+        }
+
+        char[] result = new char[count];
+        Arrays.fill(result, c);
+        return new String(result);
+    }
+
+    public static String utf8Str(Object obj) {
+        return str(obj, CharsetTools.CHARSET_UTF_8);
+    }
+
+    public static String str(CharSequence cs) {
+        return null == cs ? null : cs.toString();
+    }
+
+    public static String str(Object obj, Charset charset) {
+        if (null == obj) {
+            return null;
+        }
+
+        if (obj instanceof String) {
+            return (String) obj;
+        } else if (obj instanceof byte[]) {
+            return str((byte[]) obj, charset);
+        } else if (obj instanceof Byte[]) {
+            return str((Byte[]) obj, charset);
+        } else if (obj instanceof ByteBuffer) {
+            return str((ByteBuffer) obj, charset);
+        } else if (ArrayTools.isArray(obj)) {
+            return ArrayTools.toString(obj);
+        }
+
+        return obj.toString();
+    }
+
+    public static String str(byte[] data, Charset charset) {
+        if (data == null) {
+            return null;
+        }
+
+        if (null == charset) {
+            return new String(data);
+        }
+        return new String(data, charset);
+    }
+
+    public static String str(byte[] bytes, String charset) {
+        return str(bytes, CharsetTools.charset(charset));
+    }
+
+    public static String str(Byte[] data, Charset charset) {
+        if (data == null) {
+            return null;
+        }
+
+        byte[] bytes = new byte[data.length];
+        Byte dataByte;
+        for (int i = 0; i < data.length; i++) {
+            dataByte = data[i];
+            bytes[i] = (null == dataByte) ? -1 : dataByte;
+        }
+
+        return str(bytes, charset);
+    }
+
+    public static String str(Byte[] bytes, String charset) {
+        return str(bytes, CharsetTools.charset(charset));
+    }
+
+    public static String str(ByteBuffer data, Charset charset) {
+        if (null == charset) {
+            charset = Charset.defaultCharset();
+        }
+        return charset.decode(data).toString();
+    }
+
+    public static String str(ByteBuffer data, String charset) {
+        if (data == null) {
+            return null;
+        }
+
+        return str(data, CharsetTools.charset(charset));
     }
 }

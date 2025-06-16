@@ -49,4 +49,13 @@ public abstract class CharTools {
     public static boolean isBlankChar(char c) {
         return isBlankChar((int) c);
     }
+
+    public static boolean isChar(Object value) {
+        //noinspection ConstantConditions
+        return value instanceof Character || value.getClass() == char.class;
+    }
+
+    public static String toString(char c) {
+        return ASCIIStrCache.toString(c);
+    }
 }
