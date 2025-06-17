@@ -575,4 +575,46 @@ public abstract class CharSequenceTools {
 
         return str(data, CharsetTools.charset(charset));
     }
+
+    public static String lowerFirst(CharSequence str) {
+        if (null == str) {
+            return null;
+        }
+        if (str.length() > 0) {
+            char firstChar = str.charAt(0);
+            if (Character.isUpperCase(firstChar)) {
+                return Character.toLowerCase(firstChar) + subSuf(str, 1);
+            }
+        }
+        return str.toString();
+    }
+
+    public static String upperFirst(CharSequence str) {
+        if (null == str) {
+            return null;
+        }
+        if (str.length() > 0) {
+            char firstChar = str.charAt(0);
+            if (Character.isLowerCase(firstChar)) {
+                return Character.toUpperCase(firstChar) + subSuf(str, 1);
+            }
+        }
+        return str.toString();
+    }
+
+    public static int indexOfIgnoreCase(final CharSequence str, final CharSequence searchStr, int fromIndex) {
+        return indexOf(str, searchStr, fromIndex, true);
+    }
+
+    public static int indexOfIgnoreCase(final CharSequence str, final CharSequence searchStr) {
+        return indexOfIgnoreCase(str, searchStr, 0);
+    }
+
+    public static boolean containsIgnoreCase(CharSequence str, CharSequence testStr) {
+        if (null == str) {
+            // 如果被监测字符串和
+            return null == testStr;
+        }
+        return indexOfIgnoreCase(str, testStr) > -1;
+    }
 }

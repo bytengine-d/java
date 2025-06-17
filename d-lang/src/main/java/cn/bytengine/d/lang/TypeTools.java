@@ -17,6 +17,10 @@ public abstract class TypeTools {
     private TypeTools() {
     }
 
+    public static Type getTypeArgument(Type type) {
+        return getTypeArgument(type, 0);
+    }
+
     public static Type getTypeArgument(Type type, int index) {
         final Type[] typeArguments = getTypeArguments(type);
         if (null != typeArguments && typeArguments.length > index) {

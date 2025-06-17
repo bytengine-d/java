@@ -1,7 +1,5 @@
 package cn.bytengine.d.lang;
 
-import cn.hutool.core.util.NumberUtil;
-
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -57,7 +55,7 @@ public abstract class ObjectTools {
 
     public static boolean equal(Object obj1, Object obj2) {
         if (obj1 instanceof Number && obj2 instanceof Number) {
-            return NumberUtil.equals((Number) obj1, (Number) obj2);
+            return NumberTools.equals((Number) obj1, (Number) obj2);
         }
         return Objects.equals(obj1, obj2);
     }

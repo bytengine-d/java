@@ -1,10 +1,9 @@
 package cn.bytengine.d.collection;
 
+import cn.bytengine.d.fn.Suppliers;
 import cn.bytengine.d.lang.CollectionTools;
 import cn.bytengine.d.lang.ObjectTools;
 import cn.bytengine.d.lang.ReferenceTools;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.func.Func0;
 
 import java.io.Serializable;
 import java.lang.ref.Reference;
@@ -119,8 +118,8 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
         return this.raw.computeIfPresent(ofKey(key, this.lastQueue), (kWeakKey, value) -> remappingFunction.apply(key, value));
     }
 
-    public V computeIfAbsent(K key, Func0<? extends V> supplier) {
-        return computeIfAbsent(key, (keyParam) -> supplier.callWithRuntimeException());
+    public V computeIfAbsent(K key, Suppliers.Supplier0WithThrows<? extends V> supplier) {
+        return computeIfAbsent(key, (keyParam) -> supplier.applyWithRuntimeException());
     }
 
     @Override

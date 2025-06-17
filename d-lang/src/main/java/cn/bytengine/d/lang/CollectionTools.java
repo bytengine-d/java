@@ -59,4 +59,19 @@ public abstract class CollectionTools {
     public static <T> HashSet<T> newHashSet(boolean isSorted, Collection<T> collection) {
         return isSorted ? new LinkedHashSet<>(collection) : new HashSet<>(collection);
     }
+
+    @SafeVarargs
+    public static <T> ArrayList<T> toList(T... values) {
+        return (ArrayList<T>) list(false, values);
+    }
+
+    @SafeVarargs
+    public static <T> List<T> list(boolean isLinked, T... values) {
+        if (ArrayTools.isEmpty(values)) {
+            return list(isLinked);
+        }
+        final List<T> arrayList = isLinked ? new LinkedList<>() : new ArrayList<>(values.length);
+        Collections.addAll(arrayList, values);
+        return arrayList;
+    }
 }

@@ -1,10 +1,6 @@
 package cn.bytengine.d.utils;
 
-import cn.bytengine.d.lang.BooleanTools;
-import cn.bytengine.d.lang.CharSequenceTools;
-import cn.bytengine.d.lang.TemporalTools;
-import cn.hutool.core.util.ByteUtil;
-import cn.hutool.core.util.NumberUtil;
+import cn.bytengine.d.lang.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -67,7 +63,7 @@ public class NumberConverter extends AbstractConverter<Number> {
 
         // since 5.7.18
         if (value instanceof byte[]) {
-            return ByteUtil.bytesToNumber((byte[]) value, targetType, ByteUtil.DEFAULT_ORDER);
+            return ByteTools.bytesToNumber((byte[]) value, targetType, ByteTools.DEFAULT_ORDER);
         }
 
         if (Byte.class == targetType) {
@@ -80,7 +76,7 @@ public class NumberConverter extends AbstractConverter<Number> {
             try {
                 return CharSequenceTools.isBlank(valueStr) ? null : Byte.valueOf(valueStr);
             } catch (NumberFormatException e) {
-                return NumberUtil.parseNumber(valueStr).byteValue();
+                return NumberTools.parseNumber(valueStr).byteValue();
             }
         } else if (Short.class == targetType) {
             if (value instanceof Number) {
@@ -92,7 +88,7 @@ public class NumberConverter extends AbstractConverter<Number> {
             try {
                 return CharSequenceTools.isBlank(valueStr) ? null : Short.valueOf(valueStr);
             } catch (NumberFormatException e) {
-                return NumberUtil.parseNumber(valueStr).shortValue();
+                return NumberTools.parseNumber(valueStr).shortValue();
             }
         } else if (Integer.class == targetType) {
             if (value instanceof Number) {
@@ -107,7 +103,7 @@ public class NumberConverter extends AbstractConverter<Number> {
                 return (int) TemporalTools.toInstant((TemporalAccessor) value).toEpochMilli();
             }
             final String valueStr = toStrFunc.apply((value));
-            return CharSequenceTools.isBlank(valueStr) ? null : NumberUtil.parseInt(valueStr);
+            return CharSequenceTools.isBlank(valueStr) ? null : NumberTools.parseInt(valueStr);
         } else if (AtomicInteger.class == targetType) {
             final Number number = convert(value, Integer.class, toStrFunc);
             if (null != number) {
@@ -126,7 +122,7 @@ public class NumberConverter extends AbstractConverter<Number> {
                 return TemporalTools.toInstant((TemporalAccessor) value).toEpochMilli();
             }
             final String valueStr = toStrFunc.apply((value));
-            return CharSequenceTools.isBlank(valueStr) ? null : NumberUtil.parseLong(valueStr);
+            return CharSequenceTools.isBlank(valueStr) ? null : NumberTools.parseLong(valueStr);
         } else if (AtomicLong.class == targetType) {
             final Number number = convert(value, Long.class, toStrFunc);
             if (null != number) {
@@ -147,15 +143,15 @@ public class NumberConverter extends AbstractConverter<Number> {
                 return BooleanTools.toFloatObj((Boolean) value);
             }
             final String valueStr = toStrFunc.apply((value));
-            return CharSequenceTools.isBlank(valueStr) ? null : NumberUtil.parseFloat(valueStr);
+            return CharSequenceTools.isBlank(valueStr) ? null : NumberTools.parseFloat(valueStr);
         } else if (Double.class == targetType) {
             if (value instanceof Number) {
-                return NumberUtil.toDouble((Number) value);
+                return NumberTools.toDouble((Number) value);
             } else if (value instanceof Boolean) {
                 return BooleanTools.toDoubleObj((Boolean) value);
             }
             final String valueStr = toStrFunc.apply((value));
-            return CharSequenceTools.isBlank(valueStr) ? null : NumberUtil.parseDouble(valueStr);
+            return CharSequenceTools.isBlank(valueStr) ? null : NumberTools.parseDouble(valueStr);
         } else if (DoubleAdder.class == targetType) {
             //jdk8 新增
             final Number number = convert(value, Double.class, toStrFunc);
@@ -175,7 +171,7 @@ public class NumberConverter extends AbstractConverter<Number> {
                 return BooleanTools.toInteger((Boolean) value);
             }
             final String valueStr = toStrFunc.apply((value));
-            return CharSequenceTools.isBlank(valueStr) ? null : NumberUtil.parseNumber(valueStr);
+            return CharSequenceTools.isBlank(valueStr) ? null : NumberTools.parseNumber(valueStr);
         }
 
         throw new UnsupportedOperationException(CharSequenceTools.format("Unsupport Number type: {}", targetType.getName()));
@@ -183,13 +179,13 @@ public class NumberConverter extends AbstractConverter<Number> {
 
     private static BigDecimal toBigDecimal(Object value, Function<Object, String> toStrFunc) {
         if (value instanceof Number) {
-            return NumberUtil.toBigDecimal((Number) value);
+            return NumberTools.toBigDecimal((Number) value);
         } else if (value instanceof Boolean) {
             return ((boolean) value) ? BigDecimal.ONE : BigDecimal.ZERO;
         }
 
         //对于Double类型，先要转换为String，避免精度问题
-        return NumberUtil.toBigDecimal(toStrFunc.apply(value));
+        return NumberTools.toBigDecimal(toStrFunc.apply(value));
     }
 
     private static BigInteger toBigInteger(Object value, Function<Object, String> toStrFunc) {
@@ -199,6 +195,6 @@ public class NumberConverter extends AbstractConverter<Number> {
             return (boolean) value ? BigInteger.ONE : BigInteger.ZERO;
         }
 
-        return NumberUtil.toBigInteger(toStrFunc.apply(value));
+        return NumberTools.toBigInteger(toStrFunc.apply(value));
     }
 }

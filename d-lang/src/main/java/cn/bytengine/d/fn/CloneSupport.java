@@ -1,7 +1,6 @@
 package cn.bytengine.d.fn;
 
-import cn.hutool.core.clone.CloneRuntimeException;
-import cn.hutool.core.clone.Cloneable;
+import cn.bytengine.d.lang.Cloneable;
 
 /**
  * TODO
@@ -17,7 +16,7 @@ public class CloneSupport<T> implements Cloneable<T> {
         try {
             return (T) super.clone();
         } catch (CloneNotSupportedException e) {
-            throw new CloneRuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 }

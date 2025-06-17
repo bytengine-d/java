@@ -1,8 +1,5 @@
 package cn.bytengine.d.lang;
 
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.format.GlobalCustomFormat;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -168,14 +165,14 @@ public abstract class LocalDateTimeTools {
             // fix issue#1082
             //see https://stackoverflow.com/questions/22588051/is-java-time-failing-to-parse-fraction-of-second
             // jdk8 bug at: https://bugs.openjdk.java.net/browse/JDK-8031085
-            if (CharSequenceTools.startWithIgnoreEquals(format, DatePattern.PURE_DATETIME_PATTERN)) {
-                final String fraction = CharSequenceTools.removePrefix(format, DatePattern.PURE_DATETIME_PATTERN);
+            if (CharSequenceTools.startWithIgnoreEquals(format, DatePatterns.PURE_DATETIME_PATTERN)) {
+                final String fraction = CharSequenceTools.removePrefix(format, DatePatterns.PURE_DATETIME_PATTERN);
                 if (RegexTools.isMatch("[S]{1,2}", fraction)) {
                     //将yyyyMMddHHmmssS、yyyyMMddHHmmssSS的日期统一替换为yyyyMMddHHmmssSSS格式，用0补
                     text += CharSequenceTools.repeat('0', 3 - fraction.length());
                 }
                 formatter = new DateTimeFormatterBuilder()
-                        .appendPattern(DatePattern.PURE_DATETIME_PATTERN)
+                        .appendPattern(DatePatterns.PURE_DATETIME_PATTERN)
                         .appendValue(ChronoField.MILLI_OF_SECOND, 3)
                         .toFormatter();
             } else {

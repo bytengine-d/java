@@ -1,6 +1,6 @@
 package cn.bytengine.d.lang.reflect;
 
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.bytengine.d.lang.CharSequenceTools;
 
 import java.beans.FeatureDescriptor;
 import java.beans.IntrospectionException;
@@ -123,7 +123,7 @@ public class ClassInfo {
 
     public MethodInfo findFirstMethod(String methodName, boolean throwWhenNotFound) {
         Optional<MethodInfo> result = methodInfos.values().stream()
-                .filter(mi -> CharSequenceUtil.equals(mi.getMethodName(), methodName))
+                .filter(mi -> CharSequenceTools.equals(mi.getMethodName(), methodName))
                 .findFirst();
         if (throwWhenNotFound) {
             return result.orElseThrow(() -> new NoSuchElementException("the method name not existed in type"));
@@ -133,7 +133,7 @@ public class ClassInfo {
 
     public List<MethodInfo> findAllMethods(String methodName) {
         return methodInfos.values().stream()
-                .filter(mi -> CharSequenceUtil.equals(mi.getMethodName(), methodName))
+                .filter(mi -> CharSequenceTools.equals(mi.getMethodName(), methodName))
                 .collect(Collectors.toList());
     }
 
@@ -221,7 +221,7 @@ public class ClassInfo {
                 } else {
                     continue;
                 }
-                String propertyName = CharSequenceUtil.lowerFirst(methodName.substring(nameIndex));
+                String propertyName = CharSequenceTools.lowerFirst(methodName.substring(nameIndex));
                 if (propertyName.isEmpty()) {
                     continue;
                 }

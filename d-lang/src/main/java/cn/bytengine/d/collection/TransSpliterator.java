@@ -33,7 +33,7 @@ public class TransSpliterator<F, T> implements Spliterator<T> {
     @Override
     public Spliterator<T> trySplit() {
         Spliterator<F> fromSplit = fromSpliterator.trySplit();
-        return (fromSplit != null) ? new cn.hutool.core.collection.TransSpliterator<>(fromSplit, function) : null;
+        return (fromSplit != null) ? new TransSpliterator<>(fromSplit, function) : null;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package cn.bytengine.d.lang;
 
-import cn.hutool.core.util.TypeUtil;
-
 import java.lang.reflect.Type;
 
 /**
@@ -15,7 +13,7 @@ public abstract class TypeReference<T> implements Type {
     private final Type type;
 
     public TypeReference() {
-        this.type = TypeUtil.getTypeArgument(getClass());
+        this.type = TypeTools.getTypeArgument(getClass());
     }
 
     public Type getType() {

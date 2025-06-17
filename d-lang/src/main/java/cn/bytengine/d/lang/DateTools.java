@@ -23,4 +23,8 @@ public abstract class DateTools {
         }
         return new Date(TemporalTools.toInstant(temporalAccessor).toEpochMilli());
     }
+
+    public static Date date(long date) {
+        return new Date(date);
+    }
 }
