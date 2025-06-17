@@ -35,6 +35,10 @@ public abstract class NumberTools {
         return 0 == bigNum1.compareTo(bigNum2);
     }
 
+    public static boolean equals(char c1, char c2, boolean ignoreCase) {
+        return CharTools.equals(c1, c2, ignoreCase);
+    }
+
     public static Number parseNumber(String numberStr) throws NumberFormatException {
         if (CharSequenceTools.startWithIgnoreCase(numberStr, "0x")) {
             // 0x04表示16进制数

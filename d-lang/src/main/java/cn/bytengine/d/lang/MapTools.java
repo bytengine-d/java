@@ -1,5 +1,6 @@
 package cn.bytengine.d.lang;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -34,5 +35,15 @@ public abstract class MapTools {
             //value = map.computeIfAbsent(key, mappingFunction);
         }
         return value;
+    }
+
+    public static <K, V> HashMap<K, V> of(K key, V value) {
+        return of(key, value, false);
+    }
+
+    public static <K, V> HashMap<K, V> of(K key, V value, boolean isOrder) {
+        final HashMap<K, V> map = CollectionTools.newHashMap(isOrder);
+        map.put(key, value);
+        return map;
     }
 }

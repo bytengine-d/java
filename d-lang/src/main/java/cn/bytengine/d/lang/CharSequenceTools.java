@@ -226,6 +226,13 @@ public abstract class CharSequenceTools {
         return new StringFinder(searchStr, ignoreCase).setText(text).start(from);
     }
 
+    public static int indexOf(CharSequence text, char searchChar, int start, int end) {
+        if (isEmpty(text)) {
+            return INDEX_NOT_FOUND;
+        }
+        return new CharFinder(searchChar).setText(text).setEndIndex(end).start(start);
+    }
+
     public static boolean equals(CharSequence str1, CharSequence str2) {
         return equals(str1, str2, false);
     }
@@ -616,5 +623,9 @@ public abstract class CharSequenceTools {
             return null == testStr;
         }
         return indexOfIgnoreCase(str, testStr) > -1;
+    }
+
+    public static String toUnderlineCase(CharSequence str) {
+        return NamingCase.toUnderlineCase(str);
     }
 }

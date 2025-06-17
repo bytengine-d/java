@@ -15,6 +15,9 @@ public abstract class CollectionTools {
     private CollectionTools() {
     }
 
+    public static final int DEFAULT_INITIAL_CAPACITY = 16;
+    public static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
     public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
     }
@@ -73,5 +76,14 @@ public abstract class CollectionTools {
         final List<T> arrayList = isLinked ? new LinkedList<>() : new ArrayList<>(values.length);
         Collections.addAll(arrayList, values);
         return arrayList;
+    }
+
+    public static <K, V> HashMap<K, V> newHashMap(boolean isLinked) {
+        return newHashMap(DEFAULT_INITIAL_CAPACITY, isLinked);
+    }
+
+    public static <K, V> HashMap<K, V> newHashMap(int size, boolean isLinked) {
+        final int initialCapacity = (int) (size / DEFAULT_LOAD_FACTOR) + 1;
+        return isLinked ? new LinkedHashMap<>(initialCapacity) : new HashMap<>(initialCapacity);
     }
 }

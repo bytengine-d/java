@@ -1,7 +1,5 @@
 package cn.bytengine.d.lang;
 
-import cn.bytengine.d.utils.Convert;
-
 import java.util.Set;
 
 /**
@@ -196,14 +194,6 @@ public abstract class BooleanTools {
         }
 
         return result;
-    }
-
-    public static Boolean xorOfWrap(Boolean... array) {
-        if (ArrayTools.isEmpty(array)) {
-            throw new IllegalArgumentException("The Array must not be empty !");
-        }
-        final boolean[] primitive = Convert.convert(boolean[].class, array);
-        return xor(primitive);
     }
 
     public static boolean isBoolean(Class<?> clazz) {

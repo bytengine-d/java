@@ -1,9 +1,9 @@
 package cn.bytengine.d.lang;
 
-import cn.bytengine.d.utils.Convert;
-
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -80,34 +80,18 @@ public abstract class ArrayTools {
     }
 
     public static <T> T[] insert(T[] buffer, int index, T... newElements) {
-        return (T[]) insert((Object) buffer, index, newElements);
-    }
-
-    public static <T> Object insert(Object array, int index, T... newElements) {
-        if (isEmpty(newElements)) {
-            return array;
-        }
-        if (isEmpty(array)) {
-            return newElements;
-        }
-
-        final int len = length(array);
+        final int newEleLen = length(newElements);
+        final int len = length(buffer);
         if (index < 0) {
             index = (index % len) + len;
         }
 
-        // 已有数组的元素类型
-        final Class<?> originComponentType = array.getClass().getComponentType();
-        Object newEleArr = newElements;
-        // 如果 已有数组的元素类型是 原始类型，则需要转换 新元素数组 为该类型，避免ArrayStoreException
-        if (originComponentType.isPrimitive()) {
-            newEleArr = Convert.convert(array.getClass(), newElements);
-        }
-        final Object result = Array.newInstance(originComponentType, Math.max(len, index) + newElements.length);
-        System.arraycopy(array, 0, result, 0, Math.min(len, index));
-        System.arraycopy(newEleArr, 0, result, index, newElements.length);
+        final Class<?> originComponentType = buffer.getClass().getComponentType();
+        T[] result = newArray(originComponentType, len + newEleLen);
+        System.arraycopy(buffer, 0, result, 0, Math.min(len, index));
+        System.arraycopy(newElements, 0, result, index, newEleLen);
         if (index < len) {
-            System.arraycopy(array, index, result, index + newElements.length, len - index);
+            System.arraycopy(buffer, index, result, index + newEleLen, len - index);
         }
         return result;
     }
@@ -167,5 +151,29 @@ public abstract class ArrayTools {
     @SuppressWarnings("unchecked")
     public static <T> T[] newArray(Class<?> componentType, int newSize) {
         return (T[]) Array.newInstance(componentType, newSize);
+    }
+
+    public static <T> T[] edit(T[] array, Function<T, T> editor) {
+        if (null == editor) {
+            return array;
+        }
+
+        final ArrayList<T> list = new ArrayList<>(array.length);
+        T modified;
+        for (T t : array) {
+            modified = editor.apply(t);
+            if (null != modified) {
+                list.add(modified);
+            }
+        }
+        final T[] result = newArray(array.getClass().getComponentType(), list.size());
+        return list.toArray(result);
+    }
+
+    public static <T> T[] filter(T[] array, Predicate<T> filter) {
+        if (null == array || null == filter) {
+            return array;
+        }
+        return edit(array, t -> filter.test(t) ? t : null);
     }
 }

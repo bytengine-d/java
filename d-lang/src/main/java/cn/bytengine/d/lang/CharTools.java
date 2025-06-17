@@ -58,4 +58,15 @@ public abstract class CharTools {
     public static String toString(char c) {
         return ASCIIStrCache.toString(c);
     }
+
+    public static boolean equals(char c1, char c2, boolean caseInsensitive) {
+        if (caseInsensitive) {
+            return Character.toLowerCase(c1) == Character.toLowerCase(c2);
+        }
+        return c1 == c2;
+    }
+
+    public static boolean isNumber(char ch) {
+        return ch >= '0' && ch <= '9';
+    }
 }

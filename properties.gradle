@@ -20,10 +20,6 @@ ext {
     subProjects = "d-apt-util,d-ctx,d-ctx-annotation,d-events,d-example,d-lang,d-assist,d-assist-annotation"
     subApps = "d-example"
 
-
-    // dependencies version
-    HutoolVersion = "5.8.23"
-
     Slf4jVersion = "2.0.9"
     JaninoVersion = "3.1.10"
     ApacheCollection4Version = "4.4"

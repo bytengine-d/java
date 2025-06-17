@@ -1,6 +1,4 @@
-package cn.bytengine.d.fn;
-
-import cn.bytengine.d.lang.Cloneable;
+package cn.bytengine.d.lang;
 
 /**
  * TODO
