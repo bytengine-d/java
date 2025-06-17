@@ -4,9 +4,11 @@ import cn.bytengine.d.events.EventExceptionHandler;
 import cn.bytengine.d.events.RegisterOption;
 import cn.bytengine.d.fn.invoker.Invoker;
 import cn.bytengine.d.lang.AssertTools;
-import org.apache.commons.collections4.map.MultiKeyMap;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 默认的调用器事件总线实现
@@ -24,7 +26,7 @@ import java.util.List;
 public class DefaultInvokerEventBus implements AbstractInvokerEventBus {
     private final EventRouter eventRouter;
     private final EventInvokerDispatcher dispatcher;
-    private final MultiKeyMap<Object, InvokerRegistration> eventInvokerRegistrationMap = new MultiKeyMap<>();
+    private final Map<EventInvokerKey, InvokerRegistration> eventInvokerRegistrationMap = new HashMap<>();
 
 
     /**
@@ -49,10 +51,11 @@ public class DefaultInvokerEventBus implements AbstractInvokerEventBus {
 
     @Override
     public void unregister(String eventName, Invoker invoker) {
-        InvokerRegistration invokerRegistration = eventInvokerRegistrationMap.get(eventName, invoker);
+        EventInvokerKey key = new EventInvokerKey(eventName, invoker);
+        InvokerRegistration invokerRegistration = eventInvokerRegistrationMap.get(key);
         if (invokerRegistration != null) {
             eventRouter.remove(eventName, invokerRegistration);
-            eventInvokerRegistrationMap.remove(eventName, invoker);
+            eventInvokerRegistrationMap.remove(key);
         }
     }
 
@@ -60,7 +63,37 @@ public class DefaultInvokerEventBus implements AbstractInvokerEventBus {
     public Invoker register(String eventName, Invoker invoker, RegisterOption... options) {
         InvokerRegistration invokerRegistration = new InvokerRegistration(invoker, options);
         eventRouter.add(eventName, invokerRegistration);
-        eventInvokerRegistrationMap.put(eventName, invoker, invokerRegistration);
+        eventInvokerRegistrationMap.put(new EventInvokerKey(eventName, invoker), invokerRegistration);
         return invoker;
+    }
+
+    private static class EventInvokerKey {
+        final String eventName;
+        final Invoker invoker;
+
+        public EventInvokerKey(String eventName, Invoker invoker) {
+            this.eventName = eventName;
+            this.invoker = invoker;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+            EventInvokerKey that = (EventInvokerKey) o;
+            return Objects.equals(eventName, that.eventName) && Objects.equals(invoker, that.invoker);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(eventName, invoker);
+        }
+
+        @Override
+        public String toString() {
+            return "EventInvokerKey{" +
+                    "eventName='" + eventName + '\'' +
+                    ", invoker=" + invoker +
+                    '}';
+        }
     }
 }
