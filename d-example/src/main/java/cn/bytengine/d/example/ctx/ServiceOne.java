@@ -1,6 +1,7 @@
 package cn.bytengine.d.example.ctx;
 
-import cn.bytengine.d.ctx.annotations.CtxWrapper;
+import cn.bytengine.d.assist.annotations.ClassAccess;
+import cn.bytengine.d.assist.annotations.MethodAccess;
 
 /**
  * TODO
@@ -16,7 +17,7 @@ import cn.bytengine.d.ctx.annotations.CtxWrapper;
  * @author Ban Tenio
  * @version 1.0
  */
-@CtxWrapper
+@ClassAccess
 public class ServiceOne {
     private String username;
     private int age;
@@ -39,11 +40,13 @@ public class ServiceOne {
         return this;
     }
 
+    @MethodAccess
     public void handleEvent(String name, int age) {
         StringBuilder buf = new StringBuilder(name + ":" + age);
         buf.delete(0, buf.length());
     }
 
+    @MethodAccess
     public Object handle(String name, int age) {
         StringBuilder buf = new StringBuilder(name + ":" + age);
         buf.delete(0, buf.length());

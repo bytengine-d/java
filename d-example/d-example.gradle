@@ -8,11 +8,9 @@ dependencies {
     implementation project(':d-ctx')
     implementation project(':d-assist')
 
-    annotationProcessor project(':d-ctx')
-//    implementation group: 'com.lmax', name: 'disruptor', version: '4.0.0'
+    annotationProcessor project(':d-assist-apt')
 }
 
 application {
-    // Define the main class for the application.
     mainClass = 'cn.bytengne.d.example.App'
 }

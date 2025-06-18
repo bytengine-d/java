@@ -7,4 +7,8 @@ plugins {
 dependencies {
     api project(":d-assist")
     api project(":d-apt-util")
+    api project(":d-ctx")
+    api libs.freemarker
+
+    runtimeOnly("com.google.auto.service:auto-service-annotations:1.1.1")
 }

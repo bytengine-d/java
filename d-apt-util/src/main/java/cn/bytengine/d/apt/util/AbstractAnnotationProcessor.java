@@ -42,7 +42,10 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         mFiler = processingEnv.getFiler();
         mMessager = processingEnv.getMessager();
         mElements = processingEnv.getElementUtils();
+        internalInit(processingEnv);
     }
+
+    abstract protected void internalInit(ProcessingEnvironment processingEnv);
 
     /**
      * 获取文件管理器

@@ -86,4 +86,8 @@ public abstract class CollectionTools {
         final int initialCapacity = (int) (size / DEFAULT_LOAD_FACTOR) + 1;
         return isLinked ? new LinkedHashMap<>(initialCapacity) : new HashMap<>(initialCapacity);
     }
+
+    public static <T> boolean hasAny(Collection<T> container, Collection<T> conditionItems) {
+        return container.stream().filter(conditionItems::contains).findFirst().orElse(null) != null;
+    }
 }

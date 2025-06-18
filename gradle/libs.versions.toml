@@ -3,12 +3,14 @@
 [versions]
 slf4j = "2.0.17"
 commons-collection4 = "4.4"
+freemarker = "2.3.34"
 
 [libraries]
 slf4j-jul = { module = "org.slf4j:jul-to-slf4j", version.ref = "slf4j" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-jcl = { module = "org.slf4j:jcl-over-slf4j", version.ref = "slf4j" }
 commons-collection4 = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collection4" }
+freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
 
 [bundles]
 

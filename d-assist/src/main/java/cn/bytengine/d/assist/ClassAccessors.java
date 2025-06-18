@@ -16,6 +16,10 @@ public class ClassAccessors {
     private static final Map<Class<?>, ClassAccessor> classAccessorMap = new HashMap<>(16);
     private static final Map<String, ClassAccessor> classNameAccessorMap = new HashMap<>(16);
 
+    public static void load() {
+        ClassAccessorRegister.load();
+    }
+
     public static ClassAccessor register(Class<?> key) {
         if (containsClass(key)) {
             return get(key);

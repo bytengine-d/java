@@ -2,6 +2,7 @@ package cn.bytengine.d.ctx.annotations;
 
 import cn.bytengine.d.apt.util.AbstractAnnotationProcessor;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -54,5 +55,10 @@ public class CtxWrapperProcessor extends AbstractAnnotationProcessor {
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.RELEASE_8;
+    }
+
+    @Override
+    protected void internalInit(ProcessingEnvironment processingEnv) {
+
     }
 }

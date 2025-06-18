@@ -6,7 +6,6 @@ import cn.bytengine.d.events.Events;
 import cn.bytengine.d.events.InvokerEventBus;
 import cn.bytengine.d.example.ctx.ServiceOne;
 import cn.bytengine.d.fn.invoker.Invoker;
-import cn.bytengine.d.fn.invoker.MetaInfoInvokerFactory;
 import cn.bytengine.d.lang.CharSequenceTools;
 import cn.bytengine.d.lang.TimeInterval;
 
@@ -16,21 +15,16 @@ public class App {
     }
 
     private static void testInvokerEventBus() throws Throwable {
-        ClassAccessor classAccessor = ClassAccessors.register(ServiceOne.class);
-        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::handle));
-        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::handleEvent));
-        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::getUsername));
-        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::getAge));
-        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::setUsername));
-        classAccessor.addMethodAccessor(MetaInfoInvokerFactory.createInvoker(ServiceOne::setAge));
-        classAccessor.addPropertyAccessor("username");
-        classAccessor.addPropertyAccessor("age");
+        ClassAccessors.load();
+        ClassAccessor classAccessor = ClassAccessors.get(ServiceOne.class);
 
         ServiceOne one = new ServiceOne();
         InvokerEventBus eventBus = Events.general().build();
         Invoker invoker = eventBus.register("TestEvent", ServiceOne::handleEvent);
         int times = 1000000;
         final TimeInterval timer = new TimeInterval();
+
+        Object[] args = new Object[]{one, "Kaihan Sun", 38};
 
         timer.start("eventbus");
         for (int i = 0; i < times; i++) {
@@ -41,18 +35,18 @@ public class App {
 
         timer.start("invoker");
         for (int i = 0; i < times; i++) {
-            invoker.invoke(new Object[]{one, "Kaihan Sun", 38});
+            invoker.invoke(args);
         }
         long invokerTime = timer.intervalMs("invoker");
         System.out.println("-------------------------invoker----------------------------");
 
         timer.start("accessor");
-        Object[] args = new Object[]{"Kaihan Sun", 38};
         for (int i = 0; i < times; i++) {
 //            classAccessor.invoke(one, "handle", args);
             classAccessor.set(one, "username", "sunkaihan");
         }
         long accessorTime = timer.intervalMs("accessor");
+        System.out.println("-------------------------accessor----------------------------");
 
         timer.start("call");
         for (int i = 0; i < times; i++) {

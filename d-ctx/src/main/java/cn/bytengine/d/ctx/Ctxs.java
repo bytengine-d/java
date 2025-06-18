@@ -44,6 +44,25 @@ public abstract class Ctxs {
     }
 
     /**
+     * 使用公共上下文创建新一级的上下文视图
+     *
+     * @return 上下文视图扩展实现类
+     */
+    public static Ctx space() {
+        return space(global());
+    }
+
+    /**
+     * 使用公共上下文创建新一级的上下文视图
+     *
+     * @param data 数据内容
+     * @return 上下文视图扩展实现类
+     */
+    public static Ctx space(Map<String, Object> data) {
+        return space(global(), data);
+    }
+
+    /**
      * 指定父级上下文创建新一级的上下文视图
      *
      * @param parent 父级上下文
@@ -52,7 +71,6 @@ public abstract class Ctxs {
     public static Ctx space(Ctx parent) {
         return new CtxImpl(parent);
     }
-
 
     /**
      * 指定父级上下文和数据，创建新一级的上下文视图
