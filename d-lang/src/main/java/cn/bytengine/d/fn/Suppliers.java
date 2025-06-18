@@ -3,7 +3,7 @@ package cn.bytengine.d.fn;
 import java.io.Serializable;
 
 /**
- * TODO
+ * 枚举Function函数形式，和辅助类
  *
  * @author Ban Tenio
  * @version 1.0

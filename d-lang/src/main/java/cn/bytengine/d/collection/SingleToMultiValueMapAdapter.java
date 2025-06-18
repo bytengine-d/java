@@ -7,8 +7,14 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
- * TODO
+ * Adapts a given {@link MultiValueMap} to the {@link Map} contract. The
+ * difference with {@link MultiValueMapAdapter} is that this class delegates to
+ * a {@code Map<K, V>}, whereas {@link MultiValueMapAdapter} needs a
+ * {@code Map<K, List<V>>}. {@link MultiToSingleValueMapAdapter} adapts in the
+ * opposite direction as this class.
  *
+ * @param <K> the key type
+ * @param <V> the value element type
  * @author Ban Tenio
  * @version 1.0
  */
@@ -22,14 +28,17 @@ final class SingleToMultiValueMapAdapter<K, V> implements MultiValueMap<K, V>, S
 
     private transient Set<Entry<K, List<V>>> entries;
 
-
+    /**
+     * Wrap the given target {@link Map} as a {@link MultiValueMap} adapter.
+     *
+     * @param targetMap the plain target {@code Map}
+     */
     public SingleToMultiValueMapAdapter(Map<K, V> targetMap) {
         AssertTools.notNull(targetMap, "'targetMap' must not be null");
         this.targetMap = targetMap;
     }
 
     @Override
-
     public V getFirst(K key) {
         return this.targetMap.get(key);
     }

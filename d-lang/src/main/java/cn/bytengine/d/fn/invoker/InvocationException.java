@@ -2,6 +2,9 @@ package cn.bytengine.d.fn.invoker;
 
 /**
  * 调用异常
+ *
+ * @author Ban Tenio
+ * @version 1.0
  */
 public class InvocationException extends RuntimeException {
     /**

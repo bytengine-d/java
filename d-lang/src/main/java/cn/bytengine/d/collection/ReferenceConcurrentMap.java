@@ -18,8 +18,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * TODO
+ * 线程安全的ReferenceMap实现<br>
+ * 参考：jdk.management.resource.internal.WeakKeyConcurrentHashMap
  *
+ * @param <K> 键类型
+ * @param <V> 值类型
  * @author Ban Tenio
  * @version 1.0
  */
@@ -27,15 +30,25 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
     final ConcurrentMap<Reference<K>, V> raw;
     private final ReferenceQueue<K> lastQueue;
     private final ReferenceTools.ReferenceType keyType;
-
     private BiConsumer<Reference<? extends K>, V> purgeListener;
 
+    /**
+     * 构造
+     *
+     * @param raw           {@link ConcurrentMap}实现
+     * @param referenceType Reference类型
+     */
     public ReferenceConcurrentMap(ConcurrentMap<Reference<K>, V> raw, ReferenceTools.ReferenceType referenceType) {
         this.raw = raw;
         this.keyType = referenceType;
         lastQueue = new ReferenceQueue<>();
     }
 
+    /**
+     * 设置对象回收清除监听
+     *
+     * @param purgeListener 监听函数
+     */
     public void setPurgeListener(BiConsumer<Reference<? extends K>, V> purgeListener) {
         this.purgeListener = purgeListener;
     }
@@ -118,6 +131,13 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
         return this.raw.computeIfPresent(ofKey(key, this.lastQueue), (kWeakKey, value) -> remappingFunction.apply(key, value));
     }
 
+    /**
+     * 从缓存中获得对象，当对象不在缓存中或已经过期返回Func0回调产生的对象
+     *
+     * @param key      键
+     * @param supplier 如果不存在回调方法，用于生产值对象
+     * @return 值对象
+     */
     public V computeIfAbsent(K key, Suppliers.Supplier0WithThrows<? extends V> supplier) {
         return computeIfAbsent(key, (keyParam) -> supplier.applyWithRuntimeException());
     }
@@ -146,7 +166,6 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
     @Override
     public Set<K> keySet() {
         this.purgeStaleKeys();
-        // TODO 非高效方式的set转换，应该返回一个view
         final Collection<K> trans = CollectionTools.trans(this.raw.keySet(), (reference) -> null == reference ? null : reference.get());
         return new HashSet<>(trans);
     }
@@ -188,6 +207,9 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
         return this.raw.merge(ofKey(key, this.lastQueue), value, remappingFunction);
     }
 
+    /**
+     * 清除被回收的键
+     */
     private void purgeStaleKeys() {
         Reference<? extends K> reference;
         V value;
@@ -199,6 +221,13 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
         }
     }
 
+    /**
+     * 根据Reference类型构建key对应的{@link Reference}
+     *
+     * @param key   键
+     * @param queue {@link ReferenceQueue}
+     * @return {@link Reference}
+     */
     private Reference<K> ofKey(K key, ReferenceQueue<? super K> queue) {
         switch (keyType) {
             case WEAK:
@@ -209,9 +238,20 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
         throw new IllegalArgumentException("Unsupported key type: " + keyType);
     }
 
+    /**
+     * 弱键
+     *
+     * @param <K> 键类型
+     */
     private static class WeakKey<K> extends WeakReference<K> {
         private final int hashCode;
 
+        /**
+         * 构造
+         *
+         * @param key   原始Key，不能为{@code null}
+         * @param queue {@link ReferenceQueue}
+         */
         WeakKey(K key, ReferenceQueue<? super K> queue) {
             super(key, queue);
             hashCode = key.hashCode();
@@ -233,9 +273,20 @@ public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterab
         }
     }
 
+    /**
+     * 弱键
+     *
+     * @param <K> 键类型
+     */
     private static class SoftKey<K> extends SoftReference<K> {
         private final int hashCode;
 
+        /**
+         * 构造
+         *
+         * @param key   原始Key，不能为{@code null}
+         * @param queue {@link ReferenceQueue}
+         */
         SoftKey(K key, ReferenceQueue<? super K> queue) {
             super(key, queue);
             hashCode = key.hashCode();

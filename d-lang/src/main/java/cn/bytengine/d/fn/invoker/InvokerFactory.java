@@ -11,6 +11,9 @@ import java.util.function.Function;
 
 /**
  * 调用器工厂
+ *
+ * @author Ban Tenio
+ * @version 1.0
  */
 public interface InvokerFactory {
 
@@ -943,10 +946,23 @@ public interface InvokerFactory {
     }
     // endregion
 
+    /**
+     * 根据Serializable Lambda创建Invoker
+     *
+     * @param serializable Serializable化的Lambda
+     * @return 调用器
+     */
     static Invoker createInvokerFromSerializable(Serializable serializable) {
         return createInvokerFromSerializable(serializable, null);
     }
 
+    /**
+     * 根据Serializable Lambda创建Invoker
+     *
+     * @param serializable Serializable化的Lambda
+     * @param factory      Invoker工厂函数
+     * @return 调用器
+     */
     static Invoker createInvokerFromSerializable(Serializable serializable, Functions.Function3<Invoker, SerializedLambda, Boolean, Invoker> factory) {
         SerializedLambda serializedLambda = MethodHandles.getSerializedLambda(serializable);
         String targetFunctionalClassName = serializedLambda.getFunctionalInterfaceClass();
@@ -1802,9 +1818,24 @@ public interface InvokerFactory {
 
     // endregion
 
+    /**
+     * InvokerFactory公共内容辅助类
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     abstract class Common {
+        /**
+         * Consumers类名前缀
+         */
         static final String CHECK_CONSUMERS_PREFIX_FLAG = Consumers.class.getName().replaceAll("\\.", "\\/") + '$';
+        /**
+         * Functions类名前缀
+         */
         static final String CHECK_FUNCTIONS_PREFIX_FLAG = Functions.class.getName().replaceAll("\\.", "\\/") + '$';
+        /**
+         * InvokerFactory映射关系
+         */
         static final Map<String, Function<Serializable, Invoker>> CONSUMER_INVOKER_MAPPING = new ConcurrentHashMap<>();
 
         static {

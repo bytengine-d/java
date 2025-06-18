@@ -10,6 +10,9 @@ import java.io.Serializable;
  * <p>
  * Consumer0-C都是Serializable，支持SerializedLambda
  * </p>
+ *
+ * @author Ban Tenio
+ * @version 1.0
  */
 public abstract class Consumers {
 

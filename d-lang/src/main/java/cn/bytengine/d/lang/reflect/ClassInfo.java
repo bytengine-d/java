@@ -23,104 +23,244 @@ public class ClassInfo {
     private final Map<String, PropertyInfo> propertyInfoMap = new HashMap<>(16);
     private final Map<Method, MethodInfo> methodInfos = new HashMap<>(16);
 
+    /**
+     * 获取类信息类型
+     *
+     * @return 类信息实例
+     */
     public Class<?> getType() {
         return type;
     }
 
+    /**
+     * 获取类信息实例名称
+     *
+     * @return 类信息实例名称
+     */
     public String getClassName() {
         return this.type.getName();
     }
 
+    /**
+     * 获取类信息实例描述符
+     *
+     * @return 类信息实例描述符
+     */
     public String getDescriptorString() {
         return this.type.descriptorString();
     }
 
+    /**
+     * 类信息是否是接口类型
+     *
+     * @return 是否接口类型
+     */
     public boolean isInterface() {
         return this.type.isInterface();
     }
 
+    /**
+     * 类信息是否是Annotation类型
+     *
+     * @return 是否Annotation类型
+     */
     public boolean isAnnotation() {
         return this.type.isAnnotation();
     }
 
+    /**
+     * 类信息是否是抽象类
+     *
+     * @return 是否抽象类
+     */
     public boolean isAbstract() {
         return Modifier.isAbstract(this.type.getModifiers());
     }
 
+    /**
+     * 类信息是否不可扩展
+     *
+     * @return 是否不可扩展
+     */
     public boolean isFinal() {
         return Modifier.isFinal(this.type.getModifiers());
     }
 
+    /**
+     * 类信息包含的属性信息
+     *
+     * @param key   属性名
+     * @param value 属性信息
+     * @return 添加的属性信息
+     */
     public PropertyInfo addProperty(String key, PropertyInfo value) {
         return propertyInfoMap.put(key, value);
     }
 
+    /**
+     * 类信息移除属性信息
+     *
+     * @param key 属性名
+     * @return 移除的属性信息
+     */
     public PropertyInfo removeProperty(String key) {
         return propertyInfoMap.remove(key);
     }
 
+    /**
+     * 类信息属性名集合
+     *
+     * @return 属性名集合
+     */
     public Set<String> propertyNameSet() {
         return propertyInfoMap.keySet();
     }
 
+    /**
+     * 获取类信息属性信息集合
+     *
+     * @return 属性信息集合
+     */
     public Collection<PropertyInfo> propertyInfos() {
         return propertyInfoMap.values();
     }
 
+    /**
+     * 类信息是否包括指定属性
+     *
+     * @param o 属性名
+     * @return 是否存在属性
+     */
     public boolean containsProperty(String o) {
         return propertyInfoMap.containsKey(o);
     }
 
+    /**
+     * 类信息是否包含指定属性信息
+     *
+     * @param o 属性信息
+     * @return 是否存在属性
+     */
     public boolean containsProperty(PropertyInfo o) {
         return propertyInfoMap.containsValue(o);
     }
 
+    /**
+     * 获取指定属性信息
+     *
+     * @param propertyName 属性名
+     * @return 属性信息
+     */
     public PropertyInfo getProperty(String propertyName) {
         return propertyInfoMap.get(propertyName);
     }
 
-
-    public void eachPropertyInfos(BiConsumer<? super String, ? super PropertyInfo> action) {
-        propertyInfoMap.forEach(action);
+    /**
+     * 遍历类信息包含所有属性信息
+     *
+     * @param consumer 属性信息访问器
+     */
+    public void eachPropertyInfos(BiConsumer<? super String, ? super PropertyInfo> consumer) {
+        propertyInfoMap.forEach(consumer);
     }
 
+    /**
+     * 类信息添加根据指定Method实例的方法信息
+     *
+     * @param method Method实例
+     * @return 方法信息
+     */
     public MethodInfo addMethod(Method method) {
         return addMethodInfo(MethodInfo.of(type, method));
     }
 
+    /**
+     * 类信息添加方法信息
+     *
+     * @param methodInfo 方法信息
+     * @return 方法信息
+     */
     public MethodInfo addMethodInfo(MethodInfo methodInfo) {
         methodInfos.put(methodInfo.getMethod(), methodInfo);
         return methodInfo;
     }
 
+    /**
+     * 类信息移除指定Method实例对应的方法信息
+     *
+     * @param o Method实例
+     * @return 被移除方法信息
+     */
     public MethodInfo removeMethodInfo(Method o) {
         return methodInfos.remove(o);
     }
 
+    /**
+     * 类信息移除指定方法信息
+     *
+     * @param o 方法信息
+     * @return 被移除方法信息
+     */
     public MethodInfo removeMethodInfo(MethodInfo o) {
         return removeMethodInfo(o.getMethod());
     }
 
+    /**
+     * 是否包含指定方法信息
+     *
+     * @param o Method实例
+     * @return 是否包含方法信息
+     */
     public boolean containsMethod(Method o) {
         return methodInfos.containsKey(o);
     }
 
+    /**
+     * 是否包含指定方法信息
+     *
+     * @param o 方法信息
+     * @return 是否包含方法信息
+     */
     public boolean containsMethod(MethodInfo o) {
         return methodInfos.containsValue(o);
     }
 
+    /**
+     * 获取指定方法信息
+     *
+     * @param o Method实例
+     * @return 方法信息
+     */
     public MethodInfo getMethodInfo(Method o) {
         return methodInfos.get(o);
     }
 
+    /**
+     * 指定方法名获取第一个匹配的方法信息
+     *
+     * @param methodName 方法名称
+     * @return 方法信息
+     */
     public MethodInfo findFirstMethod(String methodName) {
         return findFirstMethod(methodName, true);
     }
 
-    public void eachMethod(BiConsumer<? super Method, ? super MethodInfo> action) {
-        methodInfos.forEach(action);
+    /**
+     * 遍历类信息包含的所有方法信息
+     *
+     * @param consumer 方法信息访问器
+     */
+    public void eachMethod(BiConsumer<? super Method, ? super MethodInfo> consumer) {
+        methodInfos.forEach(consumer);
     }
 
+    /**
+     * 指定方法名获取第一个匹配的方法信息，是否在未找到是抛出异常
+     *
+     * @param methodName 方法名称
+     * @param throwWhenNotFound 是否抛出未找到异常
+     * @return 方法信息
+     */
     public MethodInfo findFirstMethod(String methodName, boolean throwWhenNotFound) {
         Optional<MethodInfo> result = methodInfos.values().stream()
                 .filter(mi -> CharSequenceTools.equals(mi.getMethodName(), methodName))
@@ -131,6 +271,12 @@ public class ClassInfo {
         return result.orElse(null);
     }
 
+    /**
+     * 获取指定方法名的方法信息集合
+     *
+     * @param methodName 方法名称
+     * @return 方法信息集合
+     */
     public List<MethodInfo> findAllMethods(String methodName) {
         return methodInfos.values().stream()
                 .filter(mi -> CharSequenceTools.equals(mi.getMethodName(), methodName))
@@ -149,6 +295,12 @@ public class ClassInfo {
         return Objects.hashCode(type);
     }
 
+    /**
+     * 根据类信息实例创建类信息对象
+     *
+     * @param clazz 类信息实例
+     * @return 类信息
+     */
     public static ClassInfo of(Class<?> clazz) {
         ClassInfo info = new ClassInfo();
         info.type = clazz;
@@ -200,7 +352,7 @@ public class ClassInfo {
         return PropertyInfo.of(clazz, p.getName(), p.getPropertyType(), reader, writer);
     }
 
-    public static Collection<? extends PropertyDescriptor> determineBasicProperties(Class<?> beanClass) {
+    private static Collection<? extends PropertyDescriptor> determineBasicProperties(Class<?> beanClass) {
 
         Map<String, PropertyDescriptor> pdMap = new TreeMap<>();
         try {

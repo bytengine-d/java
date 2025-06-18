@@ -5,6 +5,9 @@ package cn.bytengine.d.fn.invoker;
  * <p>
  * 使用场景中，封装某方法调用
  * </p>
+ *
+ * @author Ban Tenio
+ * @version 1.0
  */
 public interface Invoker {
     /**

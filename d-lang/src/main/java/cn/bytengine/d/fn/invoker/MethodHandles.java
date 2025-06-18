@@ -14,6 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * MethodHandle相关的辅助方法集合
+ *
+ * @author Ban Tenio
+ * @version 1.0
  */
 public abstract class MethodHandles {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_OBJECT_TYPE_MAPPING = new HashMap<>();

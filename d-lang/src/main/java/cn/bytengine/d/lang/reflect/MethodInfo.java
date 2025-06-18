@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
- * 方法信息，包括方法签名和类型信息，涵盖MethodHandle
+ * 方法信息，包括方法签名和类型信息
  *
  * @author Ban Tenio
  * @version 1.0
@@ -23,14 +23,29 @@ public class MethodInfo {
     private int parameterLength = 0;
     private Class<?>[] parameters = new Class[0];
 
+    /**
+     * 获取方法实例
+     *
+     * @return 方法实例
+     */
     public Method getMethod() {
         return method;
     }
 
+    /**
+     * 获取方法信息所属类
+     *
+     * @return 方法所属类
+     */
     public Class<?> getOwnClass() {
         return ownClass;
     }
 
+    /**
+     * 获取方法名
+     *
+     * @return 方法名称
+     */
     public String getMethodName() {
         return this.method.getName();
     }

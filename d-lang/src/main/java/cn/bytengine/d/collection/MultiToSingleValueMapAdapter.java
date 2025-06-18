@@ -8,8 +8,13 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
- * TODO
+ * Adapts a given {@link MultiValueMap} to the {@link Map} contract. The
+ * difference with {@link SingleToMultiValueMapAdapter} and
+ * {@link MultiValueMapAdapter} is that this class adapts in the opposite
+ * direction.
  *
+ * @param <K> the key type
+ * @param <V> the value element type
  * @author Ban Tenio
  * @version 1.0
  */
@@ -72,7 +77,6 @@ final class MultiToSingleValueMapAdapter<K, V> implements Map<K, V>, Serializabl
     }
 
     @Override
-
     public V get(Object key) {
         return adaptValue(this.targetMap.get(key));
     }
@@ -84,7 +88,6 @@ final class MultiToSingleValueMapAdapter<K, V> implements Map<K, V>, Serializabl
     }
 
     @Override
-
     public V remove(Object key) {
         return adaptValue(this.targetMap.remove(key));
     }

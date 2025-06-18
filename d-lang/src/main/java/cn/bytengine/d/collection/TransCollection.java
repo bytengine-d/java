@@ -13,8 +13,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * TODO
+ * 使用给定的转换函数，转换源集合为新类型的集合
  *
+ * @param <F> 源元素类型
+ * @param <T> 目标元素类型
  * @author Ban Tenio
  * @version 1.0
  */
@@ -22,6 +24,12 @@ public class TransCollection<F, T> extends AbstractCollection<T> {
     private final Collection<F> fromCollection;
     private final Function<? super F, ? extends T> function;
 
+    /**
+     * 构造
+     *
+     * @param fromCollection 源集合
+     * @param function       转换函数
+     */
     public TransCollection(Collection<F> fromCollection, Function<? super F, ? extends T> function) {
         this.fromCollection = AssertTools.notNull(fromCollection);
         this.function = AssertTools.notNull(function);

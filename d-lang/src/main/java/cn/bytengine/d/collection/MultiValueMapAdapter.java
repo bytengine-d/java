@@ -8,7 +8,11 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
- * TODO
+ * Adapts a given {@link Map} to the {@link MultiValueMap} contract.
+ *
+ * @param <K> the key type
+ * @param <V> the value element type
+ * @see LinkedMultiValueMap
  *
  * @author Ban Tenio
  * @version 1.0
@@ -32,7 +36,6 @@ public class MultiValueMapAdapter<K, V> implements MultiValueMap<K, V>, Serializ
     // MultiValueMap implementation
 
     @Override
-
     public V getFirst(K key) {
         List<V> values = this.targetMap.get(key);
         return (!CollectionTools.isEmpty(values) ? values.get(0) : null);
