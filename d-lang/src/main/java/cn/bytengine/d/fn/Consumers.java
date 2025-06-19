@@ -189,7 +189,6 @@ public abstract class Consumers {
      * @param <T2> 参数2类型
      * @param <T3> 参数3类型
      * @param <T4> 参数4类型
-     * @throws Throwable 执行出现异常
      */
     public interface Consumer4Throws<T1, T2, T3, T4> extends Serializable {
         /**

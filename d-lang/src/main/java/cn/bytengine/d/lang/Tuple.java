@@ -15,9 +15,17 @@ import java.util.stream.StreamSupport;
  * @version 1.0
  */
 public class Tuple extends CloneSupport<Tuple> implements Iterable<Object>, Serializable {
-
+    /**
+     * TODO
+     */
     private final Object[] members;
+    /**
+     * TODO
+     */
     private int hashCode;
+    /**
+     * TODO
+     */
     private boolean cacheHash;
 
     /**

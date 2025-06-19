@@ -1,4 +1,5 @@
 apply from: 'properties.gradle'
+
 subprojects {
     repositories {
         maven {

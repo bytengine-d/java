@@ -1,36 +1,7 @@
-import java.nio.file.Files
-import java.nio.file.Paths
-
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'signing'
-}
-
-def localProperties = new Properties()
-if (Files.exists(Paths.get("$project.rootDir/maven_cert.properties"))) {
-    localProperties.load(new FileInputStream("$rootProject.rootDir/maven_cert.properties"))
-    localProperties.each { prop -> project.ext.set(prop.key, prop.value) }
-} else {
-    localProperties.setProperty("center_maven_repository_username", "nothing")
-    localProperties.setProperty("center_maven_repository_password", "nothing")
-    localProperties.setProperty("signing.keyId", "nothing")
-    localProperties.setProperty("signing.password", "nothing")
-    localProperties.setProperty("signing.secretKeyRingFile", "nothing")
-}
-
-ext {
-    project_name = "${project.name}"
-    center_maven_repository_username = localProperties.getProperty("center_maven_repository_username")
-    center_maven_repository_password = localProperties.getProperty("center_maven_repository_password")
-    signingKeyId = localProperties.getProperty("signing.keyId")
-    signingPassword = localProperties.getProperty("signing.password")
-    signingGpgKeyFile = localProperties.getProperty("signing.secretKeyRingFile")
-    signingGpgKeyFile = "$rootProject.rootDir/$signingGpgKeyFile"
-    signingGpgKey = ''
-    if (Files.exists(Paths.get(signingGpgKeyFile))) {
-        signingGpgKey = new File(signingGpgKeyFile).text
-    }
+    id 'org.jreleaser'
 }
 
 group = "${projectGroup}"
@@ -62,18 +33,18 @@ jar {
 publishing {
     repositories {
         maven {
-            url = version.endsWith('SNAPSHOT') ? "$centerMavenSnapshotsUrl" : "$centerMavenReleasesUrl"
-            credentials {
-                username "${center_maven_repository_username}"
-                password "${center_maven_repository_password}"
-            }
+            url = layout.buildDirectory.dir('staging-deploy')
         }
     }
+
     publications {
         mavenJava(MavenPublication) {
-            artifactId = "${project_name}"
-            from components.java
             groupId = "${projectGroup}"
+            artifactId = "${project_name}"
+            version = "${projectVersion}"
+
+            from components.java
+
             pom {
                 name = "${project_name}"
                 description = "$project.description"
@@ -101,9 +72,33 @@ publishing {
     }
 }
 
-signing {
-    useInMemoryPgpKeys(signingKeyId, signingGpgKey, signingPassword)
-    sign publishing.publications.mavenJava
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+    }
+    deploy {
+        maven {
+            /*nexus2 {
+                'maven-central' {
+                    active = 'ALWAYS'
+                    url = 'https://s01.oss.sonatype.org/service/local'
+                    snapshotUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+                    closeRepository = true
+                    releaseRepository = true
+                    stagingRepository('build/staging-deploy')
+                }
+            }*/
+//             Portal Publisher API
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+        }
+    }
 }
 
 tasks.withType(JavaCompile) {

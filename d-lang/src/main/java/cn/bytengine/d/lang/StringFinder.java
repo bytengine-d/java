@@ -7,7 +7,13 @@ package cn.bytengine.d.lang;
  * @version 1.0
  */
 public class StringFinder extends TextFinder {
+    /**
+     * TODO
+     */
     private final CharSequence strToFind;
+    /**
+     * TODO
+     */
     private final boolean caseInsensitive;
 
     /**

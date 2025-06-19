@@ -5,8 +5,8 @@ ext {
     centerMavenReleasesUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
 
     // projects
-    projectUrl = "https://github.com/bantenio/d"
-    projectScm = "git@github.com:bantenio/d.git"
+    projectUrl = "https://github.com/bytengine-d/java"
+    projectScm = "git@github.com:bytengine-d/java.git"
     projectGroup = "cn.bytengine.d"
     projectVersion = "0.2.0"
     snapshot = {
