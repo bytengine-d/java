@@ -10,7 +10,7 @@ import java.util.function.Function;
  * <p>
  * 此工具方法针对{@link Collection}及其实现类封装的工具。
  * <p>
- * 由于{@link Collection} 实现了{@link Iterable}接口，因此部分工具此类不提供，而是在{@link IterUtil} 中提供
+ * 由于{@link Collection} 实现了{@link Iterable}接口，因此部分工具此类不提供，而是在{@link IteratorTools} 中提供
  *
  * @author Ban Tenio
  * @version 1.0

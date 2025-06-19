@@ -16,6 +16,11 @@ public abstract class ArrayTools {
     private ArrayTools() {
     }
 
+    /**
+     * The index value when an element is not found in a list or array: {@code -1}. This value is returned by methods in
+     * this class and can also be used in comparisons with values returned by various method from
+     * {@link java.util.List}.
+     */
     public static final int INDEX_NOT_FOUND = -1;
 
     /**
@@ -276,7 +281,6 @@ public abstract class ArrayTools {
      * 1、过滤出需要的对象，如果返回{@code null}表示这个元素对象抛弃
      * 2、修改元素对象，返回集合中为修改后的对象
      * </pre>
-     * <p>
      *
      * @param <T>    数组元素类型
      * @param array  数组

@@ -180,6 +180,21 @@ public abstract class AssertTools {
         isTrue(expression, "[Assertion failed] - this expression must be true");
     }
 
+    /**
+     * 断言是否为假，如果为 {@code true} 抛出指定类型异常<br>
+     * 并使用指定的函数获取错误信息返回
+     * <pre class="code">
+     *  Assert.isFalse(i &gt; 0, ()-&gt;{
+     *      // to query relation message
+     *      return new IllegalArgumentException("relation message to return");
+     *  });
+     * </pre>
+     *
+     * @param <X>           异常类型
+     * @param expression    布尔值
+     * @param errorSupplier 指定断言不通过时抛出的异常
+     * @throws X if expression is {@code false}
+     */
     public static <X extends Throwable> void isFalse(boolean expression, Supplier<X> errorSupplier) throws X {
         if (expression) {
             throw errorSupplier.get();

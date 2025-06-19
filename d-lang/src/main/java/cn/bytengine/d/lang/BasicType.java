@@ -12,7 +12,50 @@ import java.util.Map;
  * @version 1.0
  */
 public enum BasicType {
-    BYTE, SHORT, INT, INTEGER, LONG, DOUBLE, FLOAT, BOOLEAN, CHAR, CHARACTER, STRING;
+    /**
+     * byte.class
+     */
+    BYTE,
+    /**
+     * short.class
+     */
+    SHORT,
+    /**
+     * int.class
+     */
+    INT,
+    /**
+     * Integer.class
+     */
+    INTEGER,
+    /**
+     * long.class
+     */
+    LONG,
+    /**
+     * double.class
+     */
+    DOUBLE,
+    /**
+     * float.class
+     */
+    FLOAT,
+    /**
+     * double.class
+     */
+    BOOLEAN,
+    /**
+     * char.class
+     */
+    CHAR,
+    /**
+     * Character.class
+     */
+    CHARACTER,
+    /**
+     * String.class
+     */
+    STRING;
 
     /**
      * 包装类型为Key，原始类型为Value，例如： Integer.class =》 int.class.

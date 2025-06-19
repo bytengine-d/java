@@ -15,7 +15,6 @@ import java.io.Serializable;
  * @version 1.0
  */
 public abstract class Functions {
-
     private Functions() {
     }
 
@@ -28,6 +27,12 @@ public abstract class Functions {
      * @version 1.0
      */
     public interface Function1<T1, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @return 结果
+         */
         R apply(T1 arg1);
     }
 
@@ -40,6 +45,12 @@ public abstract class Functions {
      * @version 1.0
      */
     public interface Function1Throws<T1, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @return 结果
+         */
         R apply(T1 arg1) throws Throwable;
     }
 
@@ -53,6 +64,13 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function2<T1, T2, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2);
     }
 
@@ -66,6 +84,13 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function2Throws<T1, T2, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2) throws Throwable;
     }
 
@@ -80,6 +105,14 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function3<T1, T2, T3, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3);
     }
 
@@ -94,6 +127,14 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function3Throws<T1, T2, T3, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3) throws Throwable;
     }
 
@@ -109,6 +150,15 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function4<T1, T2, T3, T4, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4);
     }
 
@@ -124,6 +174,15 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function4Throws<T1, T2, T3, T4, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4) throws Throwable;
     }
 
@@ -140,6 +199,16 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function5<T1, T2, T3, T4, T5, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
     }
 
@@ -156,6 +225,16 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function5Throws<T1, T2, T3, T4, T5, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5) throws Throwable;
     }
 
@@ -173,6 +252,17 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function6<T1, T2, T3, T4, T5, T6, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6);
     }
 
@@ -191,6 +281,17 @@ public abstract class Functions {
      */
 
     public interface Function6Throws<T1, T2, T3, T4, T5, T6, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6) throws Throwable;
     }
 
@@ -209,6 +310,18 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function7<T1, T2, T3, T4, T5, T6, T7, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7);
     }
 
@@ -227,6 +340,18 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function7Throws<T1, T2, T3, T4, T5, T6, T7, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7) throws Throwable;
     }
 
@@ -246,6 +371,19 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
     }
 
@@ -265,6 +403,19 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function8Throws<T1, T2, T3, T4, T5, T6, T7, T8, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8) throws Throwable;
     }
 
@@ -285,6 +436,20 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9);
     }
 
@@ -305,6 +470,20 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface Function9Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9) throws Throwable;
     }
 
@@ -326,6 +505,21 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface FunctionA<T1, T2, T3, T4, T5, T6, T7, T8, T9, TA, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @param argA 参数10
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA);
     }
 
@@ -347,6 +541,21 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface FunctionAThrows<T1, T2, T3, T4, T5, T6, T7, T8, T9, TA, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @param argA 参数10
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA) throws Throwable;
     }
 
@@ -369,6 +578,22 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface FunctionB<T1, T2, T3, T4, T5, T6, T7, T8, T9, TA, TB, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @param argA 参数10
+         * @param argB 参数11
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA, TB argB);
     }
 
@@ -391,6 +616,22 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface FunctionBThrows<T1, T2, T3, T4, T5, T6, T7, T8, T9, TA, TB, R> extends Serializable {
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @param argA 参数10
+         * @param argB 参数11
+         * @return 结果
+         */
         R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA, TB argB) throws Throwable;
     }
 
@@ -414,7 +655,24 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface FunctionC<T1, T2, T3, T4, T5, T6, T7, T8, T9, TA, TB, TC, R> extends Serializable {
-        R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA, TB argB, TC argc);
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @param argA 参数10
+         * @param argB 参数11
+         * @param argC 参数12
+         * @return 结果
+         */
+        R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA, TB argB, TC argC);
     }
 
     /**
@@ -437,6 +695,23 @@ public abstract class Functions {
      * @param <R> 返回参数类型
      */
     public interface FunctionCThrows<T1, T2, T3, T4, T5, T6, T7, T8, T9, TA, TB, TC, R> extends Serializable {
-        R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA, TB argB, TC argc) throws Throwable;
+        /**
+         * 对给定的参数应用此函数
+         *
+         * @param arg1 参数1
+         * @param arg2 参数2
+         * @param arg3 参数3
+         * @param arg4 参数4
+         * @param arg5 参数5
+         * @param arg6 参数6
+         * @param arg7 参数7
+         * @param arg8 参数8
+         * @param arg9 参数9
+         * @param argA 参数10
+         * @param argB 参数11
+         * @param argC 参数12
+         * @return 结果
+         */
+        R apply(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, TA argA, TB argB, TC argC) throws Throwable;
     }
 }

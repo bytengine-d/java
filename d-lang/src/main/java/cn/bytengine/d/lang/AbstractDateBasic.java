@@ -11,8 +11,13 @@ import java.util.TimeZone;
  * @version 1.0
  */
 public abstract class AbstractDateBasic implements DateBasic, Serializable {
+    /**
+     * The pattern
+     */
     protected final String pattern;
+    /** The time zone. */
     protected final TimeZone timeZone;
+    /** The locale. */
     protected final Locale locale;
 
     /**

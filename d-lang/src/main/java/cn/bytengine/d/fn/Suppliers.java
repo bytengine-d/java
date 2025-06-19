@@ -20,6 +20,11 @@ public abstract class Suppliers {
      * @version 1.0
      */
     public interface Supplier0<R> extends Serializable {
+        /**
+         * 获得结果。
+         *
+         * @return 结果
+         */
         R apply();
     }
 
@@ -31,8 +36,18 @@ public abstract class Suppliers {
      * @version 1.0
      */
     public interface Supplier0WithThrows<R> extends Serializable {
+        /**
+         * 获得结果。
+         *
+         * @return 结果
+         */
         R apply() throws Throwable;
 
+        /**
+         * 获得结果。并将处理异常转换为RuntimeException
+         *
+         * @return 结果
+         */
         default R applyWithRuntimeException() {
             try {
                 return apply();

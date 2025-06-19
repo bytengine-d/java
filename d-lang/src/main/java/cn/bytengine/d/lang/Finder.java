@@ -7,7 +7,9 @@ package cn.bytengine.d.lang;
  * @version 1.0
  */
 public interface Finder {
-
+    /**
+     * 未找到下标
+     */
     int INDEX_NOT_FOUND = -1;
 
     /**

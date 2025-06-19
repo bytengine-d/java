@@ -33,6 +33,14 @@ public class DefaultEventInvokerDispatcher implements EventInvokerDispatcher {
         }
     }
 
+    /**
+     * 调用调用器
+     *
+     * @param invokerRegistration   调用器注册信息
+     * @param eventName             事件名称
+     * @param eventExceptionHandler 事件通知失败回调
+     * @param args                  调用参数
+     */
     protected void processInvokerRegistration(InvokerRegistration invokerRegistration,
                                               String eventName,
                                               EventExceptionHandler eventExceptionHandler,

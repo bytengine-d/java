@@ -29,6 +29,9 @@ public abstract class ByteTools {
     private ByteTools() {
     }
 
+    /**
+     * @see ByteOrder#LITTLE_ENDIAN
+     */
     public static final ByteOrder DEFAULT_ORDER = ByteOrder.LITTLE_ENDIAN;
     /**
      * CPU的字节序
