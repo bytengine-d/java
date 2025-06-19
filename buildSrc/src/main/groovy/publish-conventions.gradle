@@ -73,9 +73,11 @@ publishing {
 }
 
 jreleaser {
+    gitRootSearch = true
     signing {
         active = 'ALWAYS'
         armored = true
+        verify = true
     }
     deploy {
         maven {
@@ -95,8 +97,24 @@ jreleaser {
                     active = 'ALWAYS'
                     url = 'https://central.sonatype.com/api/v1/publisher'
                     stagingRepository('build/staging-deploy')
+                    setAuthorization("Basic")
+                    applyMavenCentralRules = false
+                    sign = true
+                    checksums = true
+                    sourceJar = true
+                    javadocJar = true
                 }
             }
+        }
+    }
+    release {
+        github {
+            skipRelease = true
+            skipTag = true
+            sign = true
+            branch = "main"
+            branchPush = "main"
+            overwrite = true
         }
     }
 }
