@@ -12,7 +12,13 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Pair<K, V> extends CloneSupport<Pair<K, V>> implements Serializable {
+    /**
+     * 键
+     */
     protected K key;
+    /**
+     * 值
+     */
     protected V value;
 
     /**

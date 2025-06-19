@@ -41,8 +41,13 @@ public class FastDateFormat extends Format implements DateParser, DatePrinter {
             return new FastDateFormat(pattern, timeZone, locale);
         }
     };
-
+    /**
+     * TODO
+     */
     private final FastDatePrinter printer;
+    /**
+     * TODO
+     */
     private final FastDateParser parser;
 
     /**

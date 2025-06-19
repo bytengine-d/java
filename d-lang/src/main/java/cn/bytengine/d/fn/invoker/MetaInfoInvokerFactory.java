@@ -608,6 +608,7 @@ public interface MetaInfoInvokerFactory {
      * @param <T1>     参数1类型
      * @param <T2>     参数2类型
      * @param <T3>     参数3类型
+     * @param <T5>     参数5类型
      * @param <T4>     参数4类型
      * @param <T6>     参数6类型
      * @param <R>      返回值类型
@@ -642,6 +643,7 @@ public interface MetaInfoInvokerFactory {
      * @param <T2>     参数2类型
      * @param <T3>     参数3类型
      * @param <T4>     参数4类型
+     * @param <T5>     参数5类型
      * @param <T6>     参数6类型
      * @param <T7>     参数7类型
      * @param <R>      返回值类型
@@ -677,6 +679,7 @@ public interface MetaInfoInvokerFactory {
      * @param <T2>     参数2类型
      * @param <T3>     参数3类型
      * @param <T4>     参数4类型
+     * @param <T5>     参数5类型
      * @param <T6>     参数6类型
      * @param <T7>     参数7类型
      * @param <T8>     参数8类型
@@ -714,6 +717,7 @@ public interface MetaInfoInvokerFactory {
      * @param <T2>     参数2类型
      * @param <T3>     参数3类型
      * @param <T4>     参数4类型
+     * @param <T5>     参数5类型
      * @param <T6>     参数6类型
      * @param <T7>     参数7类型
      * @param <T8>     参数8类型
@@ -753,6 +757,7 @@ public interface MetaInfoInvokerFactory {
      * @param <T2>     参数2类型
      * @param <T3>     参数3类型
      * @param <T4>     参数4类型
+     * @param <T5>     参数5类型
      * @param <T6>     参数6类型
      * @param <T7>     参数7类型
      * @param <T8>     参数8类型
@@ -794,6 +799,7 @@ public interface MetaInfoInvokerFactory {
      * @param <T2>     参数2类型
      * @param <T3>     参数3类型
      * @param <T4>     参数4类型
+     * @param <T5>     参数5类型
      * @param <T6>     参数6类型
      * @param <T7>     参数7类型
      * @param <T8>     参数8类型
@@ -837,6 +843,7 @@ public interface MetaInfoInvokerFactory {
      * @param <T2>     参数2类型
      * @param <T3>     参数3类型
      * @param <T4>     参数4类型
+     * @param <T5>     参数5类型
      * @param <T6>     参数6类型
      * @param <T7>     参数7类型
      * @param <T8>     参数8类型

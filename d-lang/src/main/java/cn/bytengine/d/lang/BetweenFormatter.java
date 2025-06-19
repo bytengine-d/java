@@ -16,11 +16,25 @@ import java.util.function.Function;
  * @version 1.0
  */
 public class BetweenFormatter implements Serializable {
-
+    /**
+     * 时长毫秒数
+     */
     private long betweenMs;
+    /**
+     * 格式化级别
+     */
     private Level level;
+    /**
+     * 格式化级别的最大个数
+     */
     private final int levelMaxCount;
+    /**
+     * 格式化器
+     */
     private Function<Level, String> levelFormatter = Level::getName;
+    /**
+     * 分隔符
+     */
     private String separator = CharSequenceTools.EMPTY;
 
     /**

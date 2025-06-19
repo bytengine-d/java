@@ -9,8 +9,17 @@ import java.io.Serializable;
  * @version 1.0
  */
 public abstract class TextFinder implements Finder, Serializable {
+    /**
+     * 被查字符串
+     */
     protected CharSequence text;
+    /**
+     * 查找的结束位置
+     */
     protected int endIndex = -1;
+    /**
+     * 是否反向查找
+     */
     protected boolean negative;
 
     /**

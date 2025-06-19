@@ -14,6 +14,7 @@ public interface Invoker {
      * 调用封装逻辑
      *
      * @param args 调用参数列表
+     * @return 返回结果
      * @throws Throwable 调用产生的异常
      */
     Object invoke(Object[] args) throws Throwable;

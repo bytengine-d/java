@@ -85,6 +85,20 @@ public abstract class NumberTools {
         return CharTools.equals(c1, c2, ignoreCase);
     }
 
+    /**
+     * 将指定字符串转换为{@link Number} 对象<br>
+     * 此方法不支持科学计数法
+     *
+     * <p>
+     * 需要注意的是，在不同Locale下，数字的表示形式也是不同的，例如：<br>
+     * 德国、荷兰、比利时、丹麦、意大利、罗马尼亚和欧洲大多地区使用`,`区分小数<br>
+     * 也就是说，在这些国家地区，1.20表示120，而非1.2。
+     * </p>
+     *
+     * @param numberStr Number字符串
+     * @return Number对象
+     * @throws NumberFormatException 包装了{@link ParseException}，当给定的数字字符串无法解析时抛出
+     */
     public static Number parseNumber(String numberStr) throws NumberFormatException {
         if (CharSequenceTools.startWithIgnoreCase(numberStr, "0x")) {
             // 0x04表示16进制数

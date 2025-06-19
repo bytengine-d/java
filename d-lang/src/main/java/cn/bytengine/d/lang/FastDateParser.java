@@ -20,13 +20,26 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class FastDateParser extends AbstractDateBasic implements DateParser {
-
+    /**
+     * TODO
+     */
     static final Locale JAPANESE_IMPERIAL = new Locale("ja", "JP", "JP");
-
+    /**
+     * TODO
+     */
     private final int century;
+    /**
+     * TODO
+     */
     private final int startYear;
 
+    /**
+     * TODO
+     */
     private transient List<StrategyAndWidth> patterns;
+    /**
+     * TODO
+     */
     private static final Comparator<String> LONGER_FIRST_LOWERCASE = Comparator.reverseOrder();
 
     /**
@@ -164,10 +177,23 @@ public class FastDateParser extends AbstractDateBasic implements DateParser {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @param c TODO
+     * @return TODO
+     */
     private static boolean isFormatLetter(final char c) {
         return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z';
     }
 
+    /**
+     * TODO
+     *
+     * @param in TODO
+     * @throws IOException            TODO
+     * @throws ClassNotFoundException TODO
+     */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
 

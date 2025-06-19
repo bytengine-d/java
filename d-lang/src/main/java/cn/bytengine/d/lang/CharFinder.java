@@ -8,7 +8,13 @@ package cn.bytengine.d.lang;
  * @version 1.0
  */
 public class CharFinder extends TextFinder {
+    /**
+     * TODO
+     */
     private final char c;
+    /**
+     * TODO
+     */
     private final boolean caseInsensitive;
 
     /**

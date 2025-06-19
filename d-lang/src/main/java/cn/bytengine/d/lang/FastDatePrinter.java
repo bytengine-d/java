@@ -356,18 +356,43 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         return mMaxLengthEstimate;
     }
 
+    /**
+     * TODO
+     *
+     * @param in TODO
+     * @throws IOException            TODO
+     * @throws ClassNotFoundException TODO
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         init();
     }
 
+    /**
+     * TODO
+     *
+     * @param buffer TODO
+     * @param value TODO
+     * @throws IOException TODO
+     */
     private static void appendDigits(Appendable buffer, int value) throws IOException {
         buffer.append((char) (value / 10 + '0'));
         buffer.append((char) (value % 10 + '0'));
     }
 
+    /**
+     * TODO
+     */
     private static final int MAX_DIGITS = 10;
 
+    /**
+     * TODO
+     *
+     * @param buffer TODO
+     * @param value TODO
+     * @param minFieldWidth TODO
+     * @throws IOException TODO
+     */
     private static void appendFullDigits(Appendable buffer, int value, int minFieldWidth) throws IOException {
         // specialized paths for 1 to 4 digits -> avoid the memory allocation from the temporary work array
         // see LANG-1248
@@ -434,20 +459,64 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private interface Rule {
+        /**
+         * TODO
+         *
+         * @return TODO
+         */
         int estimateLength();
 
+        /**
+         * TODO
+         *
+         * @param buf TODO
+         * @param calendar TODO
+         * @throws IOException TODO
+         */
         void appendTo(Appendable buf, Calendar calendar) throws IOException;
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private interface NumberRule extends Rule {
+        /**
+         * TODO
+         *
+         * @param buffer TODO
+         * @param value TODO
+         * @throws IOException TODO
+         */
         void appendTo(Appendable buffer, int value) throws IOException;
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class CharacterLiteral implements Rule {
+        /**
+         * TODO
+         */
         private final char mValue;
 
-
+        /**
+         * TODO
+         *
+         * @param value TODO
+         */
         CharacterLiteral(final char value) {
             mValue = value;
         }
@@ -463,9 +532,23 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class StringLiteral implements Rule {
+        /**
+         * TODO
+         */
         private final String mValue;
 
+        /**
+         * TODO
+         *
+         * @param value TODO
+         */
         StringLiteral(String value) {
             mValue = value;
         }
@@ -483,10 +566,28 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class TextField implements Rule {
+        /**
+         * TODO
+         */
         private final int mField;
+        /**
+         * TODO
+         */
         private final String[] mValues;
 
+        /**
+         * TODO
+         *
+         * @param field TODO
+         * @param values TODO
+         */
         TextField(int field, String[] values) {
             mField = field;
             mValues = values;
@@ -510,9 +611,23 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class UnpaddedNumberField implements NumberRule {
+        /**
+         * TODO
+         */
         private final int mField;
 
+        /**
+         * TODO
+         *
+         * @param field TODO
+         */
         UnpaddedNumberField(int field) {
             mField = field;
         }
@@ -539,9 +654,21 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class UnpaddedMonthField implements NumberRule {
+        /**
+         * TODO
+         */
         static final UnpaddedMonthField INSTANCE = new UnpaddedMonthField();
 
+        /**
+         * TODO
+         */
         UnpaddedMonthField() {
         }
 
@@ -565,10 +692,28 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class PaddedNumberField implements NumberRule {
+        /**
+         * TODO
+         */
         private final int mField;
+        /**
+         * TODO
+         */
         private final int mSize;
 
+        /**
+         * TODO
+         *
+         * @param field TODO
+         * @param size TODO
+         */
         PaddedNumberField(int field, int size) {
             if (size < 3) {
                 // Should use UnpaddedNumberField or TwoDigitNumberField.
@@ -594,9 +739,23 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class TwoDigitNumberField implements NumberRule {
+        /**
+         * TODO
+         */
         private final int mField;
 
+        /**
+         * TODO
+         *
+         * @param field TODO
+         */
         TwoDigitNumberField(int field) {
             mField = field;
         }
@@ -622,8 +781,14 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
     }
 
     private static class TwoDigitYearField implements NumberRule {
+        /**
+         * TODO
+         */
         static final TwoDigitYearField INSTANCE = new TwoDigitYearField();
 
+        /**
+         * TODO
+         */
         TwoDigitYearField() {
         }
 
@@ -643,9 +808,21 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class TwoDigitMonthField implements NumberRule {
+        /**
+         * TODO
+         */
         static final TwoDigitMonthField INSTANCE = new TwoDigitMonthField();
 
+        /**
+         * TODO
+         */
         TwoDigitMonthField() {
         }
 
@@ -665,9 +842,23 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @author Ban Tenio
+     * @version 1.0
+     */
     private static class TwelveHourField implements NumberRule {
+        /**
+         * TODO
+         */
         private final NumberRule mRule;
 
+        /**
+         * TODO
+         *
+         * @param rule TODO
+         */
         TwelveHourField(final NumberRule rule) {
             mRule = rule;
         }

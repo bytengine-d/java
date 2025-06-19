@@ -19,6 +19,12 @@ public class DelegateClassLoader extends SecureClassLoader {
 
     private final ClassLoader parent;
 
+    /**
+     * 给定委托ClassLeader和父级ClassLoader创建委托
+     *
+     * @param delegate 委托ClassLoader
+     * @param parent   父级ClassLoader
+     */
     public DelegateClassLoader(final ClassLoader delegate, final ClassLoader parent) {
         super(parent);
         this.delegate = delegate;

@@ -27,9 +27,21 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class ReferenceConcurrentMap<K, V> implements ConcurrentMap<K, V>, Iterable<Map.Entry<K, V>>, Serializable {
+    /**
+     * TODO
+     */
     final ConcurrentMap<Reference<K>, V> raw;
+    /**
+     * TODO
+     */
     private final ReferenceQueue<K> lastQueue;
+    /**
+     * TODO
+     */
     private final ReferenceTools.ReferenceType keyType;
+    /**
+     * 回收监听
+     */
     private BiConsumer<Reference<? extends K>, V> purgeListener;
 
     /**

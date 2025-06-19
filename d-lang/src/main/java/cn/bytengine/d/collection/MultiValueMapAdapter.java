@@ -18,7 +18,9 @@ import java.util.function.BiConsumer;
  * @version 1.0
  */
 public class MultiValueMapAdapter<K, V> implements MultiValueMap<K, V>, Serializable {
-
+    /**
+     * Wrap target Map
+     */
     private final Map<K, List<V>> targetMap;
 
 

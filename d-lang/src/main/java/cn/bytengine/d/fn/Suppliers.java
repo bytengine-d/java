@@ -40,6 +40,7 @@ public abstract class Suppliers {
          * 获得结果。
          *
          * @return 结果
+         * @throws Throwable 执行异常
          */
         R apply() throws Throwable;
 
