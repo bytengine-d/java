@@ -10,7 +10,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * TODO
+ * {@link java.text.SimpleDateFormat} 的线程安全版本，用于将 {@link Date} 格式化输出<br>
+ * Thanks to Apache Commons Lang 3.5
  *
  * @author Ban Tenio
  * @version 1.0
@@ -20,6 +21,13 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
     private transient Rule[] rules;
     private transient int mMaxLengthEstimate;
 
+    /**
+     * 构造，内部使用<br>
+     *
+     * @param pattern  使用{@link java.text.SimpleDateFormat} 相同的日期格式
+     * @param timeZone 非空时区{@link TimeZone}
+     * @param locale   非空{@link Locale} 日期地理位置
+     */
     public FastDatePrinter(String pattern, TimeZone timeZone, Locale locale) {
         super(pattern, timeZone, locale);
         init();
@@ -37,6 +45,14 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         mMaxLengthEstimate = len;
     }
 
+    /**
+     * <p>
+     * Returns a list of Rules given a pattern.
+     * </p>
+     *
+     * @return a {@code List} of Rule objects
+     * @throws IllegalArgumentException if pattern is invalid
+     */
     protected List<Rule> parsePattern() {
         final DateFormatSymbols symbols = new DateFormatSymbols(locale);
         final List<Rule> rules = new ArrayList<>();
@@ -172,6 +188,15 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         return rules;
     }
 
+    /**
+     * <p>
+     * Performs the parsing of tokens.
+     * </p>
+     *
+     * @param pattern  the pattern
+     * @param indexRef index references
+     * @return parsed token
+     */
     protected String parseToken(String pattern, int[] indexRef) {
         final StringBuilder buf = new StringBuilder();
 
@@ -223,6 +248,15 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         return buf.toString();
     }
 
+    /**
+     * <p>
+     * Gets an appropriate rule for the padding required.
+     * </p>
+     *
+     * @param field   the field to get a rule for
+     * @param padding the padding required
+     * @return a new rule with the correct padding
+     */
     protected NumberRule selectNumberRule(int field, int padding) {
         switch (padding) {
             case 1:
@@ -234,6 +268,14 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         }
     }
 
+    /**
+     * <p>
+     * Formats a {@code Date}, {@code Calendar} or {@code Long} (milliseconds) object.
+     * </p>
+     *
+     * @param obj the object to format
+     * @return The formatted value.
+     */
     String format(Object obj) {
         if (obj instanceof Date) {
             return format((Date) obj);
@@ -304,6 +346,12 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
         return buf;
     }
 
+    /**
+     * 估算生成的日期字符串长度<br>
+     * 实际生成的字符串长度小于或等于此值
+     *
+     * @return 日期字符串长度
+     */
     public int getMaxLengthEstimate() {
         return mMaxLengthEstimate;
     }
@@ -725,6 +773,17 @@ public class FastDatePrinter extends AbstractDateBasic implements DatePrinter {
 
     private static final ConcurrentMap<TimeZoneDisplayKey, String> C_TIME_ZONE_DISPLAY_CACHE = new SafeConcurrentHashMap<>(7);
 
+    /**
+     * <p>
+     * Gets the time zone display name, using a cache for performance.
+     * </p>
+     *
+     * @param tz       the zone to query
+     * @param daylight true if daylight savings
+     * @param style    the style to use {@code TimeZone.LONG} or {@code TimeZone.SHORT}
+     * @param locale   the locale to use
+     * @return the textual name of the time zone
+     */
     static String getTimeZoneDisplay(TimeZone tz, boolean daylight, int style, Locale locale) {
         final TimeZoneDisplayKey key = new TimeZoneDisplayKey(tz, daylight, style, locale);
         String value = C_TIME_ZONE_DISPLAY_CACHE.get(key);

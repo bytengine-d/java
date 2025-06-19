@@ -23,19 +23,41 @@ public class InvokerRegistration {
     private final Invoker invoker;
     private final Collection<RegisterOption> registerOptions;
 
+    /**
+     * 构造器
+     *
+     * @param invoker         调用器
+     * @param registerOptions 注册选项
+     */
     public InvokerRegistration(Invoker invoker, RegisterOption... registerOptions) {
         this(invoker, Arrays.asList(registerOptions));
     }
 
+    /**
+     * 构造器
+     *
+     * @param invoker 调用器
+     * @param registerOptions 注册选项
+     */
     public InvokerRegistration(Invoker invoker, Collection<RegisterOption> registerOptions) {
         this.invoker = invoker;
         this.registerOptions = registerOptions;
     }
 
+    /**
+     * 获取调用器
+     *
+     * @return 调用器
+     */
     public Invoker getInvoker() {
         return invoker;
     }
 
+    /**
+     * 获取注册选项集合
+     *
+     * @return 注册选项集合
+     */
     public Collection<RegisterOption> getRegisterOptions() {
         return registerOptions;
     }

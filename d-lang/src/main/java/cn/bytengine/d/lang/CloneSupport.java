@@ -1,8 +1,9 @@
 package cn.bytengine.d.lang;
 
 /**
- * TODO
+ * 克隆支持类，提供默认的克隆方法
  *
+ * @param <T> 继承类的类型
  * @author Ban Tenio
  * @version 1.0
  */

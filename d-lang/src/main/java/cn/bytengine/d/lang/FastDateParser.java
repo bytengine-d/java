@@ -13,7 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO
+ * {@link java.text.SimpleDateFormat} 的线程安全版本，用于解析日期字符串并转换为 {@link Date} 对象<br>
+ * Thanks to Apache Commons Lang 3.5
  *
  * @author Ban Tenio
  * @version 1.0
@@ -28,10 +29,31 @@ public class FastDateParser extends AbstractDateBasic implements DateParser {
     private transient List<StrategyAndWidth> patterns;
     private static final Comparator<String> LONGER_FIRST_LOWERCASE = Comparator.reverseOrder();
 
+    /**
+     * <p>
+     * Constructs a new FastDateParser.
+     * </p>
+     * <p>
+     * Use {@link FastDateFormat#getInstance(String, TimeZone, Locale)} or another variation of the factory methods of {@link FastDateFormat} to get a cached FastDateParser instance.
+     *
+     * @param pattern  non-null {@link java.text.SimpleDateFormat} compatible pattern
+     * @param timeZone non-null time zone to use
+     * @param locale   non-null locale
+     */
     public FastDateParser(String pattern, TimeZone timeZone, Locale locale) {
         this(pattern, timeZone, locale, null);
     }
 
+    /**
+     * <p>
+     * Constructs a new FastDateParser.
+     * </p>
+     *
+     * @param pattern      non-null {@link java.text.SimpleDateFormat} compatible pattern
+     * @param timeZone     non-null time zone to use
+     * @param locale       non-null locale
+     * @param centuryStart The start of the century for 2 digit year parsing
+     */
     public FastDateParser(final String pattern, final TimeZone timeZone, final Locale locale, final Date centuryStart) {
         super(pattern, timeZone, locale);
         final Calendar definingCalendar = Calendar.getInstance(timeZone, locale);
@@ -474,6 +496,9 @@ public class FastDateParser extends AbstractDateBasic implements DateParser {
         }
     };
 
+    /**
+     * A strategy that handles a timezone field in the parsing pattern
+     */
     static class TimeZoneStrategy extends PatternStrategy {
         private static final String RFC_822_TIME_ZONE = "[+-]\\d{4}";
         private static final String UTC_TIME_ZONE_WITH_OFFSET = "[+-]\\d{2}:\\d{2}";

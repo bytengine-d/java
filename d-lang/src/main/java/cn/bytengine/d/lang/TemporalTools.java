@@ -4,11 +4,10 @@ import java.time.*;
 import java.time.chrono.Era;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.*;
-import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 /**
- * TODO
+ * {@link Temporal} 工具类封装
  *
  * @author Ban Tenio
  * @version 1.0
@@ -17,14 +16,39 @@ public abstract class TemporalTools {
     private TemporalTools() {
     }
 
+    /**
+     * 获取两个日期的差，如果结束时间早于开始时间，获取结果为负。
+     * <p>
+     * 返回结果为{@link Duration}对象，通过调用toXXX方法返回相差单位
+     *
+     * @param startTimeInclude 开始时间（包含）
+     * @param endTimeExclude   结束时间（不包含）
+     * @return 时间差 {@link Duration}对象
+     */
     public static Duration between(Temporal startTimeInclude, Temporal endTimeExclude) {
         return Duration.between(startTimeInclude, endTimeExclude);
     }
 
+    /**
+     * 获取两个日期的差，如果结束时间早于开始时间，获取结果为负。
+     * <p>
+     * 返回结果为时间差的long值
+     *
+     * @param startTimeInclude 开始时间（包括）
+     * @param endTimeExclude   结束时间（不包括）
+     * @param unit             时间差单位
+     * @return 时间差
+     */
     public static long between(Temporal startTimeInclude, Temporal endTimeExclude, ChronoUnit unit) {
         return unit.between(startTimeInclude, endTimeExclude);
     }
 
+    /**
+     * 将 {@link TimeUnit} 转换为 {@link ChronoUnit}.
+     *
+     * @param unit 被转换的{@link TimeUnit}单位，如果为{@code null}返回{@code null}
+     * @return {@link ChronoUnit}
+     */
     public static ChronoUnit toChronoUnit(TimeUnit unit) throws IllegalArgumentException {
         if (null == unit) {
             return null;
@@ -49,6 +73,13 @@ public abstract class TemporalTools {
         }
     }
 
+    /**
+     * 转换 {@link ChronoUnit} 到 {@link TimeUnit}.
+     *
+     * @param unit {@link ChronoUnit}，如果为{@code null}返回{@code null}
+     * @return {@link TimeUnit}
+     * @throws IllegalArgumentException 如果{@link TimeUnit}没有对应单位抛出
+     */
     public static TimeUnit toTimeUnit(ChronoUnit unit) throws IllegalArgumentException {
         if (null == unit) {
             return null;
@@ -73,6 +104,15 @@ public abstract class TemporalTools {
         }
     }
 
+    /**
+     * 日期偏移,根据field不同加不同值（偏移会修改传入的对象）
+     *
+     * @param <T>    日期类型，如LocalDate或LocalDateTime
+     * @param time   {@link Temporal}
+     * @param number 偏移量，正数为向后偏移，负数为向前偏移
+     * @param field  偏移单位，见{@link ChronoUnit}，不能为null
+     * @return 偏移后的日期时间
+     */
     @SuppressWarnings("unchecked")
     public static <T extends Temporal> T offset(T time, long number, TemporalUnit field) {
         if (null == time) {
@@ -82,11 +122,28 @@ public abstract class TemporalTools {
         return (T) time.plus(number, field);
     }
 
+    /**
+     * 偏移到指定的周几
+     *
+     * @param temporal   日期或者日期时间
+     * @param dayOfWeek  周几
+     * @param <T>        日期类型，如LocalDate或LocalDateTime
+     * @param isPrevious 是否向前偏移，{@code true}向前偏移，{@code false}向后偏移。
+     * @return 偏移后的日期
+     */
     @SuppressWarnings("unchecked")
     public <T extends Temporal> T offset(T temporal, DayOfWeek dayOfWeek, boolean isPrevious) {
         return (T) temporal.with(isPrevious ? TemporalAdjusters.previous(dayOfWeek) : TemporalAdjusters.next(dayOfWeek));
     }
 
+    /**
+     * 安全获取时间的某个属性，属性不存在返回最小值，一般为0<br>
+     * 注意请谨慎使用此方法，某些{@link TemporalAccessor#isSupported(TemporalField)}为{@code false}的方法返回最小值
+     *
+     * @param temporalAccessor 需要获取的时间对象
+     * @param field            需要获取的属性
+     * @return 时间的值，如果无法获取则获取最小值，一般为0
+     */
     public static int get(TemporalAccessor temporalAccessor, TemporalField field) {
         if (temporalAccessor.isSupported(field)) {
             return temporalAccessor.get(field);
@@ -95,6 +152,14 @@ public abstract class TemporalTools {
         return (int) field.range().getMinimum();
     }
 
+    /**
+     * 格式化日期时间为指定格式<br>
+     * 如果为{@link Month}，调用{@link Month#toString()}
+     *
+     * @param time      {@link TemporalAccessor}
+     * @param formatter 日期格式化器，预定义的格式见：{@link DateTimeFormatter}
+     * @return 格式化后的字符串
+     */
     public static String format(TemporalAccessor time, DateTimeFormatter formatter) {
         if (null == time) {
             return null;
@@ -125,6 +190,14 @@ public abstract class TemporalTools {
         }
     }
 
+    /**
+     * 格式化日期时间为指定格式<br>
+     * 如果为{@link Month}，调用{@link Month#toString()}
+     *
+     * @param time   {@link TemporalAccessor}
+     * @param format 日期格式
+     * @return 格式化后的字符串
+     */
     public static String format(TemporalAccessor time, String format) {
         if (null == time) {
             return null;
@@ -145,6 +218,13 @@ public abstract class TemporalTools {
         return format(time, formatter);
     }
 
+    /**
+     * {@link TemporalAccessor}转换为 时间戳（从1970-01-01T00:00:00Z开始的毫秒数）<br>
+     * 如果为{@link Month}，调用{@link Month#getValue()}
+     *
+     * @param temporalAccessor Date对象
+     * @return {@link Instant}对象
+     */
     public static long toEpochMilli(TemporalAccessor temporalAccessor) {
         if (temporalAccessor instanceof Month) {
             return ((Month) temporalAccessor).getValue();
@@ -156,6 +236,12 @@ public abstract class TemporalTools {
         return toInstant(temporalAccessor).toEpochMilli();
     }
 
+    /**
+     * {@link TemporalAccessor}转换为 {@link Instant}对象
+     *
+     * @param temporalAccessor Date对象
+     * @return {@link Instant}对象
+     */
     public static Instant toInstant(TemporalAccessor temporalAccessor) {
         if (null == temporalAccessor) {
             return null;
@@ -188,10 +274,32 @@ public abstract class TemporalTools {
         return result;
     }
 
+    /**
+     * 当前日期是否在日期指定范围内<br>
+     * 起始日期和结束日期可以互换
+     *
+     * @param date      被检查的日期
+     * @param beginDate 起始日期（包含）
+     * @param endDate   结束日期（包含）
+     * @return 是否在范围内
+     */
     public static boolean isIn(TemporalAccessor date, TemporalAccessor beginDate, TemporalAccessor endDate) {
         return isIn(date, beginDate, endDate, true, true);
     }
 
+    /**
+     * 当前日期是否在日期指定范围内<br>
+     * 起始日期和结束日期可以互换<br>
+     * 通过includeBegin, includeEnd参数控制日期范围区间是否为开区间，例如：传入参数：includeBegin=true, includeEnd=false，
+     * 则本方法会判断 date ∈ (beginDate, endDate] 是否成立
+     *
+     * @param date         被检查的日期
+     * @param beginDate    起始日期
+     * @param endDate      结束日期
+     * @param includeBegin 时间范围是否包含起始日期
+     * @param includeEnd   时间范围是否包含结束日期
+     * @return 是否在范围内
+     */
     public static boolean isIn(TemporalAccessor date, TemporalAccessor beginDate, TemporalAccessor endDate,
                                boolean includeBegin, boolean includeEnd) {
         if (date == null || beginDate == null || endDate == null) {

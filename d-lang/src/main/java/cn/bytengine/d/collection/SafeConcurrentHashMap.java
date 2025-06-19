@@ -1,7 +1,7 @@
 package cn.bytengine.d.collection;
 
+import cn.bytengine.d.lang.CollectionTools;
 import cn.bytengine.d.lang.JdkTools;
-import cn.bytengine.d.lang.MapTools;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,7 +70,7 @@ public class SafeConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
     @Override
     public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
         if (JdkTools.IS_JDK8) {
-            return MapTools.computeIfAbsentForJdk8(this, key, mappingFunction);
+            return CollectionTools.computeIfAbsentForJdk8(this, key, mappingFunction);
         } else {
             return super.computeIfAbsent(key, mappingFunction);
         }

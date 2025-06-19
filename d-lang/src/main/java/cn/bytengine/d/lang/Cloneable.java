@@ -1,8 +1,9 @@
 package cn.bytengine.d.lang;
 
 /**
- * TODO
+ * 克隆支持接口
  *
+ * @param <T> 实现克隆接口的类型
  * @author Ban Tenio
  * @version 1.0
  */

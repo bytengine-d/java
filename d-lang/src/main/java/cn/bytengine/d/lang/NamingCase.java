@@ -1,20 +1,65 @@
 package cn.bytengine.d.lang;
 
 /**
- * TODO
+ * 命名规则封装，主要是针对驼峰风格命名、连接符命名等的封装
  *
  * @author Ban Tenio
  * @version 1.0
  */
 public class NamingCase {
+    /**
+     * 将驼峰式命名的字符串转换为下划线方式，又称SnakeCase、underScoreCase。<br>
+     * 如果转换前的驼峰式命名的字符串为空，则返回空字符串。<br>
+     * 规则为：
+     * <ul>
+     *     <li>单字之间以下划线隔开</li>
+     *     <li>每个单字的首字母亦用小写字母</li>
+     * </ul>
+     * 例如：
+     *
+     * <pre>
+     * HelloWorld=》hello_world
+     * Hello_World=》hello_world
+     * HelloWorld_test=》hello_world_test
+     * </pre>
+     *
+     * @param str 转换前的驼峰式命名的字符串，也可以为下划线形式
+     * @return 转换后下划线方式命名的字符串
+     */
     public static String toUnderlineCase(CharSequence str) {
         return toSymbolCase(str, CharTools.UNDERLINE);
     }
 
+    /**
+     * 将驼峰式命名的字符串转换为短横连接方式。<br>
+     * 如果转换前的驼峰式命名的字符串为空，则返回空字符串。<br>
+     * 规则为：
+     * <ul>
+     *     <li>单字之间横线线隔开</li>
+     *     <li>每个单字的首字母亦用小写字母</li>
+     * </ul>
+     * 例如：
+     *
+     * <pre>
+     * HelloWorld=》hello-world
+     * Hello_World=》hello-world
+     * HelloWorld_test=》hello-world-test
+     * </pre>
+     *
+     * @param str 转换前的驼峰式命名的字符串，也可以为下划线形式
+     * @return 转换后下划线方式命名的字符串
+     */
     public static String toKebabCase(CharSequence str) {
         return toSymbolCase(str, CharTools.DASHED);
     }
 
+    /**
+     * 将驼峰式命名的字符串转换为使用符号连接方式。如果转换前的驼峰式命名的字符串为空，则返回空字符串。
+     *
+     * @param str    转换前的驼峰式命名的字符串，也可以为符号连接形式
+     * @param symbol 连接符
+     * @return 转换后符号连接方式命名的字符串
+     */
     public static String toSymbolCase(CharSequence str, char symbol) {
         if (str == null) {
             return null;

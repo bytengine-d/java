@@ -41,6 +41,9 @@ public class ClassAssistProcessor extends AbstractAnnotationProcessor {
     private Template classAccessorRegisterTemplate;
     private Template classAccessorRegisterServicesTemplate;
 
+    /**
+     * 构造器
+     */
     public ClassAssistProcessor() {
         super(ClassAccess.class);
     }
@@ -83,6 +86,13 @@ public class ClassAssistProcessor extends AbstractAnnotationProcessor {
         return isClaimed;
     }
 
+    /**
+     * 根据生成ClassAccessorRegister类信息，生成META-INF/services/cn.bytengine.d.assist.ClassAccessorRegister信息
+     *
+     * @param ctx                                上下文
+     * @param generatedClassAccessorRegisterList ClassAccessorRegister类名集合
+     * @param roundEnv                           RoundEnvironment实例
+     */
     protected void processServiceMetaInf(Ctx ctx, List<String> generatedClassAccessorRegisterList, RoundEnvironment roundEnv) {
         ctx.set("serviceClassList", generatedClassAccessorRegisterList);
         try {
@@ -99,6 +109,14 @@ public class ClassAssistProcessor extends AbstractAnnotationProcessor {
         }
     }
 
+    /**
+     * 处理生成指定类的ClassAccessorRegister注册器代码
+     *
+     * @param parent 上下文
+     * @param annotatedClass 使用ClassAccess类
+     * @param roundEnv RoundEnvironment实例
+     * @return 生成ClassAccessorRegister实现类名
+     */
     protected String processElementClass(Ctx parent, Element annotatedClass, RoundEnvironment roundEnv) {
         String className = annotatedClass.getSimpleName().toString();
         ElementKind elementKind = annotatedClass.getKind();

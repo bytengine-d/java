@@ -5,7 +5,8 @@ import cn.bytengine.d.collection.SafeConcurrentHashMap;
 import java.util.Map;
 
 /**
- * TODO
+ * 基本变量类型的枚举<br>
+ * 基本类型枚举包括原始类型和包装类型
  *
  * @author Ban Tenio
  * @version 1.0
@@ -13,7 +14,11 @@ import java.util.Map;
 public enum BasicType {
     BYTE, SHORT, INT, INTEGER, LONG, DOUBLE, FLOAT, BOOLEAN, CHAR, CHARACTER, STRING;
 
+    /**
+     * 包装类型为Key，原始类型为Value，例如： Integer.class =》 int.class.
+     */
     public static final Map<Class<?>, Class<?>> WRAPPER_PRIMITIVE_MAP = new SafeConcurrentHashMap<>(8);
+    /** 原始类型为Key，包装类型为Value，例如： int.class =》 Integer.class. */
     public static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_MAP = new SafeConcurrentHashMap<>(8);
 
     static {
@@ -31,6 +36,11 @@ public enum BasicType {
         }
     }
 
+    /**
+     * 原始类转为包装类，非原始类返回原类
+     * @param clazz 原始类
+     * @return 包装类
+     */
     public static Class<?> wrap(Class<?> clazz) {
         if (null == clazz || false == clazz.isPrimitive()) {
             return clazz;
@@ -39,6 +49,11 @@ public enum BasicType {
         return (null == result) ? clazz : result;
     }
 
+    /**
+     * 包装类转为原始类，非包装类返回原类
+     * @param clazz 包装类
+     * @return 原始类
+     */
     public static Class<?> unWrap(Class<?> clazz) {
         if (null == clazz || clazz.isPrimitive()) {
             return clazz;

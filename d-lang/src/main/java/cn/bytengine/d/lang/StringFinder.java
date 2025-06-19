@@ -1,7 +1,7 @@
 package cn.bytengine.d.lang;
 
 /**
- * TODO
+ * 字符串查找器
  *
  * @author Ban Tenio
  * @version 1.0
@@ -10,6 +10,12 @@ public class StringFinder extends TextFinder {
     private final CharSequence strToFind;
     private final boolean caseInsensitive;
 
+    /**
+     * 构造
+     *
+     * @param strToFind       被查找的字符串
+     * @param caseInsensitive 是否忽略大小写
+     */
     public StringFinder(CharSequence strToFind, boolean caseInsensitive) {
         AssertTools.notEmpty(strToFind);
         this.strToFind = strToFind;

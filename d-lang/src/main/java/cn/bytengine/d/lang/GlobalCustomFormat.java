@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * TODO
+ * 全局自定义格式<br>
+ * 用于定义用户指定的日期格式和输出日期的关系
  *
  * @author Ban Tenio
  * @version 1.0
@@ -17,7 +18,13 @@ public abstract class GlobalCustomFormat {
     private GlobalCustomFormat() {
     }
 
+    /**
+     * 格式：秒时间戳（Unix时间戳）
+     */
     public static final String FORMAT_SECONDS = "#sss";
+    /**
+     * 格式：毫秒时间戳
+     */
     public static final String FORMAT_MILLISECONDS = "#SSS";
 
     private static final Map<CharSequence, Function<Date, String>> formatterMap;
@@ -35,11 +42,11 @@ public abstract class GlobalCustomFormat {
         putParser(FORMAT_MILLISECONDS, (dateStr) -> DateTools.date(Long.parseLong(dateStr.toString())));
     }
 
-    public static long multiplyExact(long x, int y) {
+    private static long multiplyExact(long x, int y) {
         return multiplyExact(x, (long) y);
     }
 
-    public static long multiplyExact(long x, long y) {
+    private static long multiplyExact(long x, long y) {
         long r = x * y;
         long ax = Math.abs(x);
         long ay = Math.abs(y);
@@ -68,22 +75,47 @@ public abstract class GlobalCustomFormat {
         return r;
     }
 
+    /**
+     * 加入日期格式化规则
+     *
+     * @param format 格式
+     * @param func   格式化函数
+     */
     public static void putFormatter(String format, Function<Date, String> func) {
         AssertTools.notNull(format, "Format must be not null !");
         AssertTools.notNull(func, "Function must be not null !");
         formatterMap.put(format, func);
     }
 
+    /**
+     * 加入日期解析规则
+     *
+     * @param format 格式
+     * @param func   解析函数
+     */
     public static void putParser(String format, Function<CharSequence, Date> func) {
         AssertTools.notNull(format, "Format must be not null !");
         AssertTools.notNull(func, "Function must be not null !");
         parserMap.put(format, func);
     }
 
+    /**
+     * 检查指定格式是否为自定义格式
+     *
+     * @param format 格式
+     * @return 是否为自定义格式
+     */
     public static boolean isCustomFormat(String format) {
         return formatterMap.containsKey(format);
     }
 
+    /**
+     * 使用自定义格式格式化日期
+     *
+     * @param date   日期
+     * @param format 自定义格式
+     * @return 格式化后的日期
+     */
     public static String format(Date date, CharSequence format) {
         if (null != formatterMap) {
             final Function<Date, String> func = formatterMap.get(format);
@@ -95,10 +127,24 @@ public abstract class GlobalCustomFormat {
         return null;
     }
 
+    /**
+     * 使用自定义格式格式化日期
+     *
+     * @param temporalAccessor 日期
+     * @param format           自定义格式
+     * @return 格式化后的日期
+     */
     public static String format(TemporalAccessor temporalAccessor, CharSequence format) {
         return format(DateTools.date(temporalAccessor), format);
     }
 
+    /**
+     * 使用自定义格式解析日期
+     *
+     * @param dateStr 日期字符串
+     * @param format  自定义格式
+     * @return 格式化后的日期
+     */
     public static Date parse(CharSequence dateStr, String format) {
         if (null != parserMap) {
             final Function<CharSequence, Date> func = parserMap.get(format);

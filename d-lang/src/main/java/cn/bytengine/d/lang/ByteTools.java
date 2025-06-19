@@ -9,7 +9,18 @@ import java.util.concurrent.atomic.DoubleAdder;
 import java.util.concurrent.atomic.LongAdder;
 
 /**
- * TODO
+ * 对数字和字节进行转换。<br>
+ * 假设数据存储是以大端模式存储的：<br>
+ * <ul>
+ *     <li>byte: 字节类型 占8位二进制 00000000</li>
+ *     <li>char: 字符类型 占2个字节 16位二进制 byte[0] byte[1]</li>
+ *     <li>int : 整数类型 占4个字节 32位二进制 byte[0] byte[1] byte[2] byte[3]</li>
+ *     <li>long: 长整数类型 占8个字节 64位二进制 byte[0] byte[1] byte[2] byte[3] byte[4] byte[5]</li>
+ *     <li>long: 长整数类型 占8个字节 64位二进制 byte[0] byte[1] byte[2] byte[3] byte[4] byte[5] byte[6] byte[7]</li>
+ *     <li>float: 浮点数(小数) 占4个字节 32位二进制 byte[0] byte[1] byte[2] byte[3]</li>
+ *     <li>double: 双精度浮点数(小数) 占8个字节 64位二进制 byte[0] byte[1] byte[2] byte[3] byte[4]byte[5] byte[6] byte[7]</li>
+ * </ul>
+ * 注：注释来自Hanlp，代码提供来自pr#1492@Github
  *
  * @author Ban Tenio
  * @version 1.0
@@ -19,25 +30,65 @@ public abstract class ByteTools {
     }
 
     public static final ByteOrder DEFAULT_ORDER = ByteOrder.LITTLE_ENDIAN;
+    /**
+     * CPU的字节序
+     */
     public static final ByteOrder CPU_ENDIAN = "little".equals(System.getProperty("sun.cpu.endian")) ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN;
 
+    /**
+     * int转byte
+     *
+     * @param intValue int值
+     * @return byte值
+     */
     public static byte intToByte(int intValue) {
         return (byte) intValue;
     }
 
+    /**
+     * byte转无符号int
+     *
+     * @param byteValue byte值
+     * @return 无符号int值
+     * @since 3.2.0
+     */
     public static int byteToUnsignedInt(byte byteValue) {
         // Java 总是把 byte 当做有符处理；我们可以通过将其和 0xFF 进行二进制与得到它的无符值
         return byteValue & 0xFF;
     }
 
+    /**
+     * byte数组转short<br>
+     * 默认以小端序转换
+     *
+     * @param bytes byte数组
+     * @return short值
+     */
     public static short bytesToShort(byte[] bytes) {
         return bytesToShort(bytes, DEFAULT_ORDER);
     }
 
+    /**
+     * byte数组转short<br>
+     * 自定义端序
+     *
+     * @param bytes     byte数组，长度必须为2
+     * @param byteOrder 端序
+     * @return short值
+     */
     public static short bytesToShort(final byte[] bytes, final ByteOrder byteOrder) {
         return bytesToShort(bytes, 0, byteOrder);
     }
 
+    /**
+     * byte数组转short<br>
+     * 自定义端序
+     *
+     * @param bytes     byte数组，长度必须大于2
+     * @param start     开始位置
+     * @param byteOrder 端序
+     * @return short值
+     */
     public static short bytesToShort(final byte[] bytes, final int start, final ByteOrder byteOrder) {
         if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
             //小端模式，数据的高字节保存在内存的高地址中，而数据的低字节保存在内存的低地址中
@@ -47,10 +98,25 @@ public abstract class ByteTools {
         }
     }
 
+    /**
+     * short转byte数组<br>
+     * 默认以小端序转换
+     *
+     * @param shortValue short值
+     * @return byte数组
+     */
     public static byte[] shortToBytes(short shortValue) {
         return shortToBytes(shortValue, DEFAULT_ORDER);
     }
 
+    /**
+     * short转byte数组<br>
+     * 自定义端序
+     *
+     * @param shortValue short值
+     * @param byteOrder  端序
+     * @return byte数组
+     */
     public static byte[] shortToBytes(short shortValue, ByteOrder byteOrder) {
         byte[] b = new byte[Short.BYTES];
         if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
@@ -63,14 +129,38 @@ public abstract class ByteTools {
         return b;
     }
 
+    /**
+     * byte[]转int值<br>
+     * 默认以小端序转换
+     *
+     * @param bytes byte数组
+     * @return int值
+     */
     public static int bytesToInt(byte[] bytes) {
         return bytesToInt(bytes, DEFAULT_ORDER);
     }
 
+    /**
+     * byte[]转int值<br>
+     * 自定义端序
+     *
+     * @param bytes     byte数组
+     * @param byteOrder 端序
+     * @return int值
+     */
     public static int bytesToInt(byte[] bytes, ByteOrder byteOrder) {
         return bytesToInt(bytes, 0, byteOrder);
     }
 
+    /**
+     * byte[]转int值<br>
+     * 自定义端序
+     *
+     * @param bytes     byte数组
+     * @param start     开始位置（包含）
+     * @param byteOrder 端序
+     * @return int值
+     */
     public static int bytesToInt(byte[] bytes, int start, ByteOrder byteOrder) {
         if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
             return bytes[start] & 0xFF | //
@@ -86,10 +176,25 @@ public abstract class ByteTools {
 
     }
 
+    /**
+     * int转byte数组<br>
+     * 默认以小端序转换
+     *
+     * @param intValue int值
+     * @return byte数组
+     */
     public static byte[] intToBytes(int intValue) {
         return intToBytes(intValue, DEFAULT_ORDER);
     }
 
+    /**
+     * int转byte数组<br>
+     * 自定义端序
+     *
+     * @param intValue  int值
+     * @param byteOrder 端序
+     * @return byte数组
+     */
     public static byte[] intToBytes(int intValue, ByteOrder byteOrder) {
 
         if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
@@ -111,10 +216,27 @@ public abstract class ByteTools {
 
     }
 
+    /**
+     * long转byte数组<br>
+     * 默认以小端序转换<br>
+     * from: https://stackoverflow.com/questions/4485128/how-do-i-convert-long-to-byte-and-back-in-java
+     *
+     * @param longValue long值
+     * @return byte数组
+     */
     public static byte[] longToBytes(long longValue) {
         return longToBytes(longValue, DEFAULT_ORDER);
     }
 
+    /**
+     * long转byte数组<br>
+     * 自定义端序<br>
+     * from: https://stackoverflow.com/questions/4485128/how-do-i-convert-long-to-byte-and-back-in-java
+     *
+     * @param longValue long值
+     * @param byteOrder 端序
+     * @return byte数组
+     */
     public static byte[] longToBytes(long longValue, ByteOrder byteOrder) {
         byte[] result = new byte[Long.BYTES];
         if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
@@ -131,14 +253,41 @@ public abstract class ByteTools {
         return result;
     }
 
+    /**
+     * byte数组转long<br>
+     * 默认以小端序转换<br>
+     * from: https://stackoverflow.com/questions/4485128/how-do-i-convert-long-to-byte-and-back-in-java
+     *
+     * @param bytes byte数组
+     * @return long值
+     */
     public static long bytesToLong(byte[] bytes) {
         return bytesToLong(bytes, DEFAULT_ORDER);
     }
 
+    /**
+     * byte数组转long<br>
+     * 自定义端序<br>
+     * from: https://stackoverflow.com/questions/4485128/how-do-i-convert-long-to-byte-and-back-in-java
+     *
+     * @param bytes     byte数组
+     * @param byteOrder 端序
+     * @return long值
+     */
     public static long bytesToLong(byte[] bytes, ByteOrder byteOrder) {
         return bytesToLong(bytes, 0, byteOrder);
     }
 
+    /**
+     * byte数组转long<br>
+     * 自定义端序<br>
+     * from: https://stackoverflow.com/questions/4485128/how-do-i-convert-long-to-byte-and-back-in-java
+     *
+     * @param bytes     byte数组
+     * @param start     计算数组开始位置
+     * @param byteOrder 端序
+     * @return long值
+     */
     public static long bytesToLong(byte[] bytes, int start, ByteOrder byteOrder) {
         long values = 0;
         if (ByteOrder.LITTLE_ENDIAN == byteOrder) {
@@ -156,42 +305,114 @@ public abstract class ByteTools {
         return values;
     }
 
+    /**
+     * float转byte数组，默认以小端序转换<br>
+     *
+     * @param floatValue float值
+     * @return byte数组
+     */
     public static byte[] floatToBytes(float floatValue) {
         return floatToBytes(floatValue, DEFAULT_ORDER);
     }
 
+    /**
+     * float转byte数组，自定义端序<br>
+     *
+     * @param floatValue float值
+     * @param byteOrder  端序
+     * @return byte数组
+     */
     public static byte[] floatToBytes(float floatValue, ByteOrder byteOrder) {
         return intToBytes(Float.floatToIntBits(floatValue), byteOrder);
     }
 
+    /**
+     * byte数组转float<br>
+     * 默认以小端序转换<br>
+     *
+     * @param bytes byte数组
+     * @return float值
+     */
     public static float bytesToFloat(byte[] bytes) {
         return bytesToFloat(bytes, DEFAULT_ORDER);
     }
 
+    /**
+     * byte数组转float<br>
+     * 自定义端序<br>
+     *
+     * @param bytes     byte数组
+     * @param byteOrder 端序
+     * @return float值
+     */
     public static float bytesToFloat(byte[] bytes, ByteOrder byteOrder) {
         return Float.intBitsToFloat(bytesToInt(bytes, byteOrder));
     }
 
+    /**
+     * double转byte数组<br>
+     * 默认以小端序转换<br>
+     *
+     * @param doubleValue double值
+     * @return byte数组
+     */
     public static byte[] doubleToBytes(double doubleValue) {
         return doubleToBytes(doubleValue, DEFAULT_ORDER);
     }
 
+    /**
+     * double转byte数组<br>
+     * 自定义端序<br>
+     * from: https://stackoverflow.com/questions/4485128/how-do-i-convert-long-to-byte-and-back-in-java
+     *
+     * @param doubleValue double值
+     * @param byteOrder   端序
+     * @return byte数组
+     */
     public static byte[] doubleToBytes(double doubleValue, ByteOrder byteOrder) {
         return longToBytes(Double.doubleToLongBits(doubleValue), byteOrder);
     }
 
+    /**
+     * byte数组转Double<br>
+     * 默认以小端序转换<br>
+     *
+     * @param bytes byte数组
+     * @return double值
+     */
     public static double bytesToDouble(byte[] bytes) {
         return bytesToDouble(bytes, DEFAULT_ORDER);
     }
 
+    /**
+     * byte数组转double<br>
+     * 自定义端序<br>
+     *
+     * @param bytes     byte数组
+     * @param byteOrder 端序
+     * @return double值
+     */
     public static double bytesToDouble(byte[] bytes, ByteOrder byteOrder) {
         return Double.longBitsToDouble(bytesToLong(bytes, byteOrder));
     }
 
+    /**
+     * 将{@link Number}转换为
+     *
+     * @param number 数字
+     * @return bytes
+     */
     public static byte[] numberToBytes(Number number) {
         return numberToBytes(number, DEFAULT_ORDER);
     }
 
+    /**
+     * 将{@link Number}转换为
+     *
+     * @param number    数字
+     * @param byteOrder 端序
+     * @return bytes
+     */
     public static byte[] numberToBytes(Number number, ByteOrder byteOrder) {
         if (number instanceof Byte) {
             return new byte[]{number.byteValue()};
@@ -210,6 +431,16 @@ public abstract class ByteTools {
         }
     }
 
+    /**
+     * byte数组转换为指定类型数字
+     *
+     * @param <T>         数字类型
+     * @param bytes       byte数组
+     * @param targetClass 目标数字类型
+     * @param byteOrder   端序
+     * @return 转换后的数字
+     * @throws IllegalArgumentException 不支持的数字类型，如用户自定义数字类型
+     */
     @SuppressWarnings("unchecked")
     public static <T extends Number> T bytesToNumber(byte[] bytes, Class<T> targetClass, ByteOrder byteOrder) throws IllegalArgumentException {
         Number number;

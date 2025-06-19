@@ -50,54 +50,119 @@ public class MethodInfo {
         return this.method.getName();
     }
 
+    /**
+     * 获取方法声明所属类名称
+     *
+     * @return 方法声明所属类名称
+     */
     public String getDeclaringClassName() {
         return this.method.getDeclaringClass().getName();
     }
 
+    /**
+     * 获取方法返回类型名称
+     *
+     * @return 返回类型名称
+     */
     public String getReturnTypeName() {
         return this.method.getReturnType().getName();
     }
 
+    /**
+     * 获取方法是否虚方法
+     *
+     * @return 方法是否虚方法
+     */
     public boolean isAbstract() {
         return Modifier.isAbstract(this.method.getModifiers());
     }
 
+    /**
+     * 获取方法是否静态方法
+     *
+     * @return 方法是否静态方法
+     */
     public boolean isStatic() {
         return Modifier.isStatic(this.method.getModifiers());
     }
 
+    /**
+     * 获取方法是否不可重写
+     *
+     * @return 方法是否不可重写
+     */
     public boolean isFinal() {
         return Modifier.isFinal(this.method.getModifiers());
     }
 
+    /**
+     * 获取方法是否可以重写
+     *
+     * @return 方法是否可以重写
+     */
     public boolean isOverridable() {
         return !isStatic() && !isFinal() && !isPrivate();
     }
 
+    /**
+     * 获取方法是否私有
+     *
+     * @return 方法是否私有
+     */
     private boolean isPrivate() {
         return Modifier.isPrivate(this.method.getModifiers());
     }
 
+    /**
+     * 获取方法签名字符串
+     *
+     * @return 方法签名字符串
+     */
     public String getMethodSign() {
         return methodSign;
     }
 
+    /**
+     * 获取方法类型签名
+     *
+     * @return 方法类型签名
+     */
     public String getMethodTypeSign() {
         return methodTypeSign;
     }
 
+    /**
+     * 方法是否有返回值
+     *
+     * @return 是否有返回值
+     */
     public boolean isHasReturn() {
         return hasReturn;
     }
 
+    /**
+     * 获取方法返回类型
+     *
+     * @return 方法返回类型
+     */
     public Class<?> getReturnType() {
         return returnType;
     }
 
+    /**
+     * 获取方法参数数量
+     *
+     * @return 方法参数数量
+     */
     public int getParameterLength() {
         return parameterLength;
     }
 
+    /**
+     * 获取方法参数类型集合
+     *
+     * @return 方法参数类型集合
+     */
     public Class<?>[] getParameters() {
         return parameters;
     }
@@ -114,6 +179,13 @@ public class MethodInfo {
         return Objects.hashCode(methodSign);
     }
 
+    /**
+     * 给定方法所属类型和方法实例，创建方法信息
+     *
+     * @param ownClass 方法所属类
+     * @param method   方法实例
+     * @return 方法信息
+     */
     public static MethodInfo of(Class<?> ownClass, Method method) {
         MethodInfo info = new MethodInfo();
         info.method = method;
@@ -123,10 +195,16 @@ public class MethodInfo {
         info.parameters = method.getParameterTypes();
         info.parameterLength = info.parameters.length;
         info.methodTypeSign = methodSignatureString(method);
-        info.methodSign = CharSequenceTools.format("{}.{}{}}", ownClass.getCanonicalName(), info.getMethodName(), info.methodTypeSign);
+        info.methodSign = CharSequenceTools.format("{}.{}{}", ownClass.getCanonicalName(), info.getMethodName(), info.methodTypeSign);
         return info;
     }
 
+    /**
+     * 获取方法类型签名
+     *
+     * @param methodInstance 方法实例
+     * @return 方法类型签名
+     */
     public static String methodSignatureString(Method methodInstance) {
         Type[] parameterTypes = methodInstance.getGenericParameterTypes();
         StringBuilder buf = new StringBuilder("(");

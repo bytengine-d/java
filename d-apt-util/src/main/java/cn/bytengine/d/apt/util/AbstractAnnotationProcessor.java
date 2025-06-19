@@ -45,6 +45,11 @@ public abstract class AbstractAnnotationProcessor extends AbstractProcessor {
         internalInit(processingEnv);
     }
 
+    /**
+     * 实现类初始化，处理器已经完成filer，messager和elements
+     *
+     * @param processingEnv TODO
+     */
     abstract protected void internalInit(ProcessingEnvironment processingEnv);
 
     /**

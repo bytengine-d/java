@@ -15,6 +15,13 @@ public abstract class AbstractDateBasic implements DateBasic, Serializable {
     protected final TimeZone timeZone;
     protected final Locale locale;
 
+    /**
+     * 构造，内部使用
+     *
+     * @param pattern  使用{@link java.text.SimpleDateFormat} 相同的日期格式
+     * @param timeZone 非空时区{@link TimeZone}
+     * @param locale   非空{@link Locale} 日期地理位置
+     */
     protected AbstractDateBasic(final String pattern, final TimeZone timeZone, final Locale locale) {
         this.pattern = pattern;
         this.timeZone = timeZone;

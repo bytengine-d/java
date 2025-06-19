@@ -22,15 +22,28 @@ public class CtxImpl implements Ctx {
     private Ctx parentCtx;
     private Map<String, Object> source;
 
+    /**
+     * 上下文构造器
+     */
     public CtxImpl() {
         this((Ctx) null);
     }
 
+    /**
+     * 上下文构造器，指定父级上下文
+     *
+     * @param parentCtx 父级上下文
+     */
     public CtxImpl(final Ctx parentCtx) {
         this.source = new ConcurrentHashMap<>();
         this.parentCtx = parentCtx;
     }
 
+    /**
+     * 上下文构造器，指定数据源
+     *
+     * @param source 数据源
+     */
     public CtxImpl(final Map<String, ?> source) {
         Set<String> strings = source.keySet();
         List<String> keys = new ArrayList<>(strings);
@@ -43,6 +56,12 @@ public class CtxImpl implements Ctx {
         this.parentCtx = null;
     }
 
+    /**
+     * 上下文构造器，指定父级上下文和数据源
+     *
+     * @param parentCtx 父级上下文
+     * @param source    数据源
+     */
     public CtxImpl(final Ctx parentCtx, final Map<String, ?> source) {
         this.source = source == null ? null : new ConcurrentHashMap<>(source);
         this.parentCtx = parentCtx;
@@ -90,15 +109,31 @@ public class CtxImpl implements Ctx {
         return parentCtx;
     }
 
+    /**
+     * 清理上下文内容
+     *
+     * @return 上下文
+     */
     public CtxImpl clear() {
         this.source.clear();
         return this;
     }
 
+    /**
+     * 获取上下文源
+     *
+     * @return 上下文源
+     */
     public Map<String, Object> getSource() {
         return this.source;
     }
 
+    /**
+     * 设置上下文源
+     *
+     * @param source 上下文源
+     * @return 上下文
+     */
     public CtxImpl setSource(Map<String, Object> source) {
         this.source = source;
         return this;

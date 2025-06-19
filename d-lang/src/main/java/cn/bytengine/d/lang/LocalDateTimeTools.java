@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * TODO
+ * JDK8+中的{@link LocalDateTime} 工具类封装
  *
  * @author Ban Tenio
  * @version 1.0
@@ -18,18 +18,41 @@ public abstract class LocalDateTimeTools {
     private LocalDateTimeTools() {
     }
 
+    /**
+     * 当前时间，默认时区
+     *
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime now() {
         return LocalDateTime.now();
     }
 
+    /**
+     * {@link Instant}转{@link LocalDateTime}，使用默认时区
+     *
+     * @param instant {@link Instant}
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(Instant instant) {
         return of(instant, ZoneId.systemDefault());
     }
 
+    /**
+     * {@link Instant}转{@link LocalDateTime}，使用UTC时区
+     *
+     * @param instant {@link Instant}
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime ofUTC(Instant instant) {
         return of(instant, ZoneId.of("UTC"));
     }
 
+    /**
+     * {@link ZonedDateTime}转{@link LocalDateTime}
+     *
+     * @param zonedDateTime {@link ZonedDateTime}
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(ZonedDateTime zonedDateTime) {
         if (null == zonedDateTime) {
             return null;
@@ -37,6 +60,13 @@ public abstract class LocalDateTimeTools {
         return zonedDateTime.toLocalDateTime();
     }
 
+    /**
+     * {@link Instant}转{@link LocalDateTime}
+     *
+     * @param instant {@link Instant}
+     * @param zoneId  时区
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(Instant instant, ZoneId zoneId) {
         if (null == instant) {
             return null;
@@ -45,6 +75,13 @@ public abstract class LocalDateTimeTools {
         return LocalDateTime.ofInstant(instant, ObjectTools.defaultIfNull(zoneId, ZoneId::systemDefault));
     }
 
+    /**
+     * {@link Instant}转{@link LocalDateTime}
+     *
+     * @param instant  {@link Instant}
+     * @param timeZone 时区
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(Instant instant, TimeZone timeZone) {
         if (null == instant) {
             return null;
@@ -53,22 +90,56 @@ public abstract class LocalDateTimeTools {
         return of(instant, ObjectTools.defaultIfNull(timeZone, TimeZone::getDefault).toZoneId());
     }
 
+    /**
+     * 毫秒转{@link LocalDateTime}，使用默认时区
+     *
+     * <p>注意：此方法使用默认时区，如果非UTC，会产生时间偏移</p>
+     *
+     * @param epochMilli 从1970-01-01T00:00:00Z开始计数的毫秒数
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(long epochMilli) {
         return of(Instant.ofEpochMilli(epochMilli));
     }
 
+    /**
+     * 毫秒转{@link LocalDateTime}，使用UTC时区
+     *
+     * @param epochMilli 从1970-01-01T00:00:00Z开始计数的毫秒数
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime ofUTC(long epochMilli) {
         return ofUTC(Instant.ofEpochMilli(epochMilli));
     }
 
+    /**
+     * 毫秒转{@link LocalDateTime}，根据时区不同，结果会产生时间偏移
+     *
+     * @param epochMilli 从1970-01-01T00:00:00Z开始计数的毫秒数
+     * @param zoneId     时区
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(long epochMilli, ZoneId zoneId) {
         return of(Instant.ofEpochMilli(epochMilli), zoneId);
     }
 
+    /**
+     * 毫秒转{@link LocalDateTime}，结果会产生时间偏移
+     *
+     * @param epochMilli 从1970-01-01T00:00:00Z开始计数的毫秒数
+     * @param timeZone   时区
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(long epochMilli, TimeZone timeZone) {
         return of(Instant.ofEpochMilli(epochMilli), timeZone);
     }
 
+    /**
+     * {@link Date}转{@link LocalDateTime}，使用默认时区
+     *
+     * @param date Date对象
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(Date date) {
         if (null == date) {
             return null;
@@ -76,6 +147,12 @@ public abstract class LocalDateTimeTools {
         return of(date.toInstant());
     }
 
+    /**
+     * {@link TemporalAccessor}转{@link LocalDateTime}，使用默认时区
+     *
+     * @param temporalAccessor {@link TemporalAccessor}
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime of(TemporalAccessor temporalAccessor) {
         if (null == temporalAccessor) {
             return null;
@@ -117,6 +194,12 @@ public abstract class LocalDateTimeTools {
         );
     }
 
+    /**
+     * {@link TemporalAccessor}转{@link LocalDate}，使用默认时区
+     *
+     * @param temporalAccessor {@link TemporalAccessor}
+     * @return {@link LocalDate}
+     */
     public static LocalDate ofDate(TemporalAccessor temporalAccessor) {
         if (null == temporalAccessor) {
             return null;
@@ -135,10 +218,25 @@ public abstract class LocalDateTimeTools {
         );
     }
 
+    /**
+     * 解析日期时间字符串为{@link LocalDateTime}，仅支持yyyy-MM-dd'T'HH:mm:ss格式，例如：2007-12-03T10:15:30<br>
+     * 即{@link DateTimeFormatter#ISO_LOCAL_DATE_TIME}
+     *
+     * @param text 日期时间字符串
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime parse(CharSequence text) {
         return parse(text, (DateTimeFormatter) null);
     }
 
+    /**
+     * 解析日期时间字符串为{@link LocalDateTime}，格式支持日期时间、日期、时间<br>
+     * 如果formatter为{@code null}，则使用{@link DateTimeFormatter#ISO_LOCAL_DATE_TIME}
+     *
+     * @param text      日期时间字符串
+     * @param formatter 日期格式化器，预定义的格式见：{@link DateTimeFormatter}
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime parse(CharSequence text, DateTimeFormatter formatter) {
         if (CharSequenceTools.isBlank(text)) {
             return null;
@@ -150,6 +248,13 @@ public abstract class LocalDateTimeTools {
         return of(formatter.parse(text));
     }
 
+    /**
+     * 解析日期时间字符串为{@link LocalDateTime}
+     *
+     * @param text   日期时间字符串
+     * @param format 日期格式，类似于yyyy-MM-dd HH:mm:ss,SSS
+     * @return {@link LocalDateTime}
+     */
     public static LocalDateTime parse(CharSequence text, String format) {
         if (CharSequenceTools.isBlank(text)) {
             return null;
