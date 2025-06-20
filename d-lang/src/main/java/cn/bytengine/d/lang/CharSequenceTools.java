@@ -15,6 +15,18 @@ import java.util.function.Supplier;
  */
 public abstract class CharSequenceTools {
     /**
+     * 数字字符串
+     */
+    public static final String NUMBERS = "0123456789";
+    /**
+     * 小写字母字符串
+     */
+    public static final String LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    /**
+     * 大写字母字符串
+     */
+    public static final String UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    /**
      * 字符串常量：空 JSON {@code "{}"}
      */
     public static final String EMPTY_JSON = "{}";

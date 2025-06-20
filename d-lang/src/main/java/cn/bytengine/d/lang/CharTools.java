@@ -1,5 +1,8 @@
 package cn.bytengine.d.lang;
 
+import java.security.SecureRandom;
+import java.util.BitSet;
+
 /**
  * 字符工具类<br>
  * 部分工具来自于Apache Commons系列
@@ -10,6 +13,41 @@ package cn.bytengine.d.lang;
 public abstract class CharTools {
     private CharTools() {
     }
+
+    /**
+     * 数字字符集合
+     */
+    public static final char[] NUMBER_CHARS = CharSequenceTools.NUMBERS.toCharArray();
+
+    /**
+     * 数字字符集合长度
+     */
+    public static final int NUMBER_CHARS_COUNT = NUMBER_CHARS.length;
+
+    /**
+     * 小写字母字符集合
+     */
+    public static final char[] LOWERCASE_ALPHA_CHARS = CharSequenceTools.LOWERCASE_LETTERS.toCharArray();
+
+    /**
+     * 小写字母字符集合长度
+     */
+    public static final int LOWERCASE_ALPHA_CHARS_COUNT = LOWERCASE_ALPHA_CHARS.length;
+
+    /**
+     * 大写字母字符集合
+     */
+    public static final char[] UPPERCASE_ALPHA_CHARS = CharSequenceTools.UPPERCASE_LETTERS.toCharArray();
+
+    /**
+     * 大写字母字符集合长度
+     */
+    public static final int UPPERCASE_ALPHA_CHARS_COUNT = UPPERCASE_ALPHA_CHARS.length;
+
+    /**
+     * 随机生成器
+     */
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     /**
      * 字符常量：空格符 {@code ' '}
@@ -188,5 +226,32 @@ public abstract class CharTools {
      */
     public static boolean isNumber(char ch) {
         return ch >= '0' && ch <= '9';
+    }
+
+    /**
+     * 根据指定字符集合范围，重新生成指定长度字符集合表
+     *
+     * @param sourceTable    指定字符集合
+     * @param generateLength 生成长度
+     * @param allowRepeat    是否允许重复
+     * @return 生成新的字符集合
+     */
+    public static char[] generateTable(char[] sourceTable, int generateLength, boolean allowRepeat) {
+        int len = sourceTable.length;
+        BitSet placeholder = allowRepeat ? new BitSet(generateLength) : null;
+        char[] result = new char[generateLength];
+        int randIndex = 0;
+        for (int idx = 0; idx < sourceTable.length; idx++) {
+            randIndex = secureRandom.nextInt(len);
+            if (allowRepeat && (placeholder.get(randIndex) || idx == randIndex)) {
+                idx--;
+                continue;
+            }
+            if (allowRepeat) {
+                placeholder.set(randIndex);
+            }
+            result[idx] = sourceTable[randIndex];
+        }
+        return result;
     }
 }

@@ -13,12 +13,30 @@ public abstract class Events {
     }
 
     /**
+     * 默认全局EventBus
+     */
+    private static final InvokerEventBus GLOBAL_EVENT_BUS;
+
+    static {
+        GLOBAL_EVENT_BUS = general().build();
+    }
+
+    /**
      * 构建DefaultInvokerEventBus构建器
      *
      * @return DefaultInvokerEventBusBuilder
      */
     public static DefaultInvokerEventBusBuilder general() {
         return new DefaultInvokerEventBusBuilder();
+    }
+
+    /**
+     * 获取全局EventBus
+     *
+     * @return EventBus实例
+     */
+    public static InvokerEventBus global() {
+        return GLOBAL_EVENT_BUS;
     }
 
     /**

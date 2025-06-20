@@ -102,6 +102,86 @@ public abstract class ArrayTools {
     }
 
     /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(long[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(int[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(short[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(char[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(byte[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(double[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(float[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 数组是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(boolean[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
      * 数组是否为非空
      *
      * @param <T>   数组元素类型
@@ -110,6 +190,86 @@ public abstract class ArrayTools {
      */
     public static <T> boolean isNotEmpty(T[] array) {
         return (null != array && array.length != 0);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(long[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(int[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(short[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(char[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(byte[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(double[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(float[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(boolean[] array) {
+        return !isEmpty(array);
     }
 
     /**
@@ -211,6 +371,24 @@ public abstract class ArrayTools {
      */
     public static <T> int indexOf(T[] array, Object value) {
         return matchIndex((obj) -> ObjectTools.equal(value, obj), array);
+    }
+
+    /**
+     * 返回数组中指定元素所在位置，未找到返回{@link #INDEX_NOT_FOUND}
+     *
+     * @param array 数组
+     * @param value 被检查的元素
+     * @return 数组中指定元素所在位置，未找到返回{@link #INDEX_NOT_FOUND}
+     */
+    public static int indexOf(char[] array, char value) {
+        if (isNotEmpty(array)) {
+            for (int i = 0; i < array.length; i++) {
+                if (value == array[i]) {
+                    return i;
+                }
+            }
+        }
+        return INDEX_NOT_FOUND;
     }
 
     /**
@@ -322,5 +500,253 @@ public abstract class ArrayTools {
             return array;
         }
         return edit(array, t -> filter.test(t) ? t : null);
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static byte[] addAll(byte[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (byte[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final byte[] result = new byte[length];
+        length = 0;
+        for (byte[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static int[] addAll(int[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (int[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final int[] result = new int[length];
+        length = 0;
+        for (int[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static long[] addAll(long[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (long[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final long[] result = new long[length];
+        length = 0;
+        for (long[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static double[] addAll(double[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (double[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final double[] result = new double[length];
+        length = 0;
+        for (double[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static float[] addAll(float[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (float[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final float[] result = new float[length];
+        length = 0;
+        for (float[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static char[] addAll(char[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (char[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final char[] result = new char[length];
+        length = 0;
+        for (char[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static boolean[] addAll(boolean[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (boolean[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final boolean[] result = new boolean[length];
+        length = 0;
+        for (boolean[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将多个数组合并在一起<br>
+     * 忽略null的数组
+     *
+     * @param arrays 数组集合
+     * @return 合并后的数组
+     */
+    public static short[] addAll(short[]... arrays) {
+        if (arrays.length == 1) {
+            return arrays[0];
+        }
+
+        // 计算总长度
+        int length = 0;
+        for (short[] array : arrays) {
+            if (isNotEmpty(array)) {
+                length += array.length;
+            }
+        }
+
+        final short[] result = new short[length];
+        length = 0;
+        for (short[] array : arrays) {
+            if (isNotEmpty(array)) {
+                System.arraycopy(array, 0, result, length, array.length);
+                length += array.length;
+            }
+        }
+        return result;
     }
 }
