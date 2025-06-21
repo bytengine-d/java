@@ -307,6 +307,42 @@ public abstract class DatePatterns {
      * UTC时间{@link FastDateFormat}：yyyy-MM-dd'T'HH:mm:ss.SSSXXX
      */
     public static final FastDateFormat UTC_MS_WITH_XXX_OFFSET_FORMAT = FastDateFormat.getInstance(UTC_MS_WITH_XXX_OFFSET_PATTERN);
+    /**
+     * GMT时间：EEE, dd MMM yyyy HH:mm:ss zzz
+     */
+    public static final String HTTP_RFC_DATE_IMF_FIX_DATE_PATTERN = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    /**
+     * GMT时间：{@link FastDateFormat}：EEE, dd MMM yyyy HH:mm:ss zzz
+     */
+    public static final FastDateFormat HTTP_US_GMT_RFC_IMF_FIX_DATE_FORMAT = FastDateFormat.getInstance(HTTP_RFC_DATE_IMF_FIX_DATE_PATTERN, TimeZone.getTimeZone("GMT"), Locale.US);
+
+    /**
+     * GMT时间：EEEE, dd-MMM-yy HH:mm:ss zzz
+     */
+    public static final String HTTP_RFC_850_DATE_PATTERN = "EEEE, dd-MMM-yy HH:mm:ss zzz";
+    /**
+     * GMT时间：{@link FastDateFormat}：EEEE, dd-MMM-yy HH:mm:ss zzz
+     */
+    public static final FastDateFormat HTTP_US_RFC_850_DATE_FORMAT = FastDateFormat.getInstance(HTTP_RFC_850_DATE_PATTERN, Locale.US);
+
+    /**
+     * GMT时间：EEE MMM dd HH:mm:ss yyyy
+     */
+    public static final String HTTP_ANSI_C_ASC_TIME_DATE_PATTERN = "EEE MMM dd HH:mm:ss yyyy";
+    /**
+     * GMT时间：{@link FastDateFormat}：EEE MMM dd HH:mm:ss yyyy
+     */
+    public static final FastDateFormat HTTP_US_GMT_ANSI_C_ASC_TIME_DATE_FORMAT = FastDateFormat.getInstance(HTTP_ANSI_C_ASC_TIME_DATE_PATTERN, TimeZone.getTimeZone("GMT"), Locale.US);
+
+    /**
+     * GMT时间：EEE, d MMM yyyy HH:mm:ss zzz
+     */
+    public static final String HTTP_RFC_1123_DATE_PATTERN = "EEE, d MMM yyyy HH:mm:ss zzz";
+    /**
+     * GMT时间：{@link FastDateFormat}：EEE, d MMM yyyy HH:mm:ss zzz
+     */
+    public static final FastDateFormat HTTP_GMT_RFC_1123_DATE_FORMAT = FastDateFormat.getInstance(HTTP_RFC_1123_DATE_PATTERN, TimeZone.getTimeZone("GMT"));
+
 
     /**
      * 创建并为 {@link DateTimeFormatter} 赋予默认时区和位置信息，默认值为系统默认值。
