@@ -3,8 +3,11 @@ package cn.bytengine.d.lang;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import static sun.tools.jconsole.Messages.EMPTY_ARRAY;
 
 /**
  * 数组工具类
@@ -15,6 +18,24 @@ import java.util.function.Predicate;
 public abstract class ArrayTools {
     private ArrayTools() {
     }
+
+    /**
+     * 数组元素分割字符串
+     */
+    private static final String ARRAY_ELEMENT_SEPARATOR = ", ";
+    /**
+     * 数组开头标识
+     */
+    private static final String ARRAY_START = "{";
+    /**
+     * 数组结束标识
+     */
+    private static final String ARRAY_END = "}";
+
+    /**
+     * 空对象数组
+     */
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     /**
      * The index value when an element is not found in a list or array: {@code -1}. This value is returned by methods in
@@ -748,5 +769,347 @@ public abstract class ArrayTools {
             }
         }
         return result;
+    }
+
+    /**
+     * 数组对比
+     *
+     * @param o1 数组1
+     * @param o2 数组2
+     * @return 是否相等
+     */
+    public static boolean equals(Object o1, Object o2) {
+        if (o1 instanceof Object[] && o2 instanceof Object[]) {
+            Object[] objects1 = (Object[]) o1;
+            Object[] objects2 = (Object[]) o2;
+            return Arrays.equals(objects1, objects2);
+        }
+        if (o1 instanceof boolean[] && o2 instanceof boolean[]) {
+            boolean[] booleans1 = (boolean[]) o1;
+            boolean[] booleans2 = (boolean[]) o2;
+            return Arrays.equals(booleans1, booleans2);
+        }
+        if (o1 instanceof byte[] && o2 instanceof byte[]) {
+            byte[] bytes1 = (byte[]) o1;
+            byte[] bytes2 = (byte[]) o2;
+            return Arrays.equals(bytes1, bytes2);
+        }
+        if (o1 instanceof char[] && o2 instanceof char[]) {
+            char[] chars1 = (char[]) o1;
+            char[] chars2 = (char[]) o2;
+            return Arrays.equals(chars1, chars2);
+        }
+        if (o1 instanceof double[] && o2 instanceof double[]) {
+            double[] doubles1 = (double[]) o1;
+            double[] doubles2 = (double[]) o2;
+            return Arrays.equals(doubles1, doubles2);
+        }
+        if (o1 instanceof float[] && o2 instanceof float[]) {
+            float[] floats1 = (float[]) o1;
+            float[] floats2 = (float[]) o2;
+            return Arrays.equals(floats1, floats2);
+        }
+        if (o1 instanceof int[] && o2 instanceof int[]) {
+            int[] ints1 = (int[]) o1;
+            int[] ints2 = (int[]) o2;
+            return Arrays.equals(ints1, ints2);
+        }
+        if (o1 instanceof long[] && o2 instanceof long[]) {
+            long[] longs1 = (long[]) o1;
+            long[] longs2 = (long[]) o2;
+            return Arrays.equals(longs1, longs2);
+        }
+        if (o1 instanceof short[] && o2 instanceof short[]) {
+            short[] shorts1 = (short[]) o1;
+            short[] shorts2 = (short[]) o2;
+            return Arrays.equals(shorts1, shorts2);
+        }
+        return false;
+    }
+
+    /**
+     * Convert the given array (which may be a primitive array) to an object array (if
+     * necessary, to an array of primitive wrapper objects).
+     * <p>A {@code null} source value or empty primitive array will be converted to an
+     * empty Object array.
+     *
+     * @param source the (potentially primitive) array
+     * @return the corresponding object array (never {@code null})
+     * @throws IllegalArgumentException if the parameter is not an array
+     */
+    public static Object[] toObjectArray(Object source) {
+        if (source instanceof Object[]) {
+            return (Object[]) source;
+        }
+        if (source == null) {
+            return EMPTY_OBJECT_ARRAY;
+        }
+        if (!source.getClass().isArray()) {
+            throw new IllegalArgumentException("Source is not an array: " + source);
+        }
+        int length = Array.getLength(source);
+        if (length == 0) {
+            return EMPTY_OBJECT_ARRAY;
+        }
+        Class<?> wrapperType = Array.get(source, 0).getClass();
+        Object[] newArray = (Object[]) Array.newInstance(wrapperType, length);
+        for (int i = 0; i < length; i++) {
+            newArray[i] = Array.get(source, i);
+        }
+        return newArray;
+    }
+
+    /**
+     * Convert a {@code String} array into a delimited {@code String} (for example, CSV).
+     * <p>Useful for {@code toString()} implementations.
+     *
+     * @param arr   the array to display (potentially {@code null} or empty)
+     * @param delim the delimiter to use (typically a ",")
+     * @return the delimited {@code String}
+     */
+    public static String arrayToDelimitedString(Object[] arr, String delim) {
+        if (isEmpty(arr)) {
+            return "";
+        }
+        if (arr.length == 1) {
+            return ObjectTools.nullSafeToString(arr[0]);
+        }
+
+        StringJoiner sj = new StringJoiner(delim);
+        for (Object elem : arr) {
+            sj.add(String.valueOf(elem));
+        }
+        return sj.toString();
+    }
+
+    /**
+     * Convert a {@code String} array into a comma delimited {@code String}
+     * (i.e., CSV).
+     * <p>Useful for {@code toString()} implementations.
+     *
+     * @param arr the array to display (potentially {@code null} or empty)
+     * @return the delimited {@code String}
+     */
+    public static String arrayToCommaDelimitedString(Object[] arr) {
+        return arrayToDelimitedString(arr, ",");
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(Object[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        int length = array.length;
+        if (length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (Object o : array) {
+            stringJoiner.add(String.valueOf(o));
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(boolean[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        int length = array.length;
+        if (length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (boolean b : array) {
+            stringJoiner.add(String.valueOf(b));
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(byte[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        if (array.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (byte b : array) {
+            stringJoiner.add(String.valueOf(b));
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(char[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        if (array.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (char c : array) {
+            stringJoiner.add('\'' + String.valueOf(c) + '\'');
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(double[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        if (array.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (double d : array) {
+            stringJoiner.add(String.valueOf(d));
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(float[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        if (array.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (float f : array) {
+            stringJoiner.add(String.valueOf(f));
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(int[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        if (array.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (int i : array) {
+            stringJoiner.add(String.valueOf(i));
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(long[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        int length = array.length;
+        if (length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (long l : array) {
+            stringJoiner.add(String.valueOf(l));
+        }
+        return stringJoiner.toString();
+    }
+
+    /**
+     * Return a String representation of the contents of the specified array.
+     * <p>The String representation consists of a list of the array's elements,
+     * enclosed in curly braces ({@code "{}"}). Adjacent elements are separated
+     * by the characters {@code ", "} (a comma followed by a space).
+     * Returns a {@code "null"} String if {@code array} is {@code null}.
+     *
+     * @param array the array to build a String representation for
+     * @return a String representation of {@code array}
+     */
+    public static String nullSafeToString(short[] array) {
+        if (array == null) {
+            return CharSequenceTools.NULL;
+        }
+        if (array.length == 0) {
+            return EMPTY_ARRAY;
+        }
+        StringJoiner stringJoiner = new StringJoiner(ARRAY_ELEMENT_SEPARATOR, ARRAY_START, ARRAY_END);
+        for (short s : array) {
+            stringJoiner.add(String.valueOf(s));
+        }
+        return stringJoiner.toString();
     }
 }

@@ -1,9 +1,9 @@
 package cn.bytengine.d.lang;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -14,6 +14,10 @@ import java.util.function.Supplier;
  * @version 1.0
  */
 public abstract class CharSequenceTools {
+    /**
+     * 空字符串数组
+     */
+    private static final String[] EMPTY_STRING_ARRAY = {};
     /**
      * 数字字符串
      */
@@ -1308,5 +1312,134 @@ public abstract class CharSequenceTools {
      */
     public static String toUnderlineCase(CharSequence str) {
         return NamingCase.toUnderlineCase(str);
+    }
+
+    /**
+     * Tokenize the given {@code String} into a {@code String} array via a
+     * {@link StringTokenizer}.
+     * <p>Trims tokens and omits empty tokens.
+     * <p>The given {@code delimiters} string can consist of any number of
+     * delimiter characters. Each of those characters can be used to separate
+     * tokens. A delimiter is always a single character; for multi-character
+     * delimiters.
+     *
+     * @param str        the {@code String} to tokenize (potentially {@code null} or empty)
+     * @param delimiters the delimiter characters, assembled as a {@code String}
+     *                   (each of the characters is individually considered as a delimiter)
+     * @return an array of the tokens
+     * @see java.util.StringTokenizer
+     * @see String#trim()
+     */
+    public static String[] tokenizeToStringArray(String str, String delimiters) {
+        return tokenizeToStringArray(str, delimiters, true, true);
+    }
+
+    /**
+     * Tokenize the given {@code String} into a {@code String} array via a
+     * {@link StringTokenizer}.
+     * <p>The given {@code delimiters} string can consist of any number of
+     * delimiter characters. Each of those characters can be used to separate
+     * tokens. A delimiter is always a single character; for multi-character
+     * delimiters.
+     *
+     * @param str               the {@code String} to tokenize (potentially {@code null} or empty)
+     * @param delimiters        the delimiter characters, assembled as a {@code String}
+     *                          (each of the characters is individually considered as a delimiter)
+     * @param trimTokens        trim the tokens via {@link String#trim()}
+     * @param ignoreEmptyTokens omit empty tokens from the result array
+     *                          (only applies to tokens that are empty after trimming; StringTokenizer
+     *                          will not consider subsequent delimiters as token in the first place).
+     * @return an array of the tokens
+     * @see java.util.StringTokenizer
+     * @see String#trim()
+     */
+    public static String[] tokenizeToStringArray(
+            String str, String delimiters, boolean trimTokens, boolean ignoreEmptyTokens) {
+
+        if (str == null) {
+            return EMPTY_STRING_ARRAY;
+        }
+
+        StringTokenizer st = new StringTokenizer(str, delimiters);
+        List<String> tokens = new ArrayList<>();
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            if (trimTokens) {
+                token = token.trim();
+            }
+            if (!ignoreEmptyTokens || !token.isEmpty()) {
+                tokens.add(token);
+            }
+        }
+        return toStringArray(tokens);
+    }
+
+    /**
+     * Copy the given {@link Collection} into a {@code String} array.
+     * <p>The {@code Collection} must contain {@code String} elements only.
+     *
+     * @param collection the {@code Collection} to copy
+     *                   (potentially {@code null} or empty)
+     * @return the resulting {@code String} array
+     */
+    public static String[] toStringArray(Collection<String> collection) {
+        return (!CollectionTools.isEmpty(collection) ? collection.toArray(EMPTY_STRING_ARRAY) : EMPTY_STRING_ARRAY);
+    }
+
+    /**
+     * Copy the contents of the given {@link ByteArrayOutputStream} into a {@link String}.
+     * <p>This is a more effective equivalent of {@code new String(baos.toByteArray(), charset)}.
+     *
+     * @param baos    the {@code ByteArrayOutputStream} to be copied into a String
+     * @param charset the {@link Charset} to use to decode the bytes
+     * @return the String that has been copied to (possibly empty)
+     */
+    public static String copyToString(ByteArrayOutputStream baos, Charset charset) {
+        AssertTools.notNull(baos, "No ByteArrayOutputStream specified");
+        AssertTools.notNull(charset, "No Charset specified");
+        return new String(baos.toByteArray(), charset);
+    }
+
+    /**
+     * Take a {@code String} that is a delimited list and convert it into
+     * a {@code String} array.
+     * <p>A single {@code delimiter} may consist of more than one character,
+     * but it will still be considered as a single delimiter string, rather
+     * than as a bunch of potential delimiter characters, in contrast to
+     * {@link #tokenizeToStringArray}.
+     *
+     * @param str       the input {@code String} (potentially {@code null} or empty)
+     * @param delimiter the delimiter between elements (this is a single delimiter,
+     *                  rather than a bunch individual delimiter characters)
+     * @return an array of the tokens in the list
+     * @see #tokenizeToStringArray
+     */
+    public static String[] delimitedListToStringArray(String str, String delimiter) {
+
+        if (str == null) {
+            return EMPTY_STRING_ARRAY;
+        }
+        if (delimiter == null) {
+            return new String[]{str};
+        }
+
+        List<String> result = new ArrayList<>();
+        if (delimiter.isEmpty()) {
+            for (int i = 0; i < str.length(); i++) {
+                result.add(str.substring(i, i + 1));
+            }
+        } else {
+            int pos = 0;
+            int delPos;
+            while ((delPos = str.indexOf(delimiter, pos)) != -1) {
+                result.add(str.substring(pos, delPos));
+                pos = delPos + delimiter.length();
+            }
+            if (!str.isEmpty() && pos <= str.length()) {
+                // Add rest of String, but not in case of empty input.
+                result.add(str.substring(pos));
+            }
+        }
+        return toStringArray(result);
     }
 }

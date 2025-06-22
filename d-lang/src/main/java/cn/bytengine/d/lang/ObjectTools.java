@@ -43,7 +43,7 @@ public abstract class ObjectTools {
      */
     public static boolean isNotNull(Object obj) {
         //noinspection ConstantConditions
-        return null != obj && false == obj.equals(null);
+        return null != obj && !obj.equals(null);
     }
 
     /**
@@ -137,4 +137,74 @@ public abstract class ObjectTools {
         }
         return Objects.equals(obj1, obj2);
     }
+
+    /**
+     * 支持null和数组判断是否相等
+     *
+     * @param o1 对比对象1
+     * @param o2 对比对象2
+     * @return 是否相等
+     */
+    public static boolean nullSafeEquals(Object o1, Object o2) {
+        if (o1 == o2) {
+            return true;
+        }
+        if (o1 == null || o2 == null) {
+            return false;
+        }
+        if (o1.equals(o2)) {
+            return true;
+        }
+        if (o1.getClass().isArray() && o2.getClass().isArray()) {
+            return ArrayTools.equals(o1, o2);
+        }
+        return false;
+    }
+
+    /**
+     * Return a String representation of the specified Object.
+     * <p>Builds a String representation of the contents in case of an array.
+     * Returns a {@code "null"} String if {@code obj} is {@code null}.
+     *
+     * @param obj the object to build a String representation for
+     * @return a String representation of {@code obj}
+     */
+    public static String nullSafeToString(Object obj) {
+        if (obj == null) {
+            return CharSequenceTools.NULL;
+        }
+        if (obj instanceof String) {
+            return (String) obj;
+        }
+        if (obj instanceof Object[]) {
+            return ArrayTools.nullSafeToString((Object[]) obj);
+        }
+        if (obj instanceof boolean[]) {
+            return ArrayTools.nullSafeToString((boolean[]) obj);
+        }
+        if (obj instanceof byte[]) {
+            return ArrayTools.nullSafeToString((byte[]) obj);
+        }
+        if (obj instanceof char[]) {
+            return ArrayTools.nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof double[]) {
+            return ArrayTools.nullSafeToString((double[]) obj);
+        }
+        if (obj instanceof float[]) {
+            return ArrayTools.nullSafeToString((float[]) obj);
+        }
+        if (obj instanceof int[]) {
+            return ArrayTools.nullSafeToString((int[]) obj);
+        }
+        if (obj instanceof long[]) {
+            return ArrayTools.nullSafeToString((long[]) obj);
+        }
+        if (obj instanceof short[]) {
+            return ArrayTools.nullSafeToString((short[]) obj);
+        }
+        String str = obj.toString();
+        return (str != null ? str : CharSequenceTools.EMPTY);
+    }
+
 }

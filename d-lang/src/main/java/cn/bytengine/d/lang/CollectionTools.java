@@ -1,6 +1,8 @@
 package cn.bytengine.d.lang;
 
+import cn.bytengine.d.collection.MultiValueMap;
 import cn.bytengine.d.collection.TransCollection;
+import cn.bytengine.d.collection.UnmodifiableMultiValueMap;
 
 import java.util.*;
 import java.util.function.Function;
@@ -208,6 +210,29 @@ public abstract class CollectionTools {
     }
 
     /**
+     * 新建一个LinkedList
+     *
+     * @param <T> 集合元素类型
+     * @param ts  元素数组
+     * @return List对象
+     */
+    @SafeVarargs
+    public static <T> LinkedList<T> newLinkedList(T... ts) {
+        return (LinkedList<T>) list(true, ts);
+    }
+
+    /**
+     * 复制List创建新的List
+     *
+     * @param source 数据源
+     * @param <T>    数据类型
+     * @return 复制的新List
+     */
+    public static <T> List<T> copy(List<T> source) {
+        return new ArrayList<>(source);
+    }
+
+    /**
      * 新建一个HashSet
      *
      * @param <T> 集合元素类型
@@ -308,5 +333,66 @@ public abstract class CollectionTools {
      */
     public static <T> boolean hasAny(Collection<T> container, Collection<T> conditionItems) {
         return container.stream().filter(conditionItems::contains).findFirst().orElse(null) != null;
+    }
+
+    /**
+     * Return an unmodifiable view of the specified multi-value map.
+     *
+     * @param targetMap the map for which an unmodifiable view is to be returned.
+     * @return an unmodifiable view of the specified multi-value map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K, V> MultiValueMap<K, V> unmodifiableMultiValueMap(
+            MultiValueMap<? extends K, ? extends V> targetMap) {
+
+        AssertTools.notNull(targetMap, "'targetMap' must not be null");
+        if (targetMap instanceof UnmodifiableMultiValueMap) {
+            return (MultiValueMap<K, V>) targetMap;
+        }
+        return new UnmodifiableMultiValueMap<>(targetMap);
+    }
+
+    /**
+     * Convert a {@link Collection} to a delimited {@code String} (for example, CSV).
+     * <p>Useful for {@code toString()} implementations.
+     *
+     * @param coll   the {@code Collection} to convert (potentially {@code null} or empty)
+     * @param delim  the delimiter to use (typically a ",")
+     * @param prefix the {@code String} to start each element with
+     * @param suffix the {@code String} to end each element with
+     * @return the delimited {@code String}
+     */
+    public static String collectionToDelimitedString(Collection<?> coll, String delim, String prefix, String suffix) {
+
+        if (isEmpty(coll)) {
+            return "";
+        }
+
+        int totalLength = coll.size() * (prefix.length() + suffix.length()) + (coll.size() - 1) * delim.length();
+        for (Object element : coll) {
+            totalLength += String.valueOf(element).length();
+        }
+
+        StringBuilder sb = new StringBuilder(totalLength);
+        Iterator<?> it = coll.iterator();
+        while (it.hasNext()) {
+            sb.append(prefix).append(it.next()).append(suffix);
+            if (it.hasNext()) {
+                sb.append(delim);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Convert a {@code Collection} into a delimited {@code String} (for example, CSV).
+     * <p>Useful for {@code toString()} implementations.
+     *
+     * @param coll  the {@code Collection} to convert (potentially {@code null} or empty)
+     * @param delim the delimiter to use (typically a ",")
+     * @return the delimited {@code String}
+     */
+    public static String collectionToDelimitedString(Collection<?> coll, String delim) {
+        return collectionToDelimitedString(coll, delim, "", "");
     }
 }
