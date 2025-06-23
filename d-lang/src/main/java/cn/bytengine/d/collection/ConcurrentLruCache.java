@@ -16,10 +16,18 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /**
- * TODO
+ * Simple LRU (Least Recently Used) cache, bounded by a specified cache capacity.
+ * <p>This is a simplified, opinionated implementation of an LRU cache for internal
+ * use in Spring Framework. It is inspired from
+ * <a href="https://github.com/ben-manes/concurrentlinkedhashmap">ConcurrentLinkedHashMap</a>.
+ * <p>Read and write operations are internally recorded in dedicated buffers,
+ * then drained at chosen times to avoid contention.
  *
  * @author Ban Tenio
  * @version 1.0
+ * @param <K> the type of the key used for cache retrieval
+ * @param <V> the type of the cached values, does not allow null values
+ * @see #get(Object)
  */
 public class ConcurrentLruCache<K, V> {
 
@@ -128,6 +136,7 @@ public class ConcurrentLruCache<K, V> {
     /**
      * Return the maximum number of entries in the cache.
      *
+     * @return 容量
      * @see #size()
      */
     public int capacity() {
@@ -136,6 +145,8 @@ public class ConcurrentLruCache<K, V> {
 
     /**
      * Return the maximum number of entries in the cache.
+     *
+     * @return 容量
      */
     public int sizeLimit() {
         return this.capacity;
@@ -144,6 +155,7 @@ public class ConcurrentLruCache<K, V> {
     /**
      * Return the current size of the cache.
      *
+     * @return 已缓存数量
      * @see #capacity()
      */
     public int size() {

@@ -142,6 +142,9 @@ public class UriComponentsBuilder implements Cloneable {
     /**
      * Variant of {@link #fromUriString(String, ParserType)} that defaults to
      * the {@link ParserType#RFC} parsing.
+     *
+     * @param uri the URI to initialize with
+     * @return the new {@code UriComponentsBuilder}
      */
     public static UriComponentsBuilder fromUriString(String uri) throws InvalidUrlException {
         AssertTools.notNull(uri, "URI must not be null");
@@ -213,6 +216,9 @@ public class UriComponentsBuilder implements Cloneable {
      *
      * @see <a href="https://tools.ietf.org/html/rfc6454">RFC 6454</a>
      * @deprecated in favor of {@link UriComponentsBuilder#fromUriString(String)};
+     *
+     * @param origin the source origin
+     * @return the URI components of the URI
      */
     public static UriComponentsBuilder fromOriginHeader(String origin) {
         return fromUriString(origin);
@@ -240,6 +246,8 @@ public class UriComponentsBuilder implements Cloneable {
      * <p>When not expanding URI variables at all, prefer use of
      * {@link UriComponents#encode()} since that will also encode anything that
      * incidentally looks like a URI variable.
+     *
+     * @return the URI components of the URI
      */
     public final UriComponentsBuilder encode() {
         return encode(StandardCharsets.UTF_8);
@@ -249,6 +257,7 @@ public class UriComponentsBuilder implements Cloneable {
      * A variant of {@link #encode()} with a charset other than "UTF-8".
      *
      * @param charset the charset to use for encoding
+     * @return the URI components of the URI
      */
     public UriComponentsBuilder encode(Charset charset) {
         this.encodeTemplate = true;
@@ -360,6 +369,7 @@ public class UriComponentsBuilder implements Cloneable {
      * String uri = builder.encode().build().toUriString()
      * </pre>
      *
+     * @return the URI string
      * @see UriComponents#toUriString()
      */
     public String toUriString() {
@@ -480,6 +490,7 @@ public class UriComponentsBuilder implements Cloneable {
      * and may also be {@code null} to clear the scheme of this builder.
      *
      * @param scheme the URI scheme
+     * @return the URI builder
      */
     public UriComponentsBuilder scheme(String scheme) {
         this.scheme = scheme;
@@ -506,6 +517,7 @@ public class UriComponentsBuilder implements Cloneable {
      * may also be {@code null} to clear the user info of this builder.
      *
      * @param userInfo the URI user info
+     * @return this URI builder
      */
     public UriComponentsBuilder userInfo(String userInfo) {
         this.userInfo = userInfo;
@@ -518,6 +530,7 @@ public class UriComponentsBuilder implements Cloneable {
      * be {@code null} to clear the host of this builder.
      *
      * @param host the URI host
+     * @return this URI builder
      */
     public UriComponentsBuilder host(String host) {
         this.host = host;
@@ -531,6 +544,7 @@ public class UriComponentsBuilder implements Cloneable {
      * Set the URI port. Passing {@code -1} will clear the port of this builder.
      *
      * @param port the URI port
+     * @return this URI builder
      */
     public UriComponentsBuilder port(int port) {
         AssertTools.isTrue(port >= -1, "Port must be >= -1");
@@ -547,6 +561,7 @@ public class UriComponentsBuilder implements Cloneable {
      * Passing {@code null} will clear the port of this builder.
      *
      * @param port the URI port
+     * @return this URI builder
      */
     public UriComponentsBuilder port(String port) {
         this.port = port;
@@ -581,6 +596,7 @@ public class UriComponentsBuilder implements Cloneable {
      * {@link UriComponentsBuilder#encode()}.
      *
      * @param path the URI path
+     * @return this URI builder
      */
     public UriComponentsBuilder path(String path) {
         this.pathBuilder.addPath(path);
@@ -614,6 +630,7 @@ public class UriComponentsBuilder implements Cloneable {
      * appear in the resulting full path.
      *
      * @param pathSegments the URI path segments
+     * @return this URI builder
      */
     public UriComponentsBuilder pathSegment(String... pathSegments) throws IllegalArgumentException {
         this.pathBuilder.addPathSegments(pathSegments);
@@ -625,6 +642,7 @@ public class UriComponentsBuilder implements Cloneable {
      * Override the current path.
      *
      * @param path the URI path, or {@code null} for an empty path
+     * @return this URI builder
      */
     public UriComponentsBuilder replacePath(String path) {
         this.pathBuilder = new CompositePathComponentBuilder();
@@ -644,6 +662,7 @@ public class UriComponentsBuilder implements Cloneable {
      * and encoding of individual query parameters.
      *
      * @param query the query string
+     * @return this URI builder
      */
     public UriComponentsBuilder query(String query) {
         if (query != null) {
@@ -670,6 +689,7 @@ public class UriComponentsBuilder implements Cloneable {
      * and encoding of individual query parameters.
      *
      * @param query the query string
+     * @return this URI builder
      */
     public UriComponentsBuilder replaceQuery(String query) {
         this.queryParams.clear();
@@ -697,6 +717,7 @@ public class UriComponentsBuilder implements Cloneable {
      * @param name   the query parameter name
      * @param values the query parameter values
      * @see #queryParam(String, Collection)
+     * @return this URI builder
      */
     public UriComponentsBuilder queryParam(String name, Object... values) {
         AssertTools.notNull(name, "Name must not be null");
@@ -732,6 +753,7 @@ public class UriComponentsBuilder implements Cloneable {
      *
      * @param name   the query parameter name
      * @param values the query parameter values
+     * @return this URI builder
      * @see #queryParam(String, Object...)
      */
     public UriComponentsBuilder queryParam(String name, Collection<?> values) {
@@ -745,6 +767,7 @@ public class UriComponentsBuilder implements Cloneable {
      *
      * @param name  the query parameter name
      * @param value an Optional, either empty or holding the query parameter value.
+     * @return this URI builder
      */
     public UriComponentsBuilder queryParamIfPresent(String name, Optional<?> value) {
         value.ifPresent(v -> {
@@ -765,6 +788,7 @@ public class UriComponentsBuilder implements Cloneable {
      * and encoding of individual query parameters.
      *
      * @param params the params
+     * @return this URI builder
      */
     public UriComponentsBuilder queryParams(MultiValueMap<String, String> params) {
         if (params != null) {
@@ -783,6 +807,7 @@ public class UriComponentsBuilder implements Cloneable {
      *
      * @param name   the query parameter name
      * @param values the query parameter values
+     * @return this URI builder
      * @see #replaceQueryParam(String, Collection)
      */
     public UriComponentsBuilder replaceQueryParam(String name, Object... values) {
@@ -803,6 +828,7 @@ public class UriComponentsBuilder implements Cloneable {
      *
      * @param name   the query parameter name
      * @param values the query parameter values
+     * @return this URI builder
      * @see #replaceQueryParam(String, Object...)
      */
     public UriComponentsBuilder replaceQueryParam(String name, Collection<?> values) {
@@ -816,6 +842,7 @@ public class UriComponentsBuilder implements Cloneable {
      * and encoding of individual query parameters.
      *
      * @param params the query parameter name
+     * @return this URI builder
      */
     public UriComponentsBuilder replaceQueryParams(MultiValueMap<String, String> params) {
         this.queryParams.clear();
@@ -830,6 +857,7 @@ public class UriComponentsBuilder implements Cloneable {
      * and may also be {@code null} to clear the fragment of this builder.
      *
      * @param fragment the URI fragment
+     * @return this URI builder
      */
     public UriComponentsBuilder fragment(String fragment) {
         if (fragment != null) {

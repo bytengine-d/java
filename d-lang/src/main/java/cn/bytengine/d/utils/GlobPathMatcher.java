@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * <li>{@code {bytengine:[a-z]+}} matches the regexp {@code [a-z]+} as a path variable named "bytengine"</li>
  * </ul>
  *
- * <h3>Examples</h3>
+ * <b>Examples</b>
  * <ul>
  * <li>{@code com/t?st.jsp} &mdash; matches {@code com/test.jsp} but also
  * {@code com/tast.jsp} or {@code com/txst.jsp}</li>
@@ -87,7 +87,6 @@ public class GlobPathMatcher {
      * A convenient, alternative constructor to use with a custom path separator.
      *
      * @param pathSeparator the path separator to use, must not be {@code null}.
-     * @since 4.1
      */
     public GlobPathMatcher(String pathSeparator) {
         AssertTools.notNull(pathSeparator, "'pathSeparator' must not be null");
@@ -99,6 +98,8 @@ public class GlobPathMatcher {
     /**
      * Set the path separator to use for pattern parsing.
      * <p>Default is "/", as in Ant.
+     *
+     * @param pathSeparator 路径分隔符
      */
     public void setPathSeparator(String pathSeparator) {
         this.pathSeparator = (pathSeparator != null ? pathSeparator : DEFAULT_PATH_SEPARATOR);
@@ -109,7 +110,7 @@ public class GlobPathMatcher {
      * Specify whether to perform pattern matching in a case-sensitive fashion.
      * <p>Default is {@code true}. Switch this to {@code false} for case-insensitive matching.
      *
-     * @since 4.2
+     * @param caseSensitive 是否支持小写
      */
     public void setCaseSensitive(boolean caseSensitive) {
         this.caseSensitive = caseSensitive;
@@ -118,6 +119,8 @@ public class GlobPathMatcher {
     /**
      * Specify whether to trim tokenized paths and patterns.
      * <p>Default is {@code false}.
+     *
+     * @param trimTokens 是否清除Token
      */
     public void setTrimTokens(boolean trimTokens) {
         this.trimTokens = trimTokens;
@@ -133,19 +136,29 @@ public class GlobPathMatcher {
      * (the threshold is 65536), assuming that arbitrary permutations of patterns
      * are coming in, with little chance for encountering a recurring pattern.
      *
+     * @param cachePatterns 是否缓存模式
      * @see #getStringMatcher(String)
      */
     public void setCachePatterns(boolean cachePatterns) {
         this.cachePatterns = cachePatterns;
     }
 
+    /**
+     * TODO
+     */
     private void deactivatePatternCache() {
         this.cachePatterns = false;
         this.tokenizedPatternCache.clear();
         this.stringMatcherCache.clear();
     }
 
-    public boolean isPattern(String path) {
+    /**
+     * 指定路径是否为模式表达式
+     *
+     * @param path 检查路径字符
+     * @return 是否为模式表达式
+     */
+    public static boolean isPattern(String path) {
         if (path == null) {
             return false;
         }
@@ -166,10 +179,24 @@ public class GlobPathMatcher {
         return false;
     }
 
+    /**
+     * 匹配模式和路径
+     *
+     * @param pattern 匹配模式
+     * @param path    匹配路径
+     * @return 是否匹配
+     */
     public boolean match(String pattern, String path) {
         return doMatch(pattern, path, true, null);
     }
 
+    /**
+     * 匹配模式和路径，检查是否匹配模式为开头
+     *
+     * @param pattern 匹配模式
+     * @param path    匹配路径
+     * @return 是否匹配
+     */
     public boolean matchStart(String pattern, String path) {
         return doMatch(pattern, path, false, null);
     }
@@ -177,10 +204,11 @@ public class GlobPathMatcher {
     /**
      * Actually match the given {@code path} against the given {@code pattern}.
      *
-     * @param pattern   the pattern to match against
-     * @param path      the path to test
-     * @param fullMatch whether a full pattern match is required (else a pattern match
-     *                  as far as the given base path goes is sufficient)
+     * @param pattern              the pattern to match against
+     * @param path                 the path to test
+     * @param fullMatch            whether a full pattern match is required (else a pattern match
+     *                             as far as the given base path goes is sufficient)
+     * @param uriTemplateVariables URI模版变量表
      * @return {@code true} if the supplied {@code path} matched, {@code false} if it didn't
      */
     protected boolean doMatch(String pattern, String path, boolean fullMatch,
@@ -466,6 +494,10 @@ public class GlobPathMatcher {
      * <li>'{@code *}' and '{@code /docs/cvs/commit.html} &rarr; '{@code /docs/cvs/commit.html}'</li> </ul>
      * <p>Assumes that {@link #match} returns {@code true} for '{@code pattern}' and '{@code path}', but
      * does <strong>not</strong> enforce this.
+     *
+     * @param pattern 匹配模式
+     * @param path    路径
+     * @return 匹配模式的字符串内容
      */
     public String extractPathWithinPattern(String pattern, String path) {
         String[] patternParts = CharSequenceTools.tokenizeToStringArray(pattern, this.pathSeparator, this.trimTokens, true);
@@ -489,6 +521,13 @@ public class GlobPathMatcher {
         return builder.toString();
     }
 
+    /**
+     * 给定Pattern，获取指定路径内容所有占位符内容
+     *
+     * @param pattern 路径匹配模式
+     * @param path    路径
+     * @return 参数对应表
+     */
     public Map<String, String> extractUriTemplateVariables(String pattern, String path) {
         Map<String, String> variables = new LinkedHashMap<>();
         boolean result = doMatch(pattern, path, true, variables);
@@ -504,8 +543,8 @@ public class GlobPathMatcher {
      * the first pattern contains a file extension match (for example, {@code *.html}).
      * In that case, the second pattern will be merged into the first. Otherwise,
      * an {@code IllegalArgumentException} will be thrown.
-     * <h4>Examples</h4>
      * <table border="1">
+     * <caption>Examples</caption>
      * <tr><th>Pattern 1</th><th>Pattern 2</th><th>Result</th></tr>
      * <tr><td>{@code null}</td><td>{@code null}</td><td>&nbsp;</td></tr>
      * <tr><td>/hotels</td><td>{@code null}</td><td>/hotels</td></tr>
@@ -631,6 +670,13 @@ public class GlobPathMatcher {
 
         private final List<String> variableNames = new ArrayList<>();
 
+        /**
+         * Ant路径匹配器构造器
+         *
+         * @param pattern       匹配模式
+         * @param pathSeparator 路径分隔符
+         * @param caseSensitive 是否支持大小写匹配
+         */
         protected AntPathStringMatcher(String pattern, String pathSeparator, boolean caseSensitive) {
             this.rawPattern = pattern;
             this.caseSensitive = caseSensitive;
@@ -687,6 +733,8 @@ public class GlobPathMatcher {
         /**
          * Main entry point.
          *
+         * @param str                  模式
+         * @param uriTemplateVariables 占位符变量表
          * @return {@code true} if the string matches against the pattern, or {@code false} otherwise.
          */
         public boolean matchStrings(String str, Map<String, String> uriTemplateVariables) {
@@ -740,10 +788,21 @@ public class GlobPathMatcher {
 
         private final String pathSeparator;
 
+        /**
+         * 指定比对路径，创建模式比较器
+         *
+         * @param path 指定路径
+         */
         public AntPatternComparator(String path) {
             this(path, DEFAULT_PATH_SEPARATOR);
         }
 
+        /**
+         * 指定比对路径，创建模式比较器
+         *
+         * @param path 指定路径
+         * @param pathSeparator 路径分隔符
+         */
         public AntPatternComparator(String path, String pathSeparator) {
             this.path = path;
             this.pathSeparator = pathSeparator;

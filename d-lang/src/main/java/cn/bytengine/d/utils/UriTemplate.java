@@ -28,12 +28,24 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class UriTemplate implements Serializable {
 
+    /**
+     * TODO
+     */
     private final String uriTemplate;
 
+    /**
+     * TODO
+     */
     private final UriComponents uriComponents;
 
+    /**
+     * TODO
+     */
     private final List<String> variableNames;
 
+    /**
+     * TODO
+     */
     private final Pattern matchPattern;
 
 

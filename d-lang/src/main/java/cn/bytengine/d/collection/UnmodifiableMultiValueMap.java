@@ -25,6 +25,11 @@ public class UnmodifiableMultiValueMap<K, V> implements MultiValueMap<K, V> {
 
     private transient Collection<List<V>> values;
 
+    /**
+     * 不可变多值Map构造器
+     *
+     * @param delegate 委托Map
+     */
     @SuppressWarnings("unchecked")
     public UnmodifiableMultiValueMap(MultiValueMap<? extends K, ? extends V> delegate) {
         AssertTools.notNull(delegate, "Delegate must not be null");

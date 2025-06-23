@@ -32,11 +32,22 @@ public abstract class UriComponents implements Serializable {
      */
     private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
+    /**
+     * TODO
+     */
     private final String scheme;
 
+    /**
+     * TODO
+     */
     private final String fragment;
 
-
+    /**
+     * 给定Scheme和Fragment创建UriComponents
+     *
+     * @param scheme   scheme
+     * @param fragment fragment
+     */
     protected UriComponents(String scheme, String fragment) {
         this.scheme = scheme;
         this.fragment = fragment;
@@ -45,6 +56,8 @@ public abstract class UriComponents implements Serializable {
 
     /**
      * Return the scheme. Can be {@code null}.
+     *
+     * @return scheme
      */
     public final String getScheme() {
         return this.scheme;
@@ -52,6 +65,8 @@ public abstract class UriComponents implements Serializable {
 
     /**
      * Return the fragment. Can be {@code null}.
+     *
+     * @return fragment
      */
     public final String getFragment() {
         return this.fragment;
@@ -59,41 +74,57 @@ public abstract class UriComponents implements Serializable {
 
     /**
      * Return the scheme specific part. Can be {@code null}.
+     *
+     * @return schemeSpecificPart
      */
     public abstract String getSchemeSpecificPart();
 
     /**
      * Return the user info. Can be {@code null}.
+     *
+     * @return userInfo
      */
     public abstract String getUserInfo();
 
     /**
      * Return the host. Can be {@code null}.
+     *
+     * @return host
      */
     public abstract String getHost();
 
     /**
      * Return the port. {@code -1} if no port has been set.
+     *
+     * @return port
      */
     public abstract int getPort();
 
     /**
      * Return the path. Can be {@code null}.
+     *
+     * @return path
      */
     public abstract String getPath();
 
     /**
      * Return the list of path segments. Empty if no path has been set.
+     *
+     * @return pathSegments
      */
     public abstract List<String> getPathSegments();
 
     /**
      * Return the query. Can be {@code null}.
+     *
+     * @return query
      */
     public abstract String getQuery();
 
     /**
      * Return the map of query parameters. Empty if no query has been set.
+     *
+     * @return queryParams
      */
     public abstract MultiValueMap<String, String> getQueryParams();
 
@@ -107,6 +138,7 @@ public abstract class UriComponents implements Serializable {
      * For most cases, {@link UriComponentsBuilder#encode()} is more likely
      * to give the expected result.
      *
+     * @return UriComponents
      * @see UriComponentsBuilder#encode()
      */
     public final UriComponents encode() {
@@ -117,6 +149,7 @@ public abstract class UriComponents implements Serializable {
      * A variant of {@link #encode()} with a charset other than "UTF-8".
      *
      * @param charset the charset to use for encoding
+     * @return UriComponents
      * @see UriComponentsBuilder#encode(Charset)
      */
     public abstract UriComponents encode(Charset charset);
@@ -171,6 +204,8 @@ public abstract class UriComponents implements Serializable {
      * Normalize the path removing sequences like "path/..". Note that
      * normalization is applied to the full path, and not to individual path
      * segments.
+     *
+     * @return normalize
      */
     public abstract UriComponents normalize();
 
@@ -181,6 +216,8 @@ public abstract class UriComponents implements Serializable {
      * characters, for example if URI variables have not been expanded or if
      * encoding has not been applied via {@link UriComponentsBuilder#encode()}
      * or {@link #encode()}.
+     *
+     * @return uri string
      */
     public abstract String toUriString();
 
@@ -192,11 +229,15 @@ public abstract class UriComponents implements Serializable {
      * <p>If not yet encoded, pass individual URI component values to the
      * multi-argument {@link URI} constructor which quotes illegal characters
      * that cannot appear in their respective URI component.
+     *
+     * @return uri
      */
     public abstract URI toUri();
 
     /**
      * A simple pass-through to {@link #toUriString()}.
+     *
+     * @return uri string
      */
     @Override
     public final String toString() {
@@ -205,6 +246,8 @@ public abstract class UriComponents implements Serializable {
 
     /**
      * Set all components of the given UriComponentsBuilder.
+     *
+     * @param builder UriComponentsBuilder
      */
     protected abstract void copyToUriComponentsBuilder(UriComponentsBuilder builder);
 

@@ -7,8 +7,6 @@ import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static sun.tools.jconsole.Messages.EMPTY_ARRAY;
-
 /**
  * 数组工具类
  *
@@ -31,6 +29,10 @@ public abstract class ArrayTools {
      * 数组结束标识
      */
     private static final String ARRAY_END = "}";
+    /**
+     * 空数组标识
+     */
+    private static final String EMPTY_ARRAY = ARRAY_START + ARRAY_END;
 
     /**
      * 空对象数组

@@ -336,10 +336,24 @@ public abstract class CollectionTools {
     }
 
     /**
+     * 判断condition元素是否出现在container中
+     *
+     * @param container 数据集合
+     * @param condition 查找目标
+     * @param <T>       集合元素类型
+     * @return 是否存在查询元素
+     */
+    public static <T> boolean has(Collection<T> container, T condition) {
+        return container.contains(condition);
+    }
+
+    /**
      * Return an unmodifiable view of the specified multi-value map.
      *
      * @param targetMap the map for which an unmodifiable view is to be returned.
      * @return an unmodifiable view of the specified multi-value map
+     * @param <K> Key类型
+     * @param <V> Value类型
      */
     @SuppressWarnings("unchecked")
     public static <K, V> MultiValueMap<K, V> unmodifiableMultiValueMap(
