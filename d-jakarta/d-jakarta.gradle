@@ -5,6 +5,6 @@ plugins {
 }
 
 dependencies {
-    api project(":d-lang")
-    api project(":d-apt-util")
+    api project(':d-lang')
+    api libs.jakarata.servlet
 }

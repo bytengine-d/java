@@ -68,10 +68,11 @@ public interface Ctx {
      * @param <T>        参数值返回类型
      * @return 参数值，根据指定类型返回
      */
-    default <T> T getByType(String key, Class<T> type, T defaultVal) {
+    default <T> T getByTypeWithDefault(String key, Class<T> type, T defaultVal) {
         if (has(key)) {
             return getByType(key, type);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -88,7 +89,9 @@ public interface Ctx {
         if (has(key)) {
             return getByType(key, type);
         }
-        return defaultValSupplier.get();
+        T defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -125,6 +128,7 @@ public interface Ctx {
         if (has(key)) {
             return getString(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -139,7 +143,9 @@ public interface Ctx {
         if (has(key)) {
             return getString(key);
         }
-        return defaultValSupplier.get();
+        String defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -164,6 +170,7 @@ public interface Ctx {
         if (has(key)) {
             return getChar(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -178,7 +185,9 @@ public interface Ctx {
         if (has(key)) {
             return getChar(key);
         }
-        return defaultValSupplier.get();
+        Character defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -203,6 +212,7 @@ public interface Ctx {
         if (has(key)) {
             return getNumber(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -217,7 +227,9 @@ public interface Ctx {
         if (has(key)) {
             return getNumber(key);
         }
-        return defaultValSupplier.get();
+        Number defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -249,6 +261,7 @@ public interface Ctx {
         if (has(key)) {
             return getByte(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -263,7 +276,9 @@ public interface Ctx {
         if (has(key)) {
             return getByte(key);
         }
-        return defaultValSupplier.get();
+        Byte defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -295,6 +310,7 @@ public interface Ctx {
         if (has(key)) {
             return getShort(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -309,7 +325,9 @@ public interface Ctx {
         if (has(key)) {
             return getShort(key);
         }
-        return defaultValSupplier.get();
+        Short defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -341,6 +359,7 @@ public interface Ctx {
         if (has(key)) {
             return getInteger(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -355,7 +374,9 @@ public interface Ctx {
         if (has(key)) {
             return getInteger(key);
         }
-        return defaultValSupplier.get();
+        Integer defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -387,6 +408,7 @@ public interface Ctx {
         if (has(key)) {
             return getLong(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -401,7 +423,9 @@ public interface Ctx {
         if (has(key)) {
             return getLong(key);
         }
-        return defaultValSupplier.get();
+        Long defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -433,6 +457,7 @@ public interface Ctx {
         if (has(key)) {
             return getDouble(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -447,7 +472,9 @@ public interface Ctx {
         if (has(key)) {
             return getDouble(key);
         }
-        return defaultValSupplier.get();
+        Double defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -479,6 +506,7 @@ public interface Ctx {
         if (has(key)) {
             return getFloat(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -493,7 +521,9 @@ public interface Ctx {
         if (has(key)) {
             return getFloat(key);
         }
-        return defaultValSupplier.get();
+        Float defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -518,6 +548,7 @@ public interface Ctx {
         if (has(key)) {
             return getBoolean(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -532,7 +563,9 @@ public interface Ctx {
         if (has(key)) {
             return getBoolean(key);
         }
-        return defaultValSupplier.get();
+        Boolean defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -565,6 +598,7 @@ public interface Ctx {
         if (has(key)) {
             return getInstant(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -579,7 +613,9 @@ public interface Ctx {
         if (has(key)) {
             return getInstant(key);
         }
-        return defaultValSupplier.get();
+        Instant defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**
@@ -613,6 +649,7 @@ public interface Ctx {
         if (has(key)) {
             return getCtx(key);
         }
+        set(key, defaultVal);
         return defaultVal;
     }
 
@@ -627,7 +664,9 @@ public interface Ctx {
         if (has(key)) {
             return getCtx(key);
         }
-        return defaultValSupplier.get();
+        Ctx defaultVal = defaultValSupplier.get();
+        set(key, defaultVal);
+        return defaultVal;
     }
 
     /**

@@ -17,7 +17,7 @@ ext {
     rootAppName = "d"
 
     // sub projects
-    subProjects = "d-apt-util,d-ctx,d-example,d-lang,d-assist,d-assist-apt,d-http,d-sa"
+    subProjects = "d-lang,d-apt-util,d-jakarta,d-example,d-assist,d-assist-apt,d-http,d-sa,d-sa-jakarta"
     subApps = "d-example"
 
     Slf4jVersion = "2.0.9"

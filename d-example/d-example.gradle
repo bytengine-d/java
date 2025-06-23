@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation project(':d-ctx')
     implementation project(':d-assist')
 
     annotationProcessor project(':d-assist-apt')

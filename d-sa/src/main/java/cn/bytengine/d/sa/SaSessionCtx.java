@@ -1,10 +1,16 @@
 package cn.bytengine.d.sa;
 
-import cn.bytengine.d.ctx.CtxImpl;
+import cn.bytengine.d.ctx.AbstractCtxProxy;
+import cn.bytengine.d.ctx.Ctx;
+import cn.bytengine.d.ctx.Ctxs;
+import cn.bytengine.d.lang.AssertTools;
 import cn.bytengine.d.lang.CollectionTools;
 import cn.bytengine.d.lang.ObjectTools;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * SA上下文
@@ -12,31 +18,33 @@ import java.util.*;
  * @author Ban Tenio
  * @version 1.0
  */
-public class SaSessionCtx extends CtxImpl {
-    /**
-     * 用户唯一标识
-     */
-    private Object userId;
-    /**
-     * 用户角色集合
-     */
-    private final Set<String> roles = new LinkedHashSet<>();
-    /**
-     * 用户权限集合
-     */
-    private final Set<String> permissions = new LinkedHashSet<>();
-    /**
-     * SA配置对象
-     */
-    private final SaConfig saConfig;
+public class SaSessionCtx extends AbstractCtxProxy {
+    private static final String SA_SESSION_CTX_KEY_PREFIX = SaSessionCtx.class.getName() + ".";
+    private static final String SA_SESSION_CTX_USER_ID_KEY = SA_SESSION_CTX_KEY_PREFIX + "userId";
+    private static final String SA_SESSION_CTX_ROLES_KEY = SA_SESSION_CTX_KEY_PREFIX + "roles";
+    private static final String SA_SESSION_CTX_PERMISSIONS_KEY = SA_SESSION_CTX_KEY_PREFIX + "permissions";
+    private static final String SA_SESSION_CTX_SA_CONFIG_KEY = SA_SESSION_CTX_KEY_PREFIX + "saConfig";
+
+    static {
+        Ctxs.registerProxy(SaSessionCtx.class, SaSessionCtx::new);
+    }
 
     /**
-     * 构造器，指定SA配置策略
-     *
-     * @param saConfig SA配置策略
+     * 构造器，指定上下文
+     * <p><b>上下文内容要包括{@link SaConfig}实例</b></p>
      */
-    public SaSessionCtx(SaConfig saConfig) {
-        this.saConfig = saConfig;
+    public SaSessionCtx(Ctx delegate) {
+        super(delegate, false);
+        AssertTools.notNull(getSaConfig(), "no SaConfig instance in current Ctx");
+    }
+
+    /**
+     * 构造器，指定上下文
+     * <p><b>上下文内容要包括{@link SaConfig}实例</b></p>
+     */
+    public SaSessionCtx(SaConfig saConfig, Ctx delegate) {
+        super(delegate, false);
+        setSaConfig(saConfig, delegate);
     }
 
     /**
@@ -45,7 +53,7 @@ public class SaSessionCtx extends CtxImpl {
      * @return SA配置策略
      */
     public SaConfig getSaConfig() {
-        return saConfig;
+        return this.getByTypeWithDefault(SA_SESSION_CTX_SA_CONFIG_KEY, SaConfig.class, null);
     }
 
     /**
@@ -54,7 +62,7 @@ public class SaSessionCtx extends CtxImpl {
      * @return 是否登录
      */
     public boolean isLoggedIn() {
-        return ObjectTools.isNotNull(userId);
+        return ObjectTools.isNotNull(getUserId());
     }
 
     /**
@@ -64,7 +72,7 @@ public class SaSessionCtx extends CtxImpl {
      * @return 当前上下文
      */
     public SaSessionCtx login(Object userId) {
-        this.userId = userId;
+        set(SA_SESSION_CTX_USER_ID_KEY, userId);
         return this;
     }
 
@@ -74,9 +82,9 @@ public class SaSessionCtx extends CtxImpl {
      * @return 当前上下文
      */
     public SaSessionCtx logout() {
-        this.userId = null;
-        this.roles.clear();
-        this.permissions.clear();
+        remove(SA_SESSION_CTX_USER_ID_KEY);
+        remove(SA_SESSION_CTX_ROLES_KEY);
+        remove(SA_SESSION_CTX_PERMISSIONS_KEY);
         return this;
     }
 
@@ -90,7 +98,7 @@ public class SaSessionCtx extends CtxImpl {
         if (!isLoggedIn()) {
             return false;
         }
-        return ObjectTools.equals(userId, this.userId);
+        return ObjectTools.equals(userId, getUserId());
     }
 
     /**
@@ -103,17 +111,26 @@ public class SaSessionCtx extends CtxImpl {
         if (!isLoggedIn()) {
             return false;
         }
-        return CollectionTools.has(userIds, userId);
+        return CollectionTools.has(userIds, getUserId());
     }
 
     /**
      * 获取当前用户唯一标识
      *
-     * @return 用户唯一标识
      * @param <T> 用户Id类型
+     * @return 用户唯一标识
      */
     public <T> T getUserId() {
-        return (T) userId;
+        return (T) this.getByTypeWithDefault(SA_SESSION_CTX_USER_ID_KEY, Object.class, null);
+    }
+
+    /**
+     * 从上下文获取用户角色集合
+     *
+     * @return 用户角色集合
+     */
+    protected Set<String> getRoles() {
+        return (Set<String>) this.getByType(SA_SESSION_CTX_ROLES_KEY, Set.class, CollectionTools::newHashSet);
     }
 
     /**
@@ -133,7 +150,7 @@ public class SaSessionCtx extends CtxImpl {
      * @return 当前上下文
      */
     public SaSessionCtx addRoles(Collection<String> roles) {
-        this.roles.addAll(roles);
+        getRoles().addAll(roles);
         return this;
     }
 
@@ -145,7 +162,7 @@ public class SaSessionCtx extends CtxImpl {
      */
     public boolean hasRole(String checkRole) {
         SaGlobPredicate tester = getSaConfig().getSaRoleGlobPredicateCache().get(checkRole);
-        Optional<String> result = roles.stream().filter(tester::test).findAny();
+        Optional<String> result = getRoles().stream().filter(tester).findAny();
         return result.isPresent();
     }
 
@@ -168,6 +185,7 @@ public class SaSessionCtx extends CtxImpl {
     public boolean hasAnyRoles(Collection<String> checkRoles) {
         SaGlobPredicate tester;
         Optional<String> result;
+        Set<String> roles = getRoles();
         SaGlobPredicateCache cache = getSaConfig().getSaRoleGlobPredicateCache();
         for (String checkRole : checkRoles) {
             tester = cache.get(checkRole);
@@ -177,6 +195,15 @@ public class SaSessionCtx extends CtxImpl {
             }
         }
         return false;
+    }
+
+    /**
+     * 从上下文获取用户角色集合
+     *
+     * @return 用户角色集合
+     */
+    protected Set<String> getPermissions() {
+        return (Set<String>) this.getByType(SA_SESSION_CTX_PERMISSIONS_KEY, Set.class, CollectionTools::newHashSet);
     }
 
     /**
@@ -196,8 +223,20 @@ public class SaSessionCtx extends CtxImpl {
      * @return 当前上下文
      */
     public SaSessionCtx addPermissions(Collection<String> permissions) {
-        this.permissions.addAll(permissions);
+        getPermissions().addAll(permissions);
         return this;
+    }
+
+    /**
+     * 用户是否符合检查权限条件
+     *
+     * @param checkPermission 检查权限条件
+     * @return 是否负责权限条件
+     */
+    public boolean hasPermission(String checkPermission) {
+        SaGlobPredicate tester = getSaConfig().getSaPermissionGlobPredicateCache().get(checkPermission);
+        Optional<String> result = getPermissions().stream().filter(tester).findAny();
+        return result.isPresent();
     }
 
     /**
@@ -219,6 +258,7 @@ public class SaSessionCtx extends CtxImpl {
     public boolean hasAnyPermissions(Collection<String> checkPermissions) {
         SaGlobPredicate tester;
         Optional<String> result;
+        Set<String> permissions = getPermissions();
         SaGlobPredicateCache cache = getSaConfig().getSaPermissionGlobPredicateCache();
         for (String checkPermission : checkPermissions) {
             tester = cache.get(checkPermission);
@@ -228,5 +268,16 @@ public class SaSessionCtx extends CtxImpl {
             }
         }
         return false;
+    }
+
+    /**
+     * 给指定Ctx上下文设置SaConfig实例
+     *
+     * @param saConfig SaConfig实例
+     * @param ctx      上下文
+     */
+    public static void setSaConfig(SaConfig saConfig, Ctx ctx) {
+        AssertTools.notNull(saConfig, "the SaConfig instance is null");
+        ctx.set(SA_SESSION_CTX_SA_CONFIG_KEY, saConfig);
     }
 }
