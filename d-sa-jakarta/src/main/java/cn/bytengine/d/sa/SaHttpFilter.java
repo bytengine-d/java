@@ -17,6 +17,9 @@ import java.io.IOException;
  * @version 1.0
  */
 public class SaHttpFilter extends HttpFilter {
+    /**
+     * SA配置策略
+     */
     private final SaConfig saConfig;
 
     /**

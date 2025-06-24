@@ -836,7 +836,6 @@ public abstract class CharSequenceTools {
      * @param string 字符串
      * @param length 切割长度
      * @return 切割后后剩余的后半部分字符串
-     * @since 4.0.1
      */
     public static String subSufByLength(CharSequence string, int length) {
         if (isEmpty(string)) {
@@ -1441,5 +1440,24 @@ public abstract class CharSequenceTools {
             }
         }
         return toStringArray(result);
+    }
+
+    /**
+     * Trim all occurrences of the supplied trailing character from the given {@code String}.
+     *
+     * @param str               the {@code String} to check
+     * @param trailingCharacter the trailing character to be trimmed
+     * @return the trimmed {@code String}
+     */
+    public static String trimTrailingCharacter(String str, char trailingCharacter) {
+        if (isEmpty(str)) {
+            return str;
+        }
+
+        int endIdx = str.length() - 1;
+        while (endIdx >= 0 && trailingCharacter == str.charAt(endIdx)) {
+            endIdx--;
+        }
+        return str.substring(0, endIdx + 1);
     }
 }

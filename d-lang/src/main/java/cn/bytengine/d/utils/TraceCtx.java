@@ -26,6 +26,11 @@ public class TraceCtx extends AbstractCtxProxy {
         Ctxs.registerProxy(TraceCtx.class, TraceCtx::new);
     }
 
+    /**
+     * 构造器
+     *
+     * @param delegate 委托上下文
+     */
     public TraceCtx(Ctx delegate) {
         super(delegate, false);
         AssertTools.notNull(getTraceConfig(), "no TraceConfig instance in current Ctx");
@@ -73,6 +78,7 @@ public class TraceCtx extends AbstractCtxProxy {
      * 生成带有指定前缀的TraceID
      *
      * @param prefix 前缀
+     * @param suffix 后缀
      * @return 当前上下文代理
      */
     public TraceCtx generate(String prefix, String suffix) {

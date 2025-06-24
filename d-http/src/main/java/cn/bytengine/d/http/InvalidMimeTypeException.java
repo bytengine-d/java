@@ -1,14 +1,16 @@
 package cn.bytengine.d.http;
 
 /**
- * Exception thrown from {@link MimeTypeUtils#parseMimeType(String)} in case of
+ * Exception thrown from {@link MimeTypeTools#parseMimeType(String)} in case of
  * encountering an invalid content type specification String.
  *
  * @author Ban Tenio
  * @version 1.0
  */
 public class InvalidMimeTypeException extends IllegalArgumentException {
-
+    /**
+     * TODO
+     */
     private final String mimeType;
 
 
@@ -26,6 +28,7 @@ public class InvalidMimeTypeException extends IllegalArgumentException {
 
     /**
      * Return the offending content type.
+     * @return TODO
      */
     public String getMimeType() {
         return this.mimeType;

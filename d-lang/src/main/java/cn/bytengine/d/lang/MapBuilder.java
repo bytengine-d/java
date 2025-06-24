@@ -67,7 +67,6 @@ public class MapBuilder<K, V> {
      * @param <V>      Value类型
      * @param isLinked true创建LinkedHashMap，false创建HashMap
      * @return MapBuilder
-     * @since 5.3.0
      */
     public static <K, V> MapBuilder<K, V> create(boolean isLinked) {
         return create(CollectionTools.newHashMap(isLinked));
@@ -80,7 +79,6 @@ public class MapBuilder<K, V> {
      * @param <V> Value类型
      * @param map Map实体类
      * @return MapBuilder
-     * @since 3.2.3
      */
     public static <K, V> MapBuilder<K, V> create(Map<K, V> map) {
         return new MapBuilder<>(map);

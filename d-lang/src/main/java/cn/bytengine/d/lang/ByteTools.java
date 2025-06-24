@@ -53,7 +53,6 @@ public abstract class ByteTools {
      *
      * @param byteValue byte值
      * @return 无符号int值
-     * @since 3.2.0
      */
     public static int byteToUnsignedInt(byte byteValue) {
         // Java 总是把 byte 当做有符处理；我们可以通过将其和 0xFF 进行二进制与得到它的无符值

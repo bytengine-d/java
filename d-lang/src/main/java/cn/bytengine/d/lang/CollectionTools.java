@@ -78,7 +78,6 @@ public abstract class CollectionTools {
      * @param <V> 值类型
      * @param set 提供的集合，可能为null
      * @return 原集合，若为null返回空集合
-     * @since 4.6.3
      */
     public static <K, V> Map<K, V> emptyIfNull(Map<K, V> set) {
         return (null == set) ? Collections.emptyMap() : set;
@@ -93,7 +92,6 @@ public abstract class CollectionTools {
      * @param map        Map
      * @param defaultMap 默认Map
      * @return 非空（empty）的原Map或默认Map
-     * @since 4.6.9
      */
     public static <T extends Map<K, V>, K, V> T defaultIfEmpty(T map, T defaultMap) {
         return isEmpty(map) ? defaultMap : map;
@@ -408,5 +406,23 @@ public abstract class CollectionTools {
      */
     public static String collectionToDelimitedString(Collection<?> coll, String delim) {
         return collectionToDelimitedString(coll, delim, "", "");
+    }
+
+    /**
+     * Instantiate a new {@link LinkedHashSet} with an initial capacity that can
+     * accommodate the specified number of elements without any immediate
+     * resize/rehash operations to be expected.
+     *
+     * @param expectedSize the expected number of elements (with a corresponding
+     *                     capacity to be derived so that no resize/rehash operations are needed)
+     * @param <E>          TODO
+     * @return TODO
+     */
+    public static <E> LinkedHashSet<E> newLinkedHashSet(int expectedSize) {
+        return new LinkedHashSet<>(computeInitialCapacity(expectedSize), DEFAULT_LOAD_FACTOR);
+    }
+
+    private static int computeInitialCapacity(int expectedSize) {
+        return (int) Math.ceil(expectedSize / (double) DEFAULT_LOAD_FACTOR);
     }
 }

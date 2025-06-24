@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author Ban Tenio
  * @version 1.0
  */
-public abstract class MimeTypeUtils {
+public abstract class MimeTypeTools {
 
     private static final byte[] BOUNDARY_CHARS =
             new byte[]{'-', '_', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -36,7 +36,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType ALL;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#ALL}.
+     * A String equivalent of {@link #ALL}.
      */
     public static final String ALL_VALUE = "*/*";
 
@@ -48,7 +48,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType APPLICATION_GRAPHQL;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#APPLICATION_GRAPHQL}.
+     * A String equivalent of {@link #APPLICATION_GRAPHQL}.
      */
     public static final String APPLICATION_GRAPHQL_VALUE = "application/graphql+json";
 
@@ -58,7 +58,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType APPLICATION_JSON;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#APPLICATION_JSON}.
+     * A String equivalent of {@link #APPLICATION_JSON}.
      */
     public static final String APPLICATION_JSON_VALUE = "application/json";
 
@@ -68,7 +68,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType APPLICATION_OCTET_STREAM;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#APPLICATION_OCTET_STREAM}.
+     * A String equivalent of {@link #APPLICATION_OCTET_STREAM}.
      */
     public static final String APPLICATION_OCTET_STREAM_VALUE = "application/octet-stream";
 
@@ -78,7 +78,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType APPLICATION_XML;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#APPLICATION_XML}.
+     * A String equivalent of {@link #APPLICATION_XML}.
      */
     public static final String APPLICATION_XML_VALUE = "application/xml";
 
@@ -88,7 +88,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType IMAGE_GIF;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#IMAGE_GIF}.
+     * A String equivalent of {@link #IMAGE_GIF}.
      */
     public static final String IMAGE_GIF_VALUE = "image/gif";
 
@@ -98,7 +98,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType IMAGE_JPEG;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#IMAGE_JPEG}.
+     * A String equivalent of {@link #IMAGE_JPEG}.
      */
     public static final String IMAGE_JPEG_VALUE = "image/jpeg";
 
@@ -108,7 +108,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType IMAGE_PNG;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#IMAGE_PNG}.
+     * A String equivalent of {@link #IMAGE_PNG}.
      */
     public static final String IMAGE_PNG_VALUE = "image/png";
 
@@ -118,7 +118,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType TEXT_HTML;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#TEXT_HTML}.
+     * A String equivalent of {@link #TEXT_HTML}.
      */
     public static final String TEXT_HTML_VALUE = "text/html";
 
@@ -128,7 +128,7 @@ public abstract class MimeTypeUtils {
     public static final MimeType TEXT_PLAIN;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#TEXT_PLAIN}.
+     * A String equivalent of {@link #TEXT_PLAIN}.
      */
     public static final String TEXT_PLAIN_VALUE = "text/plain";
 
@@ -138,13 +138,13 @@ public abstract class MimeTypeUtils {
     public static final MimeType TEXT_XML;
 
     /**
-     * A String equivalent of {@link MimeTypeUtils#TEXT_XML}.
+     * A String equivalent of {@link #TEXT_XML}.
      */
     public static final String TEXT_XML_VALUE = "text/xml";
 
 
     private static final ConcurrentLruCache<String, MimeType> cachedMimeTypes =
-            new ConcurrentLruCache<>(64, MimeTypeUtils::parseMimeTypeInternal);
+            new ConcurrentLruCache<>(64, MimeTypeTools::parseMimeTypeInternal);
 
     private static volatile Random random;
 
@@ -224,7 +224,7 @@ public abstract class MimeTypeUtils {
                 nextIndex++;
             }
             String parameter = mimeType.substring(index + 1, nextIndex).trim();
-            if (parameter.length() > 0) {
+            if (!parameter.isEmpty()) {
                 if (parameters == null) {
                     parameters = new LinkedHashMap<>(4);
                 }
@@ -256,12 +256,12 @@ public abstract class MimeTypeUtils {
      * @throws InvalidMimeTypeException if the string cannot be parsed
      */
     public static List<MimeType> parseMimeTypes(String mimeTypes) {
-        if (!StringUtils.hasLength(mimeTypes)) {
+        if (CharSequenceTools.isNotEmpty(mimeTypes)) {
             return Collections.emptyList();
         }
         return tokenize(mimeTypes).stream()
-                .filter(StringUtils::hasText)
-                .map(MimeTypeUtils::parseMimeType)
+                .filter(CharSequenceTools::isNotEmpty)
+                .map(MimeTypeTools::parseMimeType)
                 .collect(Collectors.toList());
     }
 
@@ -272,10 +272,9 @@ public abstract class MimeTypeUtils {
      *
      * @param mimeTypes the string to tokenize
      * @return the list of tokens
-     * @since 5.1.3
      */
     public static List<String> tokenize(String mimeTypes) {
-        if (!StringUtils.hasLength(mimeTypes)) {
+        if (CharSequenceTools.isNotEmpty(mimeTypes)) {
             return Collections.emptyList();
         }
         List<String> tokens = new ArrayList<>();
@@ -284,14 +283,16 @@ public abstract class MimeTypeUtils {
         int i = 0;
         while (i < mimeTypes.length()) {
             switch (mimeTypes.charAt(i)) {
-                case '"' -> inQuotes = !inQuotes;
-                case ',' -> {
+                case '"':
+                    inQuotes = !inQuotes;
+                case ',': {
                     if (!inQuotes) {
                         tokens.add(mimeTypes.substring(startIndex, i));
                         startIndex = i + 1;
                     }
                 }
-                case '\\' -> i++;
+                case '\\':
+                    i++;
             }
             i++;
         }
@@ -326,6 +327,7 @@ public abstract class MimeTypeUtils {
      *
      * @param mimeTypes the list of mime types to be sorted
      * @throws InvalidMimeTypeException if {@code mimeTypes} contains more than 50 elements
+     * @param <T> TODO
      * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.2">HTTP 1.1: Semantics
      * and Content, section 5.3.2</a>
      * @see MimeType#isMoreSpecific(MimeType)
@@ -356,6 +358,7 @@ public abstract class MimeTypeUtils {
 
     /**
      * Generate a random MIME boundary as bytes, often used in multipart mime types.
+     * @return TODO
      */
     public static byte[] generateMultipartBoundary() {
         Random randomToUse = initRandom();
@@ -368,11 +371,12 @@ public abstract class MimeTypeUtils {
 
     /**
      * Lazily initialize the {@link SecureRandom} for {@link #generateMultipartBoundary()}.
+     * @return TODO
      */
     private static Random initRandom() {
         Random randomToUse = random;
         if (randomToUse == null) {
-            synchronized (MimeTypeUtils.class) {
+            synchronized (MimeTypeTools.class) {
                 randomToUse = random;
                 if (randomToUse == null) {
                     randomToUse = new SecureRandom();
@@ -386,6 +390,7 @@ public abstract class MimeTypeUtils {
 
     /**
      * Generate a random MIME boundary as String, often used in multipart mime types.
+     * @return TODO
      */
     public static String generateMultipartBoundaryString() {
         return new String(generateMultipartBoundary(), StandardCharsets.US_ASCII);

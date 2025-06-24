@@ -14,6 +14,9 @@ import java.util.*;
  * @version 1.0
  */
 public class MimeType implements Comparable<MimeType> {
+    /**
+     * TODO
+     */
     protected static final String WILDCARD_TYPE = "*";
 
     private static final String PARAM_CHARSET = "charset";
@@ -231,6 +234,7 @@ public class MimeType implements Comparable<MimeType> {
     /**
      * Indicates whether the {@linkplain #getType() type} is the wildcard character
      * <code>&#42;</code> or not.
+     * @return TODO
      */
     public boolean isWildcardType() {
         return WILDCARD_TYPE.equals(getType());
@@ -260,6 +264,7 @@ public class MimeType implements Comparable<MimeType> {
 
     /**
      * Return the primary type.
+     * @return TODO
      */
     public String getType() {
         return this.type;
@@ -267,6 +272,7 @@ public class MimeType implements Comparable<MimeType> {
 
     /**
      * Return the subtype.
+     * @return TODO
      */
     public String getSubtype() {
         return this.subtype;
@@ -274,8 +280,8 @@ public class MimeType implements Comparable<MimeType> {
 
     /**
      * Return the subtype suffix as defined in RFC 6839.
+     * @return TODO
      *
-     * @since 5.3
      */
     public String getSubtypeSuffix() {
         int suffixIndex = this.subtype.lastIndexOf('+');
@@ -655,6 +661,13 @@ public class MimeType implements Comparable<MimeType> {
             }
         }
 
+        /**
+         * 对比MimeType参数
+         *
+         * @param mimeType1 实例1
+         * @param mimeType2 实例2
+         * @return 是否包含
+         */
         protected int compareParameters(T mimeType1, T mimeType2) {
             int paramsSize1 = mimeType1.getParameters().size();
             int paramsSize2 = mimeType2.getParameters().size();

@@ -120,4 +120,42 @@ public abstract class PathTools {
         // Avoid String concatenation with empty prefix
         return (prefix.isEmpty() ? joined : prefix + joined);
     }
+
+    /**
+     * Apply the given relative path to the given Java resource path,
+     * assuming standard Java folder separation (i.e. "/" separators).
+     *
+     * @param path         the path to start from (usually a full file path)
+     * @param relativePath the relative path to apply
+     *                     (relative to the full file path above)
+     * @return the full file path that results from applying the relative path
+     */
+    public static String applyRelativePath(String path, String relativePath) {
+        int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR_CHAR);
+        if (separatorIndex != -1) {
+            String newPath = path.substring(0, separatorIndex);
+            if (!relativePath.startsWith(FOLDER_SEPARATOR)) {
+                newPath += FOLDER_SEPARATOR_CHAR;
+            }
+            return newPath + relativePath;
+        } else {
+            return relativePath;
+        }
+    }
+
+    /**
+     * Extract the filename from the given Java resource path,
+     * for example, {@code "mypath/myfile.txt" &rarr; "myfile.txt"}.
+     *
+     * @param path the file path (may be {@code null})
+     * @return the extracted filename, or {@code null} if none
+     */
+    public static String getFilename(String path) {
+        if (path == null) {
+            return null;
+        }
+
+        int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR_CHAR);
+        return (separatorIndex != -1 ? path.substring(separatorIndex + 1) : path);
+    }
 }

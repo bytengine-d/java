@@ -16,6 +16,9 @@ public class WebTraceConfig extends TraceConfig {
     private String clientTraceIdResponseHeaderKey;
     private boolean returnClientTraceId;
     private String traceIdPrefix = "web-";
+    private boolean findClientTraceId = true;
+    private String clientTraceIdKey = "trace_id";
+
 
     /**
      * 指定TraceId生成器和客户端TraceId查找器，创建WebTraceConfig配置
@@ -142,6 +145,47 @@ public class WebTraceConfig extends TraceConfig {
         return this;
     }
 
+    /**
+     * 是否使用客户端TraceID
+     *
+     * @return 是否使用
+     */
+    public boolean isFindClientTraceId() {
+        return findClientTraceId;
+    }
+
+    /**
+     * 设置是否启用客户端TraceID
+     *
+     * @param findClientTraceId 设置开关
+     * @return 当前配置
+     */
+    public WebTraceConfig setFindClientTraceId(boolean findClientTraceId) {
+        this.findClientTraceId = findClientTraceId;
+        return this;
+    }
+
+    /**
+     * 获取客户端上报TraceID使用KEY值
+     * <p>默认为"trace_id"</p>
+     *
+     * @return 客户端上报TraceID使用KEY
+     */
+    public String getClientTraceIdKey() {
+        return clientTraceIdKey;
+    }
+
+    /**
+     * 设置客户端上报TraceID使用KEY值
+     *
+     * @param clientTraceIdKey 客户端上报TraceID使用KEY
+     * @return 当前配置
+     */
+    public WebTraceConfig setClientTraceIdKey(String clientTraceIdKey) {
+        this.clientTraceIdKey = clientTraceIdKey;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "WebTraceConfig{" +
@@ -151,6 +195,8 @@ public class WebTraceConfig extends TraceConfig {
                 ", clientTraceIdResponseHeaderKey='" + clientTraceIdResponseHeaderKey + '\'' +
                 ", returnClientTraceId=" + returnClientTraceId +
                 ", traceIdPrefix='" + traceIdPrefix + '\'' +
+                ", findClientTraceId=" + findClientTraceId +
+                ", clientTraceIdKey='" + clientTraceIdKey + '\'' +
                 "} " + super.toString();
     }
 }

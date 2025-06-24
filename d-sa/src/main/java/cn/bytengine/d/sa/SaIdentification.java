@@ -2,13 +2,11 @@ package cn.bytengine.d.sa;
 
 /**
  * SA唯一标识，可以是不同类型的
- * <p>
- *     <ul>
- *         <li>手机号</li>
- *         <li>SessionId</li>
- *         <li>API Key/Token</li>
- *     </ul>
- * </p>
+ * <ul>
+ *    <li>手机号</li>
+ *    <li>SessionId</li>
+ *    <li>API Key/Token</li>
+ * </ul>
  *
  * @author Ban Tenio
  * @version 1.0

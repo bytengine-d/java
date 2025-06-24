@@ -215,7 +215,6 @@ public class UriComponentsBuilder implements Cloneable {
      * Create an instance by parsing the "Origin" header of an HTTP request.
      *
      * @see <a href="https://tools.ietf.org/html/rfc6454">RFC 6454</a>
-     * @deprecated in favor of {@link UriComponentsBuilder#fromUriString(String)};
      *
      * @param origin the source origin
      * @return the URI components of the URI

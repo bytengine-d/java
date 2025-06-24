@@ -11,10 +11,20 @@ import cn.bytengine.d.unique.UniqueGenerator;
 public class TraceConfig {
     private final UniqueGenerator uniqueGenerator;
 
+    /**
+     * 构造器
+     *
+     * @param uniqueGenerator TraceID生成器
+     */
     public TraceConfig(UniqueGenerator uniqueGenerator) {
         this.uniqueGenerator = uniqueGenerator;
     }
 
+    /**
+     * 获取TraceID生成器
+     *
+     * @return TraceID生成器
+     */
     public UniqueGenerator getUniqueGenerator() {
         return uniqueGenerator;
     }

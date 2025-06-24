@@ -1,5 +1,6 @@
 package cn.bytengine.d.lang;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -205,6 +206,82 @@ public abstract class ObjectTools {
         }
         String str = obj.toString();
         return (str != null ? str : CharSequenceTools.EMPTY);
+    }
+
+    /**
+     * Return a hash code for the given elements, delegating to
+     * {@link #nullSafeHashCode(Object)} for each element. Contrary
+     * to {@link Objects#hash(Object...)}, this method can handle an
+     * element that is an array.
+     *
+     * @param elements the elements to be hashed
+     * @return a hash value of the elements
+     */
+    public static int nullSafeHash(Object... elements) {
+        if (elements == null) {
+            return 0;
+        }
+        int result = 1;
+        for (Object element : elements) {
+            result = 31 * result + nullSafeHashCode(element);
+        }
+        return result;
+    }
+
+    /**
+     * Return a hash code for the given object, typically the value of
+     * {@link Object#hashCode()}. If the object is an array, this method
+     * will delegate to one of the {@code Arrays.hashCode} methods. If
+     * the object is {@code null}, this method returns {@code 0}.
+     *
+     * @param obj TODO
+     * @return TODO
+     * @see Object#hashCode()
+     * @see Arrays
+     */
+    public static int nullSafeHashCode(Object obj) {
+        if (obj == null) {
+            return 0;
+        }
+        if (obj.getClass().isArray()) {
+            if (obj instanceof Object[]) {
+                Object[] objects = (Object[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof boolean[]) {
+                boolean[] objects = (boolean[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof byte[]) {
+                byte[] objects = (byte[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof char[]) {
+                char[] objects = (char[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof double[]) {
+                double[] objects = (double[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof float[]) {
+                float[] objects = (float[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof int[]) {
+                int[] objects = (int[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof long[]) {
+                long[] objects = (long[]) obj;
+                return Arrays.hashCode(objects);
+            }
+            if (obj instanceof short[]) {
+                short[] objects = (short[]) obj;
+                return Arrays.hashCode(objects);
+            }
+        }
+        return obj.hashCode();
     }
 
 }

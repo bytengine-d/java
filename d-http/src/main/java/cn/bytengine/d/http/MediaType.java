@@ -632,6 +632,7 @@ public class MediaType extends MimeType {
     /**
      * Return a replica of this instance with the quality value of the given {@code MediaType}.
      *
+     * @param mediaType TODO
      * @return the same instance if the given MediaType doesn't have a quality value,
      * or a new one otherwise
      */
@@ -665,6 +666,7 @@ public class MediaType extends MimeType {
      * with this method name following the 'valueOf' naming convention.
      *
      * @param value the string to parse
+     * @return TODO
      * @throws InvalidMediaTypeException if the media type value cannot be parsed
      * @see #parseMediaType(String)
      */
@@ -682,7 +684,7 @@ public class MediaType extends MimeType {
     public static MediaType parseMediaType(String mediaType) {
         MimeType type;
         try {
-            type = MimeTypeUtils.parseMimeType(mediaType);
+            type = MimeTypeTools.parseMimeType(mediaType);
         } catch (InvalidMimeTypeException ex) {
             throw new InvalidMediaTypeException(ex);
         }
@@ -706,7 +708,7 @@ public class MediaType extends MimeType {
             return Collections.emptyList();
         }
         // Avoid using java.util.stream.Stream in hot paths
-        List<String> tokenizedTypes = MimeTypeUtils.tokenize(mediaTypes);
+        List<String> tokenizedTypes = MimeTypeTools.tokenize(mediaTypes);
         List<MediaType> result = new ArrayList<>(tokenizedTypes.size());
         for (String type : tokenizedTypes) {
             if (CharSequenceTools.isNotEmpty(type)) {
@@ -740,6 +742,8 @@ public class MediaType extends MimeType {
 
     /**
      * Re-create the given mime types as media types.
+     * @param mimeTypes TODO
+     * @return TODO
      */
     public static List<MediaType> asMediaTypes(List<MimeType> mimeTypes) {
         List<MediaType> mediaTypes = new ArrayList<>(mimeTypes.size());
@@ -750,7 +754,20 @@ public class MediaType extends MimeType {
     }
 
     /**
+     * Return a string representation of the given list of {@code MediaType} objects.
+     * <p>This method can be used to for an {@code Accept} or {@code Content-Type} header.
+     *
+     * @param mediaTypes the media types to create a string representation for
+     * @return the string representation
+     */
+    public static String toString(Collection<MediaType> mediaTypes) {
+        return MimeTypeTools.toString(mediaTypes);
+    }
+
+    /**
      * Re-create the given mime type as a media type.
+     * @param mimeType TODO
+     * @return TODO
      */
     public static MediaType asMediaType(MimeType mimeType) {
         if (mimeType instanceof MediaType) {

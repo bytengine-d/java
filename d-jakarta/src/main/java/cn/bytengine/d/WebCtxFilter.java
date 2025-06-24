@@ -20,8 +20,17 @@ import java.io.IOException;
 public class WebCtxFilter extends HttpFilter {
     private static final String DEFAULT_SERVE_TRACE_ID_HEADER_KEY = "X-SERVE-TRACE-ID";
     private static final String DEFAULT_CLIENT_TRACE_ID_HEADER_KEY = "X-CLIENT-TRACE-ID";
+    /**
+     * 应用上下文
+     */
     private final Ctx appCtx;
+    /**
+     * WebTrace配置策略
+     */
     private final WebTraceConfig webTraceConfig;
+    /**
+     * Jakarta Servlet客户端TraceId查找器
+     */
     private final JakartaServletClientTraceFinder clientTraceFinder;
 
     /**
@@ -41,7 +50,7 @@ public class WebCtxFilter extends HttpFilter {
         Ctx requestCtx = Ctxs.space(appCtx);
         WebCtx.setWebTraceConfig(webTraceConfig, requestCtx);
         WebCtx webCtx = Ctxs.proxy(WebCtx.class, requestCtx);
-        String clientTraceId = clientTraceFinder.findClientTraceId(req);
+        String clientTraceId = webTraceConfig.isFindClientTraceId() ? clientTraceFinder.findClientTraceId(req) : CharSequenceTools.EMPTY;
         webCtx.generate(
                 CharSequenceTools.nullToDefault(webTraceConfig.getTraceIdPrefix(), ""),
                 CharSequenceTools.nullToDefault(clientTraceId, ""));

@@ -32,6 +32,7 @@ public class SaSessionCtx extends AbstractCtxProxy {
     /**
      * 构造器，指定上下文
      * <p><b>上下文内容要包括{@link SaConfig}实例</b></p>
+     * @param delegate 委托上下文
      */
     public SaSessionCtx(Ctx delegate) {
         super(delegate, false);
@@ -41,6 +42,8 @@ public class SaSessionCtx extends AbstractCtxProxy {
     /**
      * 构造器，指定上下文
      * <p><b>上下文内容要包括{@link SaConfig}实例</b></p>
+     * @param saConfig SA配置策略
+     * @param delegate 委托上下文
      */
     public SaSessionCtx(SaConfig saConfig, Ctx delegate) {
         super(delegate, false);

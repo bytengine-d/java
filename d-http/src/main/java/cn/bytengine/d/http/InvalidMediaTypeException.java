@@ -8,7 +8,9 @@ package cn.bytengine.d.http;
  * @version 1.0
  */
 public class InvalidMediaTypeException extends IllegalArgumentException {
-
+    /**
+     * TODO
+     */
     private final String mediaType;
 
 
@@ -34,6 +36,7 @@ public class InvalidMediaTypeException extends IllegalArgumentException {
 
     /**
      * Return the offending media type.
+     * @return TODO
      */
     public String getMediaType() {
         return this.mediaType;

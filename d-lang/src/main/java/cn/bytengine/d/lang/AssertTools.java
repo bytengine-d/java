@@ -107,7 +107,6 @@ public abstract class AssertTools {
      * @return 非空字符串
      * @throws X 被检查字符串为空抛出此异常
      * @see CharSequenceTools#isNotEmpty(CharSequence)
-     * @since 5.4.5
      */
     public static <T extends CharSequence, X extends Throwable> T notEmpty(T text, Supplier<X> errorSupplier) throws X {
         if (CharSequenceTools.isEmpty(text)) {
