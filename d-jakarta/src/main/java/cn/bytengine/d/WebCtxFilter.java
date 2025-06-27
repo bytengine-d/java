@@ -52,8 +52,8 @@ public class WebCtxFilter extends HttpFilter {
         WebCtx webCtx = Ctxs.proxy(WebCtx.class, requestCtx);
         String clientTraceId = webTraceConfig.isFindClientTraceId() ? clientTraceFinder.findClientTraceId(req) : CharSequenceTools.EMPTY;
         webCtx.generate(
-                CharSequenceTools.nullToDefault(webTraceConfig.getTraceIdPrefix(), ""),
-                CharSequenceTools.nullToDefault(clientTraceId, ""));
+                CharSequenceTools.nullToDefault(webTraceConfig.getTraceIdPrefix(), CharSequenceTools.EMPTY),
+                CharSequenceTools.nullToDefault(clientTraceId, CharSequenceTools.EMPTY));
         req.setAttribute(WebCtx.WEB_CTX_REQUEST_ATTRIBUTE_KEY, webCtx);
         try {
             super.doFilter(req, res, chain);

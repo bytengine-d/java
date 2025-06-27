@@ -20,14 +20,14 @@ public class SaHttpFilter extends HttpFilter {
     /**
      * SA配置策略
      */
-    private final SaConfig saConfig;
+    private final WebSaConfig saConfig;
 
     /**
      * 构造器
      *
      * @param saConfig SA配置策略
      */
-    public SaHttpFilter(SaConfig saConfig) {
+    public SaHttpFilter(WebSaConfig saConfig) {
         this.saConfig = saConfig;
     }
 
@@ -37,6 +37,19 @@ public class SaHttpFilter extends HttpFilter {
         SaSessionCtx.setSaConfig(saConfig, webCtx);
         SaSessionCtx saSessionCtx = Ctxs.proxy(SaSessionCtx.class, webCtx);
         req.setAttribute(SaServlet.SA_SERVLET_SESSION_CTX_ATTRIBUTE_KEY, saSessionCtx);
+        IdentityInfoProvider identityInfoProvider = saConfig.getIdentityInfoProvider();
+        if (identityInfoProvider != null) {
+            JakartaServletSaIdentificationFinder finder = saConfig.getFinder();
+            if (finder != null) {
+                SaIdentification saIdentification = finder.find(saConfig, req);
+                if (saIdentification != null) {
+                    IdentityInfo identityInfo = identityInfoProvider.get(saIdentification);
+                    if (identityInfo != null) {
+                        saSessionCtx.login(identityInfo.getUser());
+                    }
+                }
+            }
+        }
         try {
             super.doFilter(req, res, chain);
         } finally {

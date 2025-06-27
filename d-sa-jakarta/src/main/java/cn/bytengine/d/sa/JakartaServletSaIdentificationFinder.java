@@ -12,8 +12,9 @@ public interface JakartaServletSaIdentificationFinder {
     /**
      * 查找请求携带的SaIdentification信息
      *
-     * @param request Http请求
+     * @param saConfig Web SA配置
+     * @param request  Http请求
      * @return SA唯一标识
      */
-    SaIdentification find(HttpServletRequest request);
+    SaIdentification find(WebSaConfig saConfig, HttpServletRequest request);
 }
