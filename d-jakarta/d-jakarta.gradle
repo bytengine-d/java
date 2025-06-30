@@ -6,5 +6,5 @@ plugins {
 
 dependencies {
     api project(':d-lang')
-    api libs.jakarata.servlet
+    compileOnlyApi libs.jakarata.servlet
 }

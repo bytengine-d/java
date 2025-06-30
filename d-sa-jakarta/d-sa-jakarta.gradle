@@ -7,4 +7,5 @@ plugins {
 dependencies {
     api project(':d-sa')
     api project(':d-jakarta')
+    compileOnlyApi libs.jakarata.servlet
 }

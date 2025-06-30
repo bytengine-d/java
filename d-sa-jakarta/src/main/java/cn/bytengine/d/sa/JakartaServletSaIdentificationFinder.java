@@ -1,6 +1,6 @@
 package cn.bytengine.d.sa;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 基于Servlet API的SaIdentification查找器

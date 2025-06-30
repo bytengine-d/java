@@ -4,7 +4,7 @@
 slf4j = "2.0.17"
 commons-collection4 = "4.4"
 freemarker = "2.3.34"
-jakarata = "4.0.2"
+jakarata = "5.0.0"
 servlet = "3.1.0"
 
 [libraries]
@@ -14,7 +14,7 @@ slf4j-jcl = { module = "org.slf4j:jcl-over-slf4j", version.ref = "slf4j" }
 commons-collection4 = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collection4" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
 jakarata-servlet = { module = "jakarta.servlet:jakarta.servlet-api", version.ref = "jakarata" }
-javax-servlet = { module = "compileOnly 'javax.servlet:javax.servlet-api", version.ref = "servlet" }
+javax-servlet = { module = "javax.servlet:javax.servlet-api", version.ref = "servlet" }
 
 [bundles]
 

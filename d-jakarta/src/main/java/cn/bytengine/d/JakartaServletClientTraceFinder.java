@@ -1,6 +1,6 @@
 package cn.bytengine.d;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author Ban Tenio
