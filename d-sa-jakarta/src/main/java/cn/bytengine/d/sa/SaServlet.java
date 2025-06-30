@@ -9,12 +9,10 @@ package cn.bytengine.d.sa;
 public abstract class SaServlet {
     private SaServlet() {
     }
-
-    private static final String SA_SERVLET_ATTRIBUTE_KEY_PREFIX = SaServlet.class.getName() + ".";
     /**
      * Sa会话上下文请求Attribute Key
      */
-    public static final String SA_SERVLET_SESSION_CTX_ATTRIBUTE_KEY = SA_SERVLET_ATTRIBUTE_KEY_PREFIX + "attribute$session_ctx";
+    public static final String SA_SERVLET_SESSION_CTX_ATTRIBUTE_KEY = "cn.bytengine.d.sa.SaServlet.attribute$session_ctx";
 
     /**
      * Sa会话Id在Http请求QueryString参数Key名称

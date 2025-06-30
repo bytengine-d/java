@@ -17,7 +17,7 @@ public abstract class Ctxs {
 
     private static final Ctx globalCtx = root();
 
-    private static final Map<Class<?>, Function<? extends Ctx, ? extends CtxProxy>> REGISTER_CTX_PROXY_FACTORY_FUNCTIONS = new LinkedHashMap<>();
+    private static final Map<Class<?>, Function<Ctx, ? extends CtxProxy>> REGISTER_CTX_PROXY_FACTORY_FUNCTIONS = new LinkedHashMap<>();
 
     /**
      * 创建一个新的根上下文视图
@@ -101,7 +101,7 @@ public abstract class Ctxs {
      * @see cn.bytengine.d.ctx.annotations.CtxWrapper
      */
     public static <T extends CtxProxy> T proxy(Class<?> clazz, Ctx delegate) {
-        return (T) REGISTER_CTX_PROXY_FACTORY_FUNCTIONS.get(clazz);
+        return (T) REGISTER_CTX_PROXY_FACTORY_FUNCTIONS.get(clazz).apply(delegate);
     }
 
     /**
@@ -112,7 +112,7 @@ public abstract class Ctxs {
      * @see #proxy(Class, Ctx)
      * @see cn.bytengine.d.ctx.annotations.CtxWrapper
      */
-    public static void registerProxy(Class<?> clazz, Function<? extends Ctx, ? extends CtxProxy> factoryFunction) {
+    public static void registerProxy(Class<?> clazz, Function<Ctx, ? extends CtxProxy> factoryFunction) {
         REGISTER_CTX_PROXY_FACTORY_FUNCTIONS.put(clazz, factoryFunction);
     }
 }

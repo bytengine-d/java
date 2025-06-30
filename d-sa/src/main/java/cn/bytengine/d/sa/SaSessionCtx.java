@@ -19,11 +19,10 @@ import java.util.Set;
  * @version 1.0
  */
 public class SaSessionCtx extends AbstractCtxProxy {
-    private static final String SA_SESSION_CTX_KEY_PREFIX = SaSessionCtx.class.getName() + ".";
-    private static final String SA_SESSION_CTX_USER_ID_KEY = SA_SESSION_CTX_KEY_PREFIX + "userId";
-    private static final String SA_SESSION_CTX_ROLES_KEY = SA_SESSION_CTX_KEY_PREFIX + "roles";
-    private static final String SA_SESSION_CTX_PERMISSIONS_KEY = SA_SESSION_CTX_KEY_PREFIX + "permissions";
-    private static final String SA_SESSION_CTX_SA_CONFIG_KEY = SA_SESSION_CTX_KEY_PREFIX + "saConfig";
+    private static final String SA_SESSION_CTX_USER_ID_KEY = "cn.bytengine.d.sa.userId";
+    private static final String SA_SESSION_CTX_ROLES_KEY = "cn.bytengine.d.sa.roles";
+    private static final String SA_SESSION_CTX_PERMISSIONS_KEY = "cn.bytengine.d.sa.permissions";
+    private static final String SA_SESSION_CTX_SA_CONFIG_KEY = "cn.bytengine.d.sa.saConfig";
 
     static {
         Ctxs.registerProxy(SaSessionCtx.class, SaSessionCtx::new);
@@ -32,6 +31,7 @@ public class SaSessionCtx extends AbstractCtxProxy {
     /**
      * 构造器，指定上下文
      * <p><b>上下文内容要包括{@link SaConfig}实例</b></p>
+     *
      * @param delegate 委托上下文
      */
     public SaSessionCtx(Ctx delegate) {
@@ -42,6 +42,7 @@ public class SaSessionCtx extends AbstractCtxProxy {
     /**
      * 构造器，指定上下文
      * <p><b>上下文内容要包括{@link SaConfig}实例</b></p>
+     *
      * @param saConfig SA配置策略
      * @param delegate 委托上下文
      */

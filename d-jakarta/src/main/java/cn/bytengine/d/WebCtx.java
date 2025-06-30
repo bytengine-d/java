@@ -12,12 +12,11 @@ import cn.bytengine.d.utils.TraceCtx;
  * @version 1.0
  */
 public class WebCtx extends TraceCtx {
-    private static final String WEB_CTX_KEY_PREFIX = WebCtx.class.getName() + ".";
-    private static final String WEB_CTX_CONFIG_KEY_PREFIX = WEB_CTX_KEY_PREFIX + "config";
+    private static final String WEB_CTX_CONFIG_KEY_PREFIX = "cn.bytengine.d.WebCtx.config";
     /**
      * HttpServletRequest Attribute存储WebCtx上下文的Key
      */
-    public static final String WEB_CTX_REQUEST_ATTRIBUTE_KEY = WEB_CTX_KEY_PREFIX + "$Attribute$Key";
+    public static final String WEB_CTX_REQUEST_ATTRIBUTE_KEY = "cn.bytengine.d.WebCtx.$Attribute$Key";
 
     static {
         Ctxs.registerProxy(WebCtx.class, WebCtx::new);

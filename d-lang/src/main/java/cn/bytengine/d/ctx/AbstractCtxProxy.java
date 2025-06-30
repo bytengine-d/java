@@ -33,7 +33,7 @@ public abstract class AbstractCtxProxy implements CtxProxy {
      */
     protected AbstractCtxProxy(Ctx delegate, boolean readOnly) {
         AssertTools.notNull(delegate, "delegate Ctx instance is null");
-        if (delegate instanceof AbstractCtxProxy) {
+        while (delegate instanceof AbstractCtxProxy) {
             delegate = ((AbstractCtxProxy) delegate).delegate;
         }
         this.delegate = delegate;
