@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(':d-assist')
+    implementation project(':d-lang')
 
     annotationProcessor project(':d-assist-apt')
 }

@@ -8,7 +8,7 @@ ext {
     projectUrl = "https://github.com/bytengine-d/java"
     projectScm = "git@github.com:bytengine-d/java.git"
     projectGroup = "cn.bytengine.d"
-    projectVersion = "0.2.3"
+    projectVersion = "0.2.4"
     snapshot = {
         version = ""
     }
@@ -17,7 +17,7 @@ ext {
     rootAppName = "d"
 
     // sub projects
-    subProjects = "d-lang,d-apt-util,d-jakarta,d-example,d-assist,d-assist-apt,d-http,d-sa,d-sa-jakarta"
+    subProjects = "d-lang,d-apt-util,d-jakarta,d-assist-apt,d-http,d-sa,d-sa-jakarta,d-example"
     subApps = "d-example"
 
     Slf4jVersion = "2.0.9"

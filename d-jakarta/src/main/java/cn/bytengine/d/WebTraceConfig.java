@@ -10,7 +10,7 @@ import cn.bytengine.d.utils.TraceConfig;
  * @version 1.0
  */
 public class WebTraceConfig extends TraceConfig {
-    private final JakartaServletClientTraceFinder clientTraceFinder;
+    private JakartaServletClientTraceFinder clientTraceFinder;
     private String traceIdResponseHeaderKey;
     private boolean returnTraceId;
     private String clientTraceIdResponseHeaderKey;
@@ -23,12 +23,10 @@ public class WebTraceConfig extends TraceConfig {
     /**
      * 指定TraceId生成器和客户端TraceId查找器，创建WebTraceConfig配置
      *
-     * @param uniqueGenerator   TraceId生成器
-     * @param clientTraceFinder 客户端TraceId查找器
+     * @param uniqueGenerator TraceId生成器
      */
-    public WebTraceConfig(UniqueGenerator uniqueGenerator, JakartaServletClientTraceFinder clientTraceFinder) {
+    public WebTraceConfig(UniqueGenerator uniqueGenerator) {
         super(uniqueGenerator);
-        this.clientTraceFinder = clientTraceFinder;
     }
 
     /**
@@ -38,6 +36,17 @@ public class WebTraceConfig extends TraceConfig {
      */
     public JakartaServletClientTraceFinder getClientTraceFinder() {
         return clientTraceFinder;
+    }
+
+    /**
+     * 设置客户端TraceId查找器
+     *
+     * @param clientTraceFinder 客户端TraceId查找器
+     * @return 当前配置
+     */
+    public WebTraceConfig setClientTraceFinder(JakartaServletClientTraceFinder clientTraceFinder) {
+        this.clientTraceFinder = clientTraceFinder;
+        return this;
     }
 
     /**
