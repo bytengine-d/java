@@ -8,7 +8,7 @@ ext {
     projectUrl = "https://github.com/bytengine-d/java"
     projectScm = "git@github.com:bytengine-d/java.git"
     projectGroup = "cn.bytengine.d"
-    projectVersion = "0.2.1"
+    projectVersion = "0.2.2"
     snapshot = {
         version = ""
     }
