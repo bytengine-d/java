@@ -46,11 +46,14 @@ public class WebCtxFilter extends HttpFilter {
     }
 
     @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
         Ctx requestCtx = Ctxs.space(appCtx);
         WebCtx.setWebTraceConfig(webTraceConfig, requestCtx);
         WebCtx webCtx = Ctxs.proxy(WebCtx.class, requestCtx);
-        String clientTraceId = webTraceConfig.isFindClientTraceId() ? clientTraceFinder.findClientTraceId(req) : CharSequenceTools.EMPTY;
+        String clientTraceId = webTraceConfig.isFindClientTraceId()
+                ? clientTraceFinder.findClientTraceId(req)
+                : CharSequenceTools.EMPTY;
         webCtx.generate(
                 CharSequenceTools.nullToDefault(webTraceConfig.getTraceIdPrefix(), CharSequenceTools.EMPTY),
                 CharSequenceTools.nullToDefault(clientTraceId, CharSequenceTools.EMPTY));
@@ -59,11 +62,13 @@ public class WebCtxFilter extends HttpFilter {
             super.doFilter(req, res, chain);
         } finally {
             if (webTraceConfig.isReturnClientTraceId()) {
-                String key = CharSequenceTools.nullToDefault(webTraceConfig.getClientTraceIdResponseHeaderKey(), DEFAULT_CLIENT_TRACE_ID_HEADER_KEY);
+                String key = CharSequenceTools.nullToDefault(webTraceConfig.getClientTraceIdResponseHeaderKey(),
+                        DEFAULT_CLIENT_TRACE_ID_HEADER_KEY);
                 res.addHeader(key, clientTraceId);
             }
             if (webTraceConfig.isReturnTraceId()) {
-                String key = CharSequenceTools.nullToDefault(webTraceConfig.getTraceIdResponseHeaderKey(), DEFAULT_SERVE_TRACE_ID_HEADER_KEY);
+                String key = CharSequenceTools.nullToDefault(webTraceConfig.getTraceIdResponseHeaderKey(),
+                        DEFAULT_SERVE_TRACE_ID_HEADER_KEY);
                 res.addHeader(key, webCtx.traceId());
             }
             req.removeAttribute(WebCtx.WEB_CTX_REQUEST_ATTRIBUTE_KEY);

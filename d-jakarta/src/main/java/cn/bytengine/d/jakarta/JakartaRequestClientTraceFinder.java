@@ -1,5 +1,6 @@
 package cn.bytengine.d.jakarta;
 
+import cn.bytengine.d.lang.ArrayTools;
 import cn.bytengine.d.lang.CharSequenceTools;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +41,8 @@ public class JakartaRequestClientTraceFinder implements JakartaServletClientTrac
         } else {
             value = req.getHeader(clientTraceIDKey);
             if (!CharSequenceTools.isNotBlank(value)) {
-                value = Arrays.stream(req.getCookies())
+                Cookie[] cookies = req.getCookies();
+                value = ArrayTools.isEmpty(cookies) ? CharSequenceTools.EMPTY : Arrays.stream(cookies)
                         .filter(cookie -> CharSequenceTools.equals(cookie.getName(), clientTraceIDKey))
                         .map(Cookie::getValue)
                         .findAny()
