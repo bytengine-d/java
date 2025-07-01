@@ -1,4 +1,4 @@
-package cn.bytengine.d;
+package cn.bytengine.d.jakarta;
 
 import cn.bytengine.d.unique.UniqueGenerator;
 import cn.bytengine.d.utils.TraceConfig;
