@@ -45,7 +45,7 @@ public abstract class AbstractCtxProxy implements CtxProxy {
      *
      * @return 委托Ctx实例
      */
-    final protected Ctx delegate() {
+    final public Ctx delegate() {
         return this.delegate;
     }
 
