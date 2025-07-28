@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * @version 1.0
  */
 public class JakartaSessionSaIdentificationFinder implements JakartaServletSaIdentificationFinder {
-    
+
     @Override
     public SaIdentification find(WebSaConfig saConfig, HttpServletRequest request) {
         String key = saConfig.getHttpSessionQueryStringKey();
@@ -35,12 +35,14 @@ public class JakartaSessionSaIdentificationFinder implements JakartaServletSaIde
             key = saConfig.getHttpSessionCookieKey();
             if (CharSequenceTools.isNotBlank(key)) {
                 Cookie[] cookies = request.getCookies();
-                for (Cookie cookie : cookies) {
-                    if (CharSequenceTools.equals(cookie.getName(), key)) {
-                        String value = cookie.getValue();
-                        if (CharSequenceTools.isNotBlank(value)) {
-                            saIdentification = new HttpSessionSaIdentification(value);
-                            break;
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if (CharSequenceTools.equals(cookie.getName(), key)) {
+                            String value = cookie.getValue();
+                            if (CharSequenceTools.isNotBlank(value)) {
+                                saIdentification = new HttpSessionSaIdentification(value);
+                                break;
+                            }
                         }
                     }
                 }
